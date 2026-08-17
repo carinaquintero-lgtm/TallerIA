@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Mis Diseños - TallerIA</title>
+<style>
+  body{margin:0;font-family:Arial,sans-serif;background:#FDECD8;}
+  .tabs{display:flex;gap:8px;padding:16px;justify-content:center;flex-wrap:wrap;}
+  .tab{padding:12px 24px;border-radius:999px;border:none;background:#fff;color:#2E2E2E;
+       font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+  .tab.active{background:#E8B324;}
+  iframe{width:100%;height:800px;border:none;display:block;}
+</style>
+</head>
+<body>
+  <div class="tabs">
+    <button class="tab active" onclick="show(0,this)">Diseño 1</button>
+    <button class="tab" onclick="show(1,this)">Diseño 2</button>
+    <button class="tab" onclick="show(2,this)">Diseño 3</button>
+  </div>
+  <iframe id="frame" src="index.html"></iframe>
+  <script>
+    const files = ["index.html","eje1index.html","eje2index.html"];
+    function show(i, btn){
+      document.getElementById('frame').src = files[i];
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      btn.classList.add('active');
+    }
+  </script>
+</body>
+</html>
