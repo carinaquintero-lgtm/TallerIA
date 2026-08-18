@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/educaia-design-system-efcb9c07-1338-471f-b73e-9f6aec5b8d30/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/educaia-design-system-efcb9c07-1338-471f-b73e-9f6aec5b8d30/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/educaia-design-system-efcb9c07-1338-471f-b73e-9f6aec5b8d30/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/educaia-design-system-efcb9c07-1338-471f-b73e-9f6aec5b8d30/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/educaia-design-system-efcb9c07-1338-471f-b73e-9f6aec5b8d30/tokens/radius.css">
+  <link rel="stylesheet" href="_ds/educaia-design-system-efcb9c07-1338-471f-b73e-9f6aec5b8d30/tokens/shadow.css">
+  <link rel="stylesheet" href="_ds/educaia-design-system-efcb9c07-1338-471f-b73e-9f6aec5b8d30/styles.css">
+  <script src="_ds/educaia-design-system-efcb9c07-1338-471f-b73e-9f6aec5b8d30/_ds_bundle.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="./image-slot.js"></script>
+  <style>
+    body{margin:0;}
+    .u1-p{margin:0 0 18px;font-family:var(--font-body);font-size:var(--text-body);line-height:var(--leading-normal);color:var(--text-primary);}
+    .u1-h3{font-family:var(--font-display);font-weight:var(--weight-bold);font-size:var(--text-h3);color:var(--text-primary);margin:0 0 12px;}
+    .u1-h4{font-family:var(--font-display);font-weight:var(--weight-bold);font-size:1.05rem;color:var(--text-primary);margin:24px 0 10px;}
+    .u1-question{font-family:var(--font-body);font-weight:var(--weight-medium);font-size:var(--text-body);line-height:var(--leading-snug);color:var(--text-primary);background:color-mix(in srgb, var(--color-blue) 22%, white);border-radius:var(--radius-md);padding:16px 20px;margin:16px 0 0;}
+    .u1-example{font-family:var(--font-body);font-size:0.98rem;line-height:var(--leading-snug);color:var(--text-primary);background:var(--color-white);border-radius:var(--radius-md);padding:16px 18px;box-shadow:var(--shadow-sm);}
+    .u1-ul{margin:0;padding:0 0 0 4px;list-style:none;display:flex;flex-direction:column;gap:8px;}
+    .u1-ul li{font-family:var(--font-body);font-size:var(--text-body);color:var(--text-primary);display:flex;gap:10px;align-items:flex-start;line-height:var(--leading-snug);}
+    .u1-dot{width:8px;height:8px;min-width:8px;border-radius:50%;background:var(--color-mustard-dark);margin-top:9px;}
+    .u1-a{color:var(--accent-title);text-decoration:underline;}
+    .u1-a:hover{color:var(--color-blue-dark);}
+
+    .t2-scope{
+      --color-ink:#232A45;--color-fog:#E9FBF6;--color-ice:#E3F3FE;
+      --color-steel:#6FB8FA;--color-steel-dark:#3D82C4;
+      --color-teal:#3DDBB0;--color-teal-dark:#26B190;
+      --color-violet:#F7A0EF;--color-violet-dark:#D671C8;
+      --color-periwinkle:#9CA8F7;--color-periwinkle-dark:#6F7EDB;
+      --t2-text-primary:var(--color-ink);--t2-text-muted:color-mix(in srgb, var(--color-ink) 62%, transparent);
+      --t2-surface-hero:var(--color-fog);--t2-surface-feature:var(--color-ice);
+      --t2-accent-title:var(--color-steel-dark);--t2-accent-secondary:var(--color-teal-dark);--t2-accent-highlight:var(--color-violet-dark);
+      --t2-border:color-mix(in srgb, var(--color-ink) 14%, transparent);
+      --t2-shadow-card:0 6px 18px color-mix(in srgb, var(--color-ink) 10%, transparent);
+      --t2-font-display:'Space Grotesk',ui-sans-serif,sans-serif;
+      --t2-font-body:'IBM Plex Sans',ui-sans-serif,sans-serif;
+      --t2-font-mono:'IBM Plex Mono',ui-monospace,monospace;
+    }
+    .t2-scope{background:#fff;}
+    a.t2-link{color:var(--t2-accent-title);text-decoration:underline;text-underline-offset:2px;}
+    a.t2-link:hover{color:var(--color-steel-dark);}
+    .t2-p{margin:0 0 16px;font-family:var(--t2-font-body);font-size:1.0625rem;line-height:1.65;color:var(--t2-text-primary);}
+    .t2-h2{font-family:var(--t2-font-display);font-weight:700;font-size:clamp(1.6rem,2.6vw,2.1rem);color:var(--t2-accent-title);margin:0 0 18px;letter-spacing:-0.01em;}
+    .t2-h3{font-family:var(--t2-font-display);font-weight:600;font-size:1.2rem;color:var(--t2-text-primary);margin:0 0 10px;letter-spacing:-0.01em;}
+    .t2-eyebrow{font-family:var(--t2-font-mono);font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--t2-text-muted);margin:0 0 10px;}
+    .t2-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--t2-font-mono);font-size:0.75rem;font-weight:500;letter-spacing:0.04em;padding:6px 14px;border-radius:999px;border:1px solid var(--t2-border);background:#fff;color:var(--t2-text-primary);}
+    .t2-card{background:#fff;border:1px solid var(--t2-border);border-radius:16px;padding:24px;box-shadow:var(--t2-shadow-card);}
+    .t2-question{font-family:var(--t2-font-body);font-weight:500;font-size:1.0625rem;line-height:1.5;color:var(--t2-text-primary);background:color-mix(in srgb, var(--color-steel) 18%, white);border-left:3px solid var(--color-steel-dark);border-radius:6px;padding:16px 20px;margin:0 0 14px;}
+    .t2-checklist{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:14px;}
+    .t2-checklist li{display:flex;gap:14px;align-items:flex-start;}
+    .t2-num{flex:0 0 auto;width:26px;height:26px;border-radius:6px;background:var(--color-teal);color:#fff;font-family:var(--t2-font-mono);font-size:0.8rem;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+    .t2-checklist-text{font-family:var(--t2-font-body);font-size:1rem;line-height:1.55;color:var(--t2-text-primary);}
+    .t2-res-item{border-top:1px solid var(--t2-border);padding:16px 0;}
+    .t2-res-item:first-child{border-top:none;padding-top:0;}
+    .t2-tag{display:inline-block;font-family:var(--t2-font-mono);font-size:0.7rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--color-teal-dark);background:color-mix(in srgb, var(--color-teal) 20%, white);border-radius:4px;padding:2px 8px;margin-bottom:6px;}
+    .t2-url{font-family:var(--t2-font-mono);font-size:0.8rem;color:var(--t2-text-muted);word-break:break-all;}
+  </style>
+</helmet>
+
+<div style="min-height:100vh;">
+
+  <nav style="position:sticky;top:0;z-index:20;display:flex;gap:8px;padding:14px 24px;background:#fff;border-bottom:1px solid rgba(44,62,80,0.12);font-family:var(--font-body, sans-serif);">
+    <button onClick="{{ setTab1 }}" style="{{ tab1Style }}">Eje 1.1 · Narrativas</button>
+    <button onClick="{{ setTab2 }}" style="{{ tab2Style }}">Eje 1.2 · Generar</button>
+  </nav>
+
+  <sc-if value="{{ isEje1 }}" hint-placeholder-val="{{ true }}">
+  <div style="font-family:var(--font-body);background:var(--surface-page);">
+
+    <section style="background:var(--surface-hero);padding:var(--space-9) var(--content-pad) var(--space-8);">
+      <div style="max-width:760px;margin:0 auto;display:flex;flex-wrap:wrap;gap:var(--space-7);align-items:center;">
+        <div style="flex:1 1 380px;display:flex;flex-direction:column;gap:var(--space-4);min-width:280px;">
+          <x-import component-from-global-scope="EducaIADesignSystem_efcb9c.Badge" tone="mustard" hint-size="auto,32px">Unidad 1 · Narrativas y posicionamientos</x-import>
+          <h1 style="font-family:var(--font-display);font-weight:var(--weight-display);font-size:var(--text-hero);line-height:var(--leading-tight);color:var(--text-primary);margin:0;">Entre la promesa y la amenaza</h1>
+          <p style="font-family:var(--font-body);font-size:var(--text-lead);line-height:var(--leading-snug);color:var(--text-primary);margin:0;max-width:60ch;">¿Qué decisiones docentes estamos tomando frente a la inteligencia artificial?</p>
+        </div>
+        <image-slot id="hero-img" shape="rounded" radius="24" placeholder="Sumá una foto (docentes, aula, taller)" style="flex:1 1 300px;min-width:260px;max-width:380px;height:280px;"></image-slot>
+      </div>
+    </section>
+
+    <section style="background:var(--surface-page);padding:var(--space-8) var(--content-pad);">
+      <div style="max-width:760px;margin:0 auto;">
+        <p class="u1-p">La presencia de la inteligencia artificial generativa en la educación superior ha dado lugar a discursos muy diversos. Para algunos, representa una oportunidad para transformar la enseñanza y ampliar las posibilidades de aprendizaje; para otros, constituye una amenaza para la autonomía, la escritura y el pensamiento de los estudiantes. También encontramos quienes consideran que la IA es simplemente una herramienta cuyo efecto depende del uso que se haga de ella, mientras que otros sostienen que su incorporación a la educación resulta inevitable porque forma parte de las transformaciones de la sociedad contemporánea. En todo caso, iremos problematizando estas diferentes concepciones a lo largo del recorrido por el taller.</p>
+        <p class="u1-p">En principio, consideramos que estas posiciones no son solamente opiniones diferentes acerca de una tecnología. Detrás de cada una existen determinados supuestos sobre cómo se aprende, qué significa enseñar, cuál es el papel del docente y qué lugar debe ocupar la tecnología en una experiencia educativa. Reconocer esos supuestos resulta clave para poder construir decisiones pedagógicas fundamentadas.</p>
+        <p class="u1-p" style="margin-bottom:0;">Iniciando este recorrido, una primera invitación es a revisar y preguntarnos por esas frases y concepciones que circulan en diferentes ámbitos, sobre la IA.</p>
+
+        <div style="margin-top:var(--space-8);">
+          <p style="font-family:var(--font-display);font-weight:var(--weight-bold);font-size:var(--text-eyebrow);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-muted);margin:0 0 16px;">Mapa rápido de las cuatro narrativas</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:14px;">
+            <div style="background:color-mix(in srgb, var(--color-blue) 30%, white);border-radius:var(--radius-lg);padding:20px;">
+              <div style="font-family:var(--font-display);font-weight:var(--weight-bold);font-size:1.05rem;color:var(--text-primary);margin-bottom:6px;">Promesa</div>
+              <div style="font-family:var(--font-body);font-size:var(--text-small);color:var(--text-primary);line-height:var(--leading-snug);">Una herramienta más potente = mejor enseñanza, sin más.</div>
+            </div>
+            <div style="background:color-mix(in srgb, var(--color-pink) 30%, white);border-radius:var(--radius-lg);padding:20px;">
+              <div style="font-family:var(--font-display);font-weight:var(--weight-bold);font-size:1.05rem;color:var(--text-primary);margin-bottom:6px;">Amenaza</div>
+              <div style="font-family:var(--font-body);font-size:var(--text-small);color:var(--text-primary);line-height:var(--leading-snug);">El aprendizaje valioso solo existe sin tecnología de por medio.</div>
+            </div>
+            <div style="background:color-mix(in srgb, var(--color-mint) 55%, white);border-radius:var(--radius-lg);padding:20px;">
+              <div style="font-family:var(--font-display);font-weight:var(--weight-bold);font-size:1.05rem;color:var(--text-primary);margin-bottom:6px;">Herramienta neutral</div>
+              <div style="font-family:var(--font-body);font-size:var(--text-small);color:var(--text-primary);line-height:var(--leading-snug);">"Todo depende del uso" — pero ninguna tecnología es neutra.</div>
+            </div>
+            <div style="background:color-mix(in srgb, var(--color-mustard) 35%, white);border-radius:var(--radius-lg);padding:20px;">
+              <div style="font-family:var(--font-display);font-weight:var(--weight-bold);font-size:1.05rem;color:var(--text-primary);margin-bottom:6px;">Inevitable</div>
+              <div style="font-family:var(--font-body);font-size:var(--text-small);color:var(--text-primary);line-height:var(--leading-snug);">Si ya está presente, hay que incorporarla siempre y en todo.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="background:var(--surface-feature);padding:var(--space-9) var(--content-pad);">
+      <div style="max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:var(--space-6);">
+        <h2 style="font-family:var(--font-display);font-weight:var(--weight-bold);font-size:var(--text-h2);color:var(--accent-title);margin:0;">Cuatro narrativas sobre la IA</h2>
+
+        <x-import component-from-global-scope="EducaIADesignSystem_efcb9c.Card" hint-size="100%,auto">
+          <x-import component-from-global-scope="EducaIADesignSystem_efcb9c.Badge" tone="blue" hint-size="auto,28px">La IA como promesa</x-import>
+          <div style="margin-top:14px;">
+            <p class="u1-p">Cuando la inteligencia artificial es presentada como una promesa, el énfasis está puesto en sus posibilidades: puede facilitar el acceso a información, generar materiales, ofrecer explicaciones, acompañar procesos de estudio, ayudar a producir textos o favorecer nuevas formas de personalización.</p>
+            <p class="u1-p" style="margin-bottom:0;">Esta mirada permite reconocer oportunidades que sería difícil ignorar. Sin embargo, supone un riesgo cuando se transforma en la idea de que la incorporación de una tecnología producirá, por sí misma, mejores aprendizajes. Detrás de esta narrativa puede aparecer el supuesto de que una herramienta más potente genera automáticamente una enseñanza más potente.</p>
+            <p class="u1-question">¿Qué tipos de aprendizajes podría favorecer una determinada utilización de la IA?</p>
+          </div>
+        </x-import>
+
+        <x-import component-from-global-scope="EducaIADesignSystem_efcb9c.Card" hint-size="100%,auto">
+          <x-import component-from-global-scope="EducaIADesignSystem_efcb9c.Badge" tone="pink" hint-size="auto,28px">La IA como amenaza</x-import>
+          <div style="margin-top:14px;">
+            <p class="u1-p">En el extremo opuesto aparece la narrativa de la amenaza. Desde esta perspectiva, la IA puede debilitar procesos que tradicionalmente asociamos con el aprendizaje universitario: leer, escribir, argumentar, resolver problemas, producir conocimiento propio o sostener un esfuerzo intelectual.</p>
+            <p class="u1-p" style="margin-bottom:0;">El temor no es infundado: determinadas formas de utilización pueden efectivamente desplazar procesos que resultan centrales para aprender. Sin embargo, convertir toda presencia de IA en una amenaza conduce a otra simplificación: supone que el aprendizaje valioso sólo puede producirse cuando la tecnología está ausente. Ahora bien, el verdadero riesgo no es solo el "copy-paste", sino caer en lo que Castañeda (....) llama una "educación muerta": un escenario donde el sistema funciona administrativamente (se entregan y califican tareas hechas con IA), pero donde el diálogo intelectual y el pensamiento crítico han desaparecido por completo.</p>
+            <p class="u1-question">¿Qué características deberían tener las tareas que hagan posible que un estudiante utilice IA sin que desaparezca el proceso cognitivo y sociocognitivo que queremos promover? ¿Qué se gana y qué se pierde? ¿Qué se desplaza?</p>
+          </div>
+        </x-import>
+
+        <x-import component-from-global-scope="EducaIADesignSystem_efcb9c.Card" hint-size="100%,auto">
+          <x-import component-from-global-scope="EducaIADesignSystem_efcb9c.Badge" tone="mint" hint-size="auto,28px">La IA como herramienta neutral</x-import>
+          <div style="margin-top:14px;">
+            <p class="u1-p">Una tercera posición sostiene que la IA es una herramienta y que todo depende del uso que las personas hagan de ella. Esta perspectiva tiene una doble complejidad:</p>
+            <p class="u1-p">Por un lado, podemos reconocerle el mérito de devolver la responsabilidad a quienes toman decisiones pedagógicas. Sin embargo, considerar la tecnología completamente neutral puede ocultar que toda herramienta ofrece determinadas posibilidades, impone ciertas condiciones y favorece algunas formas de hacer sobre otras.</p>
+            <p class="u1-p">Por eso, decir que "todo depende del uso" no sólo resulta insuficiente, además desconoce o silencia los aspectos sociotécnicos de las tecnologías. Las tecnologías no son neutras porque portan sesgos comerciales y algorítmicos, entre otros, que condicionan el acceso al saber, hacer y vincularse. Necesitamos preguntarnos qué hace posible una tecnología, qué dificulta, qué prácticas favorece, cuáles obstaculiza y qué implicancias tiene en las decisiones que podemos estar delegando en ella.</p>
+            <p class="u1-p" style="margin-bottom:0;">Por otro lado, pensar la IA únicamente como una herramienta resulta insuficiente. Podemos fundamentarlo desde, al menos, dos campos:</p>
+
+            <h4 class="u1-h4">Desde la semántica: la IA trabaja con lenguaje, no solo con objetos</h4>
+            <p class="u1-p">Una herramienta tradicional tiene una relación relativamente directa entre acción y resultado: uso un procesador de texto para escribir, una calculadora para calcular, una cámara para fotografiar.</p>
+            <p class="u1-p">La IA generativa funciona de otra manera. Su "materia prima" es fundamentalmente la producción y transformación de significados mediante el lenguaje. Cuando escribimos un prompt no le damos simplemente una orden mecánica; construimos una expresión lingüística que orienta la generación de una respuesta.</p>
+            <p class="u1-p" style="margin-bottom:0;">Por eso, desde una mirada semántica, el problema no es solamente qué herramienta estoy utilizando, sino qué significado construyo mediante mi interacción con ella. Por ejemplo:</p>
+
+            <div style="display:flex;flex-direction:column;gap:10px;margin:14px 0 16px;">
+              <div class="u1-example">"Explicame la teoría de Piaget"</div>
+              <div style="font-family:var(--font-body);font-size:0.95rem;color:var(--text-muted);">Esto no produce la misma interacción que:</div>
+              <div class="u1-example">"Explicame la teoría de Piaget para un estudiante de primer año, utilizando un ejemplo de una situación cotidiana y señalando dos críticas actuales."</div>
+            </div>
+
+            <p class="u1-p">El segundo prompt no es simplemente una orden más detallada: construye un contexto de significado. Define destinatario, propósito, nivel de profundidad y criterios de producción.</p>
+            <p class="u1-p">En ese sentido, aprender a utilizar IA supone también aprender a formular, contextualizar, precisar, preguntar, repreguntar, contrastar y reformular.</p>
+            <p class="u1-p" style="margin-bottom:0;">Eso tiene una consecuencia pedagógica muy interesante: el lenguaje deja de ser solamente el medio mediante el cual hablamos con la IA y se convierte en parte de la competencia que necesitamos desarrollar para interactuar con ella.</p>
+
+            <h4 class="u1-h4">Desde la comunicación: la IA modifica la interacción</h4>
+            <p class="u1-p">Desde las teorías de la comunicación también podemos hacer una distinción importante. Una herramienta tradicional suele funcionar como mediadora de una acción.</p>
+            <p class="u1-p">La IA generativa, en cambio, introduce una forma de interacción: nosotros producimos un mensaje, el sistema genera una respuesta, nosotros la interpretamos, volvemos a intervenir, reformulamos y obtenemos una nueva producción.</p>
+            <p class="u1-p">Tenemos entonces algo parecido a un intercambio conversacional, aunque con una diferencia fundamental: no estamos interactuando con otro sujeto humano.</p>
+            <p class="u1-p">Esto permite pensar la IA como un interlocutor artificial o como una interfaz lingüística para producir y transformar conocimiento, más que simplemente como una herramienta.</p>
+            <p class="u1-p">Y acá aparece algo muy importante para este taller: la IA no solamente hace cosas por nosotros; también reorganiza la manera en que formulamos problemas, buscamos información, producimos textos y revisamos nuestras propias ideas.</p>
+            <p class="u1-p" style="margin-bottom:0;">En este marco pensar la IA como un "lenguaje" es pedagógicamente interesante. En este momento del proceso reflexivo queremos introducir una idea que consideramos, como mínimo, provocadora:</p>
+            <p class="u1-question">Si la IA es también un entorno de interacción lingüística, ¿qué necesitamos aprender para interactuar críticamente con ella?</p>
+
+            <p class="u1-p" style="margin-top:16px;">Ahí aparecen competencias que no son simplemente "digitales":</p>
+            <ul class="u1-ul">
+              <li><span class="u1-dot"></span>Formular buenas preguntas</li>
+              <li><span class="u1-dot"></span>Contextualizar</li>
+              <li><span class="u1-dot"></span>Argumentar</li>
+              <li><span class="u1-dot"></span>Precisar</li>
+              <li><span class="u1-dot"></span>Detectar ambigüedades</li>
+              <li><span class="u1-dot"></span>Contrastar</li>
+              <li><span class="u1-dot"></span>Identificar supuestos</li>
+              <li><span class="u1-dot"></span>Evaluar respuestas</li>
+              <li><span class="u1-dot"></span>Reformular</li>
+              <li><span class="u1-dot"></span>Decidir cuándo aceptar y cuándo cuestionar una producción</li>
+            </ul>
+
+            <p class="u1-p" style="margin-top:16px;">En este sentido, anticipamos que encontrarán vinculaciones con los aportes de Linda Castañeda, respecto de "si enseñar es decidir", entonces utilizar IA no puede reducirse a aprender comandos. Hay que decidir qué pedir, para qué pedirlo, qué aceptar, qué cuestionar y qué hacer con lo producido.</p>
+            <p class="u1-p" style="margin-bottom:0;">De hecho, esto podría enriquecer muchísimo la categoría de "IA como herramienta neutral" que venimos trabajando: si pensamos que es simplemente una herramienta, podemos imaginar que el usuario mantiene todo el control. Pero si la entendemos como un entorno de interacción lingüística que interviene en la producción y transformación de significados, tenemos que analizar también cómo esa interacción modifica nuestras prácticas de pensamiento, escritura y aprendizaje.</p>
+            <p class="u1-question">La pregunta pedagógica que queremos compartir no refiere solo a qué cambia, sino a qué andamiajes críticos necesitamos construir para usar una herramienta que ya viene configurada con sus propias reglas.</p>
+          </div>
+        </x-import>
+
+        <x-import component-from-global-scope="EducaIADesignSystem_efcb9c.Card" hint-size="100%,auto">
+          <x-import component-from-global-scope="EducaIADesignSystem_efcb9c.Badge" tone="mustard" hint-size="auto,28px">La IA como inevitable</x-import>
+          <div style="margin-top:14px;">
+            <p class="u1-p">Finalmente, encontramos un discurso que presenta la incorporación de la inteligencia artificial como inevitable. Los estudiantes ya la utilizan, las profesiones están cambiando y la universidad no puede quedar al margen de una transformación que atraviesa las formas de producir, comunicarse y trabajar. Desde esta perspectiva, la discusión parece resolverse anticipadamente: si la IA está presente y seguirá formando parte de nuestras prácticas sociales y profesionales, debemos incorporarla a la enseñanza.</p>
+            <p class="u1-p">Esta narrativa tiene un punto de partida atendible: la universidad no puede desconocer las transformaciones culturales y profesionales que atraviesan a sus estudiantes. Preparar para el mundo contemporáneo implica, en alguna medida, comprender las tecnologías que participan de él. Sin embargo, reconocer que una tecnología forma parte de nuestro contexto no implica que deba estar presente en todas las situaciones educativas. La presencia de una tecnología no determina su necesidad pedagógica.</p>
+            <p class="u1-p">El problema aparece cuando el "hay que incorporarla" reemplaza a las preguntas acerca de para qué, cuándo, cómo y bajo qué condiciones hacerlo. En ese caso, la innovación tecnológica puede convertirse en un fin en sí mismo y la decisión pedagógica quedar subordinada a una lógica de adaptación permanente: si aparece una nueva tecnología, la educación debe incorporarla; si el mercado laboral la demanda, la universidad debe enseñar a utilizarla; si los estudiantes ya la usan, los docentes deben incluirla en sus propuestas.</p>
+            <p class="u1-p">Pero la tarea de la universidad no consiste solamente en adaptarse a aquello que ocurre en el presente. También implica analizarlo, problematizarlo y decidir qué vale la pena incorporar a los procesos formativos. Preparar a los estudiantes para un mundo atravesado por la inteligencia artificial no significa necesariamente utilizar IA en todas las actividades. Puede significar, en determinadas ocasiones, aprender a utilizarla; en otras, aprender a cuestionar sus respuestas; y en algunas situaciones, justamente, aprender sin recurrir a ella.</p>
+            <p class="u1-p">Hay aprendizajes para los cuales la utilización de IA puede resultar pertinente y enriquecedora. Puede ayudar a explorar alternativas, recibir explicaciones, contrastar perspectivas, formular preguntas, revisar producciones o simular situaciones profesionales. Pero también existen experiencias en las que la mediación de una IA puede resultar poco pertinente o incluso contraproducente. Si el propósito de una actividad es que el estudiante construya progresivamente una argumentación propia, ejercite una habilidad básica, enfrente un problema sin asistencia externa, produzca una primera interpretación o haga visible qué comprende y qué dificultades tiene, delegar parte de ese proceso en una herramienta puede alterar aquello que pretendíamos observar o desarrollar.</p>
+            <p class="u1-p">Por eso, decidir no utilizar IA también es una decisión pedagógica. No se trata de defender espacios "libres de tecnología" por principio, sino de reconocer que existen momentos en los que la ausencia de determinadas mediaciones puede ser necesaria para que ciertos aprendizajes tengan lugar. La pregunta no debería ser "¿cómo incorporamos IA?", sino "¿qué experiencia de aprendizaje queremos construir y qué lugar —si alguno— tiene sentido que ocupe la IA en ella?".</p>
+            <p class="u1-p">Esta perspectiva permite evitar dos posiciones igualmente problemáticas. Por un lado, una adaptación acrítica que incorpora la IA porque "es el futuro" o porque "los estudiantes ya la utilizan". Por otro, una resistencia que intenta preservar las prácticas educativas simplemente excluyendo una tecnología que ya forma parte del entorno social de los estudiantes. Entre ambos extremos existe un espacio propiamente pedagógico: el de la decisión fundamentada.</p>
+            <p class="u1-p">En este sentido, la inevitabilidad tecnológica no debería convertirse en inevitabilidad pedagógica. Que la IA vaya a formar parte de numerosas prácticas profesionales no significa que todas las capacidades deban desarrollarse mediante IA. La universidad también tiene la responsabilidad de formar sujetos capaces de actuar en contextos tecnológicos sin quedar completamente subordinados a ellos: profesionales que sepan utilizar herramientas, pero también evaluar sus resultados, reconocer sus límites, identificar cuándo pueden generar dependencia y decidir cuándo es preferible recurrir a otros procedimientos.</p>
+            <p class="u1-p">Si toda propuesta educativa hace más probables determinadas formas de pensar, participar y producir conocimiento, entonces incorporar una tecnología también modifica las condiciones de esa experiencia. La cuestión no es simplemente si podemos utilizar IA, sino qué hacemos posible —y qué dejamos de hacer posible— cuando decidimos incorporarla.</p>
+            <p class="u1-p">La narrativa de la inevitabilidad, entonces, puede ser un punto de partida para reconocer una transformación que no podemos ignorar, pero no debería convertirse en una respuesta anticipada. La IA puede ser parte de nuestro presente y de nuestro futuro profesional sin convertirse por ello en una presencia obligatoria en cada aula, cada actividad y cada evaluación.</p>
+            <p class="u1-p" style="margin-bottom:0;">El desafío docente consiste precisamente en recuperar la posibilidad de decidir: usar IA cuando amplía o enriquece una experiencia de aprendizaje; limitarla cuando interfiere con el propósito formativo; y prescindir de ella cuando su utilización no aporta valor o contradice aquello que se pretende aprender.</p>
+            <p class="u1-question">¿En qué situaciones tiene sentido incorporar IA y en cuáles resulta más valioso preservar otras formas de trabajo?</p>
+          </div>
+        </x-import>
+      </div>
+    </section>
+
+    <section style="background:var(--surface-page);padding:var(--space-9) var(--content-pad);">
+      <div style="max-width:760px;margin:0 auto;">
+        <h2 style="font-family:var(--font-display);font-weight:var(--weight-bold);font-size:var(--text-h2);color:var(--accent-title);margin:0 0 20px;">Más allá de las narrativas: enseñar es decidir</h2>
+        <image-slot id="decidir-img" shape="rounded" radius="20" placeholder="Imagen sobre decidir/elegir camino" style="width:100%;height:220px;margin-bottom:24px;"></image-slot>
+        <p class="u1-p">Las cuatro posiciones permiten reconocer diferentes maneras de interpretar la IA, pero ninguna de ellas puede reemplazar el análisis de las situaciones concretas de enseñanza. En estos sentidos, queremos invitar al diálogo con este desarrollo a Linda Castañeda (2026), recuperando sus propuestas desde su obra "Enseñar es decidir".</p>
+        <p class="u1-p">Esta autora sostiene que la transformación educativa no comienza con la aparición de la inteligencia artificial, los aprendizajes ya se desarrollaban en múltiples tiempos, espacios y entornos. Los estudiantes llegan a las clases después de haber consultado diferentes fuentes y continúan aprendiendo fuera de ellas mediante recursos, tecnologías y redes diversas. El aprendizaje, por lo tanto, se encuentra distribuido y la clase deja de ser el único espacio donde este ocurre.</p>
+        <p class="u1-p">Esta transformación habilita a preguntarnos por el quehacer docente. Si la información ya no está concentrada en la figura del profesor, su función no desaparece: se vuelve más necesario decidir qué experiencias de aprendizaje vale la pena diseñar y qué condiciones pueden favorecerlas.</p>
+        <p class="u1-p">Para Castañeda (2026), enseñar nunca es una práctica neutral. Seleccionar contenidos, elegir problemas, proponer actividades, establecer criterios de evaluación y determinar qué producciones serán valoradas implica tomar decisiones que expresan determinadas concepciones acerca del conocimiento y del aprendizaje. La enseñanza es, por lo tanto, una práctica situada, profesional y ética.</p>
+        <p class="u1-p">La inteligencia artificial hace particularmente visible esta dimensión de la docencia. Si una herramienta puede resumir un texto, generar preguntas, elaborar una planificación o producir una primera versión de un escrito, el problema pedagógico ya no consiste simplemente en decidir si "se puede" o "no se puede" utilizar IA. La cuestión es qué queremos que el estudiante aprenda al realizar esa actividad y qué lugar puede ocupar la herramienta dentro de ese proceso.</p>
+        <p class="u1-p" style="margin-bottom:0;">Desde esta perspectiva, diseñar una propuesta de enseñanza implica anticipar qué formas de participación, pensamiento y producción de conocimiento queremos hacer posibles. Las tareas, la colaboración, la retroalimentación y la evaluación forman parte de ese diseño. Por eso, la pregunta de Castañeda adquiere especial relevancia frente a la IA: ¿qué estamos haciendo inevitable cuando diseñamos?</p>
+        <p class="u1-question">Una actividad puede hacer inevitable que el estudiante copie, pero también puede hacer necesario que compare, argumente, tome decisiones, revise una respuesta o explique su razonamiento. La diferencia no está solamente en si la actividad permite utilizar inteligencia artificial, sino en qué tipo de pensamiento demanda la experiencia diseñada por el docente.</p>
+      </div>
+    </section>
+
+    <section style="background:var(--surface-feature);padding:var(--space-9) var(--content-pad) var(--space-10);">
+      <div style="max-width:760px;margin:0 auto;">
+        <h2 style="font-family:var(--font-display);font-weight:var(--weight-bold);font-size:var(--text-h2);color:var(--accent-title);margin:0 0 20px;">De la opinión a la decisión fundamentada</h2>
+        <p class="u1-p">Pensar la IA desde esta perspectiva implica superar la oposición entre "IA sí", "IA no". También supone evitar que las narrativas de promesa, amenaza, neutralidad o inevitabilidad determinen anticipadamente nuestras decisiones, tal como ya venimos anticipando.</p>
+        <p class="u1-p">El desafío consiste en analizar qué ocurre efectivamente en nuestras aulas. ¿Para qué utilizan IA nuestros estudiantes? ¿Qué tareas realizan con ella? ¿Qué procesos delegan? ¿Qué siguen haciendo por sí mismos? ¿Qué dificultades encuentran? ¿Qué oportunidades aparecen?</p>
+        <p class="u1-p" style="margin-bottom:0;">Observar estas prácticas permite poner en diálogo los discursos que circulan sobre la IA con lo que sucede en nuestros propios contextos universitarios. Como plantea Castañeda, la evidencia y las tecnologías pueden aportar información y ampliar las opciones, pero no sustituyen el juicio profesional. Enseñar continúa siendo decidir: interpretar un contexto, seleccionar prioridades, diseñar experiencias y asumir la responsabilidad por las oportunidades de aprendizaje que ofrecemos.</p>
+
+        <x-import component-from-global-scope="EducaIADesignSystem_efcb9c.Card" hint-size="100%,auto" style="margin-top:32px;">
+          <x-import component-from-global-scope="EducaIADesignSystem_efcb9c.Badge" tone="mustard" hint-size="auto,28px">Para escuchar</x-import>
+          <div style="margin-top:14px;">
+            <p class="u1-p">Para continuar este diálogo nuestro y de ustedes, con Linda Castañeda, les proponemos escuchar el siguiente podcast:</p>
+            <p class="u1-p" style="margin-bottom:0;">
+              <strong>Capítulo 1:</strong> La clase universitaria ya no es el centro del aprendizaje —
+              <a class="u1-a" href="https://www.lindacastaneda.com/en/mushware/podcast/capitulo-1-la-clase-universitaria-ya-no-es-el-centro-del-aprendizaje/" target="_blank" rel="noopener">escuchar episodio</a>
+            </p>
+            <p class="u1-p" style="margin-top:14px;margin-bottom:0;color:var(--text-muted);font-size:var(--text-small);">Quienes quieran explorar más pueden acceder al resto de los podcasts de Castañeda y al texto completo en PDF a través de su sitio.</p>
+            <p class="u1-p" style="margin-top:14px;margin-bottom:0;">
+              <a class="u1-a" href="https://www.lindacastaneda.com/mushware/podcasts/esdecidir/" target="_blank" rel="noopener">Escuchar todos los episodios de "Enseñar es decidir"</a>
+            </p>
+          </div>
+        </x-import>
+
+        <div style="margin-top:40px;">
+          <h2 style="font-family:var(--font-display);font-weight:var(--weight-bold);font-size:var(--text-h2);color:var(--accent-title);margin:0 0 8px;">Para ampliar: ¿qué preguntarías?</h2>
+          <p class="u1-p">Elegí un escenario de aula y anotá qué preguntas le harías al estudiante o al grupo. No hay una respuesta correcta: es un disparador para llevar al taller.</p>
+
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin:20px 0;">
+            <sc-for list="{{ scenarios }}" as="s" hint-placeholder-count="4">
+              <button sc-camel-on-click="{{ s.select }}" style="{{ s.buttonStyle }}">{{ s.label }}</button>
+            </sc-for>
+          </div>
+
+          <x-import component-from-global-scope="EducaIADesignSystem_efcb9c.Card" hint-size="100%,auto">
+            <x-import component-from-global-scope="EducaIADesignSystem_efcb9c.Badge" tone="{{ activeScenario.tone }}" hint-size="auto,28px">{{ activeScenario.label }}</x-import>
+            <p class="u1-p" style="margin-top:14px;">{{ activeScenario.text }}</p>
+            <label class="u1-h4" style="display:block;margin-top:20px;">¿Qué preguntas le harías?</label>
+            <textarea value="{{ activeScenario.answer }}" sc-camel-on-change="{{ activeScenario.onChange }}" placeholder="Escribí acá tus preguntas para este escenario..." style="width:100%;min-height:110px;box-sizing:border-box;font-family:var(--font-body);font-size:var(--text-body);color:var(--text-primary);border-radius:var(--radius-md);border:1px solid var(--border-subtle);padding:14px 16px;resize:vertical;background:var(--color-white);"></textarea>
+            <p style="margin:8px 0 0;font-size:var(--text-small);color:var(--text-muted);font-family:var(--font-body);">Se guarda automáticamente en este navegador.</p>
+          </x-import>
+        </div>
+      </div>
+    </section>
+
+    <section style="background:var(--surface-page);padding:var(--space-9) var(--content-pad) var(--space-10);">
+      <div style="max-width:760px;margin:0 auto;">
+        <x-import component-from-global-scope="EducaIADesignSystem_efcb9c.Badge" tone="pink" hint-size="auto,28px">Síntesis</x-import>
+        <h2 style="font-family:var(--font-display);font-weight:var(--weight-bold);font-size:var(--text-h2);color:var(--accent-title);margin:14px 0 8px;">El hilo argumentativo del recorrido</h2>
+        <p class="u1-p">Así se encadenan las ideas de esta unidad, de punta a punta:</p>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:0;margin-top:20px;">
+          <div style="background:color-mix(in srgb, var(--color-blue) 30%, white);border-radius:var(--radius-lg);padding:16px 18px;flex:1 1 170px;min-width:150px;">
+            <div style="font-family:var(--font-display);font-weight:var(--weight-bold);font-size:0.95rem;color:var(--text-primary);margin-bottom:4px;">1. Narrativas cotidianas</div>
+            <div style="font-family:var(--font-body);font-size:var(--text-small);color:var(--text-primary);line-height:var(--leading-snug);">Promesa, amenaza, neutralidad, inevitabilidad.</div>
+          </div>
+          <div style="flex:0 0 auto;font-size:1.4rem;color:var(--text-muted);padding:0 10px;" aria-hidden="true">›</div>
+          <div style="background:color-mix(in srgb, var(--color-pink) 30%, white);border-radius:var(--radius-lg);padding:16px 18px;flex:1 1 170px;min-width:150px;">
+            <div style="font-family:var(--font-display);font-weight:var(--weight-bold);font-size:0.95rem;color:var(--text-primary);margin-bottom:4px;">2. Supuestos ocultos</div>
+            <div style="font-family:var(--font-body);font-size:var(--text-small);color:var(--text-primary);line-height:var(--leading-snug);">Cada narrativa esconde una idea de aprender, enseñar y de la tecnología.</div>
+          </div>
+          <div style="flex:0 0 auto;font-size:1.4rem;color:var(--text-muted);padding:0 10px;" aria-hidden="true">›</div>
+          <div style="background:color-mix(in srgb, var(--color-mustard) 35%, white);border-radius:var(--radius-lg);padding:16px 18px;flex:1 1 170px;min-width:150px;">
+            <div style="font-family:var(--font-display);font-weight:var(--weight-bold);font-size:0.95rem;color:var(--text-primary);margin-bottom:4px;">3. Enseñar es decidir</div>
+            <div style="font-family:var(--font-body);font-size:var(--text-small);color:var(--text-primary);line-height:var(--leading-snug);">Castañeda: la enseñanza nunca es neutral, siempre implica decidir.</div>
+          </div>
+          <div style="flex:0 0 auto;font-size:1.4rem;color:var(--text-muted);padding:0 10px;" aria-hidden="true">›</div>
+          <div style="background:color-mix(in srgb, var(--color-mint) 55%, white);border-radius:var(--radius-lg);padding:16px 18px;flex:1 1 170px;min-width:150px;">
+            <div style="font-family:var(--font-display);font-weight:var(--weight-bold);font-size:0.95rem;color:var(--text-primary);margin-bottom:4px;">4. ¿Qué hacemos inevitable?</div>
+            <div style="font-family:var(--font-body);font-size:var(--text-small);color:var(--text-primary);line-height:var(--leading-snug);">La pregunta de diseño que reemplaza a "se puede o no se puede".</div>
+          </div>
+          <div style="flex:0 0 auto;font-size:1.4rem;color:var(--text-muted);padding:0 10px;" aria-hidden="true">›</div>
+          <div style="background:var(--color-charcoal);border-radius:var(--radius-lg);padding:16px 18px;flex:1 1 170px;min-width:150px;">
+            <div style="font-family:var(--font-display);font-weight:var(--weight-bold);font-size:0.95rem;color:var(--text-inverse);margin-bottom:4px;">5. Decisión fundamentada</div>
+            <div style="font-family:var(--font-body);font-size:var(--text-small);color:var(--text-inverse);line-height:var(--leading-snug);">Ni adoptar la IA sin criterio ni excluirla por principio: analizar cada situación.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isEje12 }}" hint-placeholder-val="{{ false }}">
+  <div class="t2-scope" style="font-family:var(--t2-font-body);">
+
+    <section style="background:var(--t2-surface-hero);padding:96px 24px 64px;">
+      <div style="max-width:920px;margin:0 auto;display:flex;flex-wrap:wrap;gap:48px;align-items:center;">
+        <div style="flex:1 1 380px;display:flex;flex-direction:column;gap:16px;min-width:280px;">
+          <span class="t2-badge">Eje complementario 1 · Sistema gráfico</span>
+          <h1 style="font-family:var(--t2-font-display);font-weight:700;font-size:clamp(2rem,4.4vw,3.1rem);line-height:1.1;color:var(--t2-text-primary);margin:0;letter-spacing:-0.02em;">Generar: lo que la IA produce, más allá del texto</h1>
+          <p style="font-family:var(--t2-font-body);font-size:1.15rem;line-height:1.5;color:var(--t2-text-primary);margin:0;max-width:56ch;">Generar una pieza es fácil. Sostener coherencia en una serie es donde aparecen los problemas reales.</p>
+        </div>
+        <image-slot id="hero-img-eje12" shape="rounded" radius="16" placeholder="Sumá una imagen: grilla de piezas generadas, mockups en serie" style="flex:1 1 300px;min-width:260px;max-width:380px;height:260px;"></image-slot>
+      </div>
+    </section>
+
+    <section style="background:#fff;padding:64px 24px;">
+      <div style="max-width:920px;margin:0 auto;">
+        <p class="t2-p">La imagen más instalada de la IA generativa sigue siendo la conversación: escribimos algo, la IA responde con texto. Pero muchos de ustedes ya vienen usando estas herramientas para generar imágenes, audio o presentaciones, y probablemente ya se toparon con algo que un uso ocasional no deja ver: cuando se genera más de una pieza, o se genera en serie, aparecen problemas distintos a los de generar una sola vez.</p>
+
+        <h3 class="t2-h3" style="margin-top:32px;">De la pieza única a la serie</h3>
+        <p class="t2-p">Generar una imagen para acompañar una actividad es una cosa. Generar diez imágenes para una misma secuencia, que necesitan sostener un mismo estilo, un mismo nivel de complejidad, una misma coherencia visual entre sí, es otra. Ahí aparece una tensión que quizás ya reconocen: cuanto más se intenta uniformar el resultado, más se termina cediendo el control específico de cada pieza. Y a la inversa: cuanto más se ajusta cada pieza por separado, más cuesta que la serie se sienta como un conjunto.</p>
+        <p class="t2-p" style="margin-bottom:0;">Lo mismo pasa cuando se encadenan lenguajes: un texto que se convierte en guion, ese guion en narración de audio, esa narración en base de un video. Cada traducción entre lenguajes agrega una capa de interpretación de la IA que no estaba en el pedido original, y esas capas se acumulan.</p>
+
+        <h3 class="t2-h3" style="margin-top:32px;">Qué sostiene una coherencia gráfica</h3>
+        <p class="t2-p">Antes de generar la primera pieza, conviene decidir el lenguaje visual: una paleta acotada, un estilo, una referencia que justifique por qué se ve así y no de otra manera. Ir ajustando el estilo pieza por pieza, sin ese acuerdo previo, es lo que más rápido rompe la coherencia de una serie.</p>
+        <p class="t2-p" style="margin-bottom:0;">Y si ese sistema visual va a aparecer en más de un entorno —el mismo estilo en una presentación, en un formulario, en una publicación— conviene pensarlo desde el inicio como un sistema que viaja, no como piezas sueltas que después se intenta unificar.</p>
+      </div>
+    </section>
+
+    <section style="background:var(--t2-surface-feature);padding:64px 24px 72px;">
+      <div style="max-width:920px;margin:0 auto;">
+        <p class="t2-eyebrow">Herramienta</p>
+        <h2 class="t2-h2">Checklist para armar un sistema gráfico propio</h2>
+        <div class="t2-card">
+          <p class="t2-p">Son las decisiones que cualquier sistema gráfico coherente necesita resolver, más allá de qué herramienta se use para generarlo.</p>
+          <ol class="t2-checklist">
+            <li><span class="t2-num">1</span><span class="t2-checklist-text"><strong>Paleta con roles fijos:</strong> cada color cumple una función (texto, fondo, acento, urgencia) — no se elige por lindo, se elige por lo que tiene que señalar.</span></li>
+            <li><span class="t2-num">2</span><span class="t2-checklist-text">Como máximo dos tipografías, con jerarquía clara entre título y cuerpo.</span></li>
+            <li><span class="t2-num">3</span><span class="t2-checklist-text">Escala de espaciado consistente, no medidas sueltas decididas pieza por pieza.</span></li>
+            <li><span class="t2-num">4</span><span class="t2-checklist-text">Jerarquía en las formas: el tamaño de un borde redondeado, un ícono o un botón comunica su peso relativo en la pieza.</span></li>
+            <li><span class="t2-num">5</span><span class="t2-checklist-text">Separación por color y espacio, no por líneas o bordes que fragmentan la lectura.</span></li>
+            <li><span class="t2-num">6</span><span class="t2-checklist-text">Animación mínima y con propósito: solo si responde a una interacción real, no como efecto decorativo.</span></li>
+            <li><span class="t2-num">7</span><span class="t2-checklist-text">Tono de texto coherente con el lenguaje visual — el estilo gráfico y la voz escrita van en la misma dirección.</span></li>
+            <li><span class="t2-num">8</span><span class="t2-checklist-text">Lo que falta se documenta, no se inventa por relleno (un ícono que no se tiene, un logo pendiente): se marca como pendiente en vez de improvisar algo que rompa el sistema.</span></li>
+          </ol>
+          <p class="t2-p" style="margin-top:20px;margin-bottom:0;color:var(--t2-text-muted);">Este checklist se puede llevar tal cual a cualquier chat de IA (Claude u otro) y pedirle que revise el propio sistema gráfico contra estos 8 puntos, señalando qué decisiones todavía faltan tomar.</p>
+        </div>
+      </div>
+    </section>
+
+    <section style="background:#fff;padding:72px 24px;">
+      <div style="max-width:920px;margin:0 auto;">
+        <p class="t2-eyebrow">Recursos</p>
+        <h2 class="t2-h2">Para explorar por tu cuenta</h2>
+        <p class="t2-p" style="margin-bottom:32px;">Recursos en distintos niveles, en video y en texto. Todas las herramientas mencionadas tienen versión gratuita, excepto donde se aclara.</p>
+
+        <div style="display:flex;flex-direction:column;gap:32px;">
+          <div>
+            <span class="t2-badge" style="border-color:var(--color-steel-dark);color:var(--color-steel-dark);">Básico</span>
+            <div style="margin-top:14px;">
+              <div class="t2-res-item">
+                <span class="t2-tag">Video</span>
+                <h3 class="t2-h3" style="margin-bottom:4px;"><a class="t2-link" href="https://www.youtube.com/watch?v=pIl-JKvHj3A" target="_blank" rel="noopener">Canva Tutorial Completo para Principiantes 2026</a></h3>
+                <div class="t2-url">youtube.com/watch?v=pIl-JKvHj3A</div>
+                <p class="t2-p" style="margin-top:8px;margin-bottom:0;">Recorrido completo del editor desde cero, incluye cómo armar un kit de marca gratuito para sostener coherencia entre piezas.</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <span class="t2-badge" style="border-color:var(--color-periwinkle-dark);color:var(--color-periwinkle-dark);">Intermedio</span>
+            <div style="margin-top:14px;">
+              <div class="t2-res-item">
+                <span class="t2-tag">Video</span>
+                <h3 class="t2-h3" style="margin-bottom:4px;"><a class="t2-link" href="https://trupeer.ai/es/tutorials/how-to-use-canva-ai-video-generator" target="_blank" rel="noopener">Generador de video con IA de Canva (Magic Media)</a></h3>
+                <div class="t2-url">trupeer.ai/es/tutorials/how-to-use-canva-ai-video-generator</div>
+                <p class="t2-p" style="margin-top:8px;margin-bottom:0;">Genera guiones, elementos visuales y animaciones a partir de texto, dentro de la misma herramienta ya conocida.</p>
+              </div>
+              <div class="t2-res-item">
+                <span class="t2-tag">Texto</span>
+                <h3 class="t2-h3" style="margin-bottom:4px;"><a class="t2-link" href="https://sofiafernandez.es/creatividad/imagenes-y-videos-con-canva-ia" target="_blank" rel="noopener">Canva IA: crea imágenes y vídeos con texto</a></h3>
+                <div class="t2-url">sofiafernandez.es/creatividad/imagenes-y-videos-con-canva-ia</div>
+                <p class="t2-p" style="margin-top:8px;margin-bottom:0;">Guía escrita sobre el Estudio/Multimedia Mágico de Canva para generar imagen y video desde texto.</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <span class="t2-badge" style="border-color:var(--color-violet-dark);color:var(--color-violet-dark);">Avanzado</span>
+            <div style="margin-top:14px;">
+              <div class="t2-res-item">
+                <span class="t2-tag">Video</span>
+                <h3 class="t2-h3" style="margin-bottom:4px;"><a class="t2-link" href="https://www.youtube.com/watch?v=xWcTZD7UHTI" target="_blank" rel="noopener">Cómo utilizar Claude Design desde cero</a></h3>
+                <div class="t2-url">youtube.com/watch?v=xWcTZD7UHTI</div>
+                <p class="t2-p" style="margin-top:8px;margin-bottom:0;">Diseñar conversando en lenguaje natural en vez de con mouse y capas. Requiere plan pago de Claude; está en versión de investigación (research preview).</p>
+              </div>
+              <div class="t2-res-item">
+                <span class="t2-tag">Texto</span>
+                <h3 class="t2-h3" style="margin-bottom:4px;"><a class="t2-link" href="https://support.claude.com/es/articles/14604416-comienza-con-claude-design" target="_blank" rel="noopener">Comienza con Claude Design — Centro de ayuda de Anthropic</a></h3>
+                <div class="t2-url">support.claude.com/es/articles/14604416-comienza-con-claude-design</div>
+                <p class="t2-p" style="margin-top:8px;margin-bottom:0;">Guía oficial: cómo crear un proyecto, opciones para compartir, límites de uso.</p>
+              </div>
+              <div class="t2-res-item">
+                <span class="t2-tag">Texto</span>
+                <h3 class="t2-h3" style="margin-bottom:4px;"><a class="t2-link" href="https://newsletter.weplash.com/p/aprende-a-usar-claude-design-en-5" target="_blank" rel="noopener">Aprendé a usar Claude Design en 5 min</a></h3>
+                <div class="t2-url">newsletter.weplash.com/p/aprende-a-usar-claude-design-en-5</div>
+                <p class="t2-p" style="margin-top:8px;margin-bottom:0;">Guía práctica: cómo se ve el flujo de trabajo (chat + canvas), qué tipo de piezas se pueden generar, dos ejemplos paso a paso.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="background:var(--t2-surface-feature);padding:64px 24px;">
+      <div style="max-width:920px;margin:0 auto;">
+        <h2 class="t2-h2">Preguntas para quienes ya vienen generando recursos</h2>
+        <p class="t2-question">Cuando refinás un mismo recurso a lo largo de varias iteraciones, ¿en qué momento deja de ser "lo que pediste" y empieza a ser otra cosa que ya no revisás con el mismo criterio inicial?</p>
+        <p class="t2-question">¿Hay algo que un recurso hecho a mano —por vos, o por un estudiante— transmite y que uno generado no puede transmitir, más allá de la calidad técnica?</p>
+        <p class="t2-question" style="margin-bottom:0;">Cuando una serie de recursos generados queda "prolija" y homogénea, ¿qué se perdió de la aspereza o singularidad que tenía el material original?</p>
+      </div>
+    </section>
+
+    <section style="background:#fff;padding:64px 24px 96px;">
+      <div style="max-width:920px;margin:0 auto;">
+        <p class="t2-eyebrow">Actividad sugerida</p>
+        <h2 class="t2-h2">Llevalo a la práctica</h2>
+        <div class="t2-card">
+          <p class="t2-p">Si querés llevarlo a la práctica: elegí una secuencia de enseñanza (no un momento aislado) y generá más de un recurso para distintos puntos de esa secuencia, intentando sostener cierta coherencia entre ellos. Puede ser el mismo recurso que ya están trabajando en la Actividad 1 u otro que prefieras. Antes de generar la primera pieza, repasá el checklist de arriba. Después, revisá qué tuviste que ceder para lograr esa coherencia, y qué ganaste o perdiste en el camino.</p>
+          <p class="t2-p" style="margin-bottom:0;color:var(--t2-text-muted);">Es una actividad sugerida, no obligatoria — pensada como disparador para quien quiera experimentar antes del encuentro sincrónico.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const SCENARIOS = [
+  { id: 'ensayo', label: 'Ensayo con IA', tone: 'blue', text: 'Un estudiante entrega un ensayo que parece generado con IA, sin marcas propias de su proceso de escritura.' },
+  { id: 'caso', label: 'Caso resuelto por chatbot', tone: 'pink', text: 'Un grupo usa un chatbot para resolver un caso práctico completo, incluidas las conclusiones, y lo presenta como propio.' },
+  { id: 'explicacion', label: 'Explicación distinta', tone: 'mustard', text: 'La IA le ofrece a un estudiante una explicación de un tema que difiere de la vista en clase.' },
+  { id: 'revision', label: 'Revisión de estilo', tone: 'mint', text: 'Un estudiante pregunta si puede usar IA solo para revisar ortografía y estilo, no el contenido de su texto.' },
+];
+const STORAGE_KEY = 'educaia-u1-escenarios-respuestas';
+
+class Component extends DCLogic {
+  state = { tab: 'eje1', activeIndex: 0, answers: {} };
+
+  componentDidMount() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      this.setState({ answers: saved });
+    } catch (e) {}
+  }
+
+  setAnswer(id, value) {
+    const answers = { ...this.state.answers, [id]: value };
+    this.setState({ answers });
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(answers)); } catch (e) {}
+  }
+
+  tabStyle(active) {
+    return {
+      fontFamily: 'inherit', fontWeight: 700, fontSize: '0.9rem', padding: '9px 16px',
+      borderRadius: '999px', cursor: 'pointer', border: active ? 'none' : '1px solid rgba(44,62,80,0.2)',
+      background: active ? '#2C3E50' : '#fff', color: active ? '#fff' : '#2C3E50',
+    };
+  }
+
+  renderVals() {
+    const isEje1 = this.state.tab === 'eje1';
+    const active = SCENARIOS[this.state.activeIndex];
+    const scenarios = SCENARIOS.map((s, i) => ({
+      label: s.label,
+      select: () => this.setState({ activeIndex: i }),
+      buttonStyle: {
+        fontFamily: 'var(--font-body)', fontWeight: 'var(--weight-medium)', fontSize: 'var(--text-small)',
+        padding: '10px 18px', borderRadius: 'var(--radius-pill)', cursor: 'pointer',
+        border: i === this.state.activeIndex ? 'none' : '1px solid var(--border-subtle)',
+        background: i === this.state.activeIndex ? 'var(--color-mustard)' : 'var(--color-white)',
+        color: 'var(--text-primary)',
+      },
+    }));
+    return {
+      isEje1,
+      isEje12: !isEje1,
+      setTab1: () => this.setState({ tab: 'eje1' }),
+      setTab2: () => this.setState({ tab: 'eje12' }),
+      tab1Style: this.tabStyle(isEje1),
+      tab2Style: this.tabStyle(!isEje1),
+      scenarios,
+      activeScenario: {
+        label: active.label,
+        tone: active.tone,
+        text: active.text,
+        answer: this.state.answers[active.id] || '',
+        onChange: (e) => this.setAnswer(active.id, e.target.value),
+      },
+    };
+  }
+}
+
+</script>
+</body>
+</html>
