@@ -1,0 +1,540 @@
+<title>Presentación: Participación Taller IA</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#f2f4f4;
+    --surface:#ffffff;
+    --surface-2:#e9edee;
+    --border:#d7dedf;
+    --ink:#1c2b2e;
+    --ink-2:#4a5c60;
+    --ink-muted:#7c8b8e;
+    --accent:#1f6f78;
+    --accent-ink:#0f4a51;
+    --accent-soft:#e2f0ee;
+    --good:#2f9668;
+    --good-soft:#e3f3ea;
+    --warn:#3f7fb8;
+    --warn-soft:#e4eef7;
+    --low:#c98a2e;
+    --low-soft:#f8ecd8;
+    --crit:#c14c4c;
+    --crit-soft:#f8e4e2;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12191a; --surface:#182223; --surface-2:#1f2b2c; --border:#2b3839;
+      --ink:#e9eeee; --ink-2:#b6c3c4; --ink-muted:#82938f;
+      --accent:#5fb8bf; --accent-ink:#a9dee1; --accent-soft:#1c3436;
+      --good:#5cbd8f; --good-soft:#1c3128; --warn:#7db1e0; --warn-soft:#1d2d3a;
+      --low:#e0ac5b; --low-soft:#382c1a; --crit:#e2837f; --crit-soft:#3a2323;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12191a; --surface:#182223; --surface-2:#1f2b2c; --border:#2b3839;
+    --ink:#e9eeee; --ink-2:#b6c3c4; --ink-muted:#82938f;
+    --accent:#5fb8bf; --accent-ink:#a9dee1; --accent-soft:#1c3436;
+    --good:#5cbd8f; --good-soft:#1c3128; --warn:#7db1e0; --warn-soft:#1d2d3a;
+    --low:#e0ac5b; --low-soft:#382c1a; --crit:#e2837f; --crit-soft:#3a2323;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    overflow:hidden;
+  }
+  .deck{position:relative;width:100%;height:100vh;min-height:520px;}
+  .slide{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:60px 8vw;text-align:center;gap:22px;
+    opacity:0;transform:translateY(14px);
+    transition:opacity .5s ease, transform .5s ease;
+    pointer-events:none;
+  }
+  .slide.active{opacity:1;transform:translateY(0);pointer-events:auto;}
+
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent-ink);font-weight:600;
+  }
+  h1.big{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:clamp(32px,5vw,58px);text-wrap:balance;margin:0;line-height:1.08;}
+  h2.mid{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:clamp(24px,3.4vw,36px);text-wrap:balance;margin:0;}
+  p.lead{font-size:clamp(15px,1.6vw,19px);color:var(--ink-2);max-width:62ch;line-height:1.55;margin:0;}
+  .source{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-muted);margin-top:6px;}
+
+  /* Big-number stat blocks */
+  .stat-row{display:flex;gap:44px;flex-wrap:wrap;justify-content:center;}
+  .stat{display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .stat .n{font-family:"Fraunces",serif;font-weight:600;font-size:clamp(46px,7vw,88px);line-height:1;font-variant-numeric:tabular-nums;}
+  .stat .l{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.05em;max-width:16ch;}
+  .stat.crit .n{color:var(--crit);}
+  .stat.good .n{color:var(--good);}
+  .stat.accent .n{color:var(--accent);}
+
+  /* Bars */
+  .bars{display:flex;flex-direction:column;gap:14px;width:min(680px,86vw);}
+  .bar-row{display:grid;grid-template-columns:170px 1fr 60px;align-items:center;gap:14px;}
+  .bar-label{font-size:14px;text-align:right;font-weight:600;}
+  .bar-track{height:22px;background:var(--surface-2);border-radius:6px;overflow:hidden;border:1px solid var(--border);}
+  .bar-fill{height:100%;border-radius:6px 0 0 6px;width:0;transition:width 1.1s cubic-bezier(.2,.7,.2,1);}
+  .bar-val{font-family:"IBM Plex Mono",monospace;font-size:14px;text-align:left;font-variant-numeric:tabular-nums;font-weight:600;}
+
+  .hbars{display:flex;flex-direction:column;gap:10px;width:min(720px,88vw);}
+  .hbar-row{display:grid;grid-template-columns:1fr 44px;align-items:center;gap:12px;}
+  .hbar-label{font-size:13px;text-align:right;color:var(--ink-2);}
+  .hbar-label b{color:var(--ink);}
+  .hbar-track{height:16px;background:var(--surface-2);border-radius:4px;overflow:hidden;}
+  .hbar-fill{height:100%;background:var(--accent);border-radius:4px;width:0;transition:width 1.1s cubic-bezier(.2,.7,.2,1);}
+  .hbar-val{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink-2);text-align:left;}
+
+  .cardgrid{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;max-width:900px;}
+  .mini{
+    background:var(--surface);border:1px solid var(--border);border-radius:12px;
+    padding:20px 24px;min-width:190px;text-align:left;
+  }
+  .mini .who{font-weight:600;font-size:15px;}
+  .mini .meta{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-muted);margin-top:4px;}
+  .mini.flag{border-color:var(--crit);}
+  .mini.win{border-color:var(--good);}
+
+  .pill{
+    display:inline-flex;align-items:center;gap:5px;font-family:"IBM Plex Mono",monospace;
+    font-size:12px;font-weight:600;padding:4px 11px;border-radius:999px;
+  }
+  .pill.good{background:var(--good-soft);color:var(--good);}
+  .pill.crit{background:var(--crit-soft);color:var(--crit);}
+
+  .list-clean{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:14px;max-width:64ch;text-align:left;}
+  .list-clean li{font-size:16px;color:var(--ink-2);padding-left:30px;position:relative;}
+  .list-clean li b{color:var(--ink);}
+  .list-clean li::before{content:attr(data-n);position:absolute;left:0;top:-2px;font-family:"IBM Plex Mono",monospace;font-weight:700;color:var(--accent);font-size:14px;}
+
+  /* Controls */
+  .ui{
+    position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;gap:14px;
+    padding:14px 24px;background:linear-gradient(to top, var(--bg) 40%, transparent);
+    transition:opacity .35s ease;z-index:20;
+  }
+  .ui.hidden{opacity:0;pointer-events:none;}
+  .ui button{
+    font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;
+    background:var(--surface);border:1px solid var(--border);color:var(--ink);
+    border-radius:8px;padding:8px 14px;cursor:pointer;
+  }
+  .ui button:hover{background:var(--surface-2);}
+  .ui button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  .progress-wrap{flex:1;display:flex;flex-direction:column;gap:6px;}
+  .dots{display:flex;gap:6px;}
+  .dot{flex:1;height:4px;border-radius:2px;background:var(--surface-2);border:1px solid var(--border);overflow:hidden;}
+  .dot i{display:block;height:100%;width:0;background:var(--accent);}
+  .dot.done i{width:100%;}
+  .counter{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-muted);white-space:nowrap;}
+  select{
+    font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:var(--surface);
+    border:1px solid var(--border);color:var(--ink);border-radius:8px;padding:8px 10px;
+  }
+  .hint{
+    position:fixed;top:18px;right:18px;font-family:"IBM Plex Mono",monospace;font-size:11px;
+    color:var(--ink-muted);background:var(--surface);border:1px solid var(--border);
+    border-radius:8px;padding:7px 11px;z-index:20;transition:opacity .5s ease;
+  }
+  .hint.hidden{opacity:0;pointer-events:none;}
+
+  @media (max-width:640px){
+    .stat-row{gap:26px;}
+    .bar-row{grid-template-columns:100px 1fr 44px;}
+    .bar-label{font-size:12px;}
+  }
+</style>
+
+<div class="deck" id="deck"></div>
+
+<div class="hint" id="hint">Flechas / Espacio para avanzar · P para play/pausa · H oculta controles</div>
+
+<div class="ui" id="ui">
+  <button id="prevBtn" title="Anterior (←)">◂</button>
+  <button id="playBtn" title="Reproducir / Pausar (P)">▶ Reproducir</button>
+  <button id="nextBtn" title="Siguiente (→)">▸</button>
+  <div class="progress-wrap">
+    <div class="dots" id="dots"></div>
+    <span class="counter" id="counter">1 / 13</span>
+  </div>
+  <select id="speed" title="Segundos por diapositiva en modo reproducción">
+    <option value="6000">6s / diapo</option>
+    <option value="9000" selected>9s / diapo</option>
+    <option value="14000">14s / diapo</option>
+    <option value="20000">20s / diapo</option>
+  </select>
+  <button id="musicBtn" title="Música de fondo (ambiente generado, sin archivos)">🎵 Música: off</button>
+  <input type="range" id="musicVol" min="0" max="0.4" step="0.01" value="0.2" title="Volumen de la música" style="width:70px;">
+</div>
+
+<script>
+const slides = [
+
+// 1 — Título
+`<span class="eyebrow">Taller IA · Registro de Moodle + encuesta a docentes</span>
+ <h1 class="big">Participación en el<br>Taller IA</h1>
+ <p class="lead">Quién entró, quién no, qué recorrió y si eso se tradujo en entregas — con la mirada cruzada de lo que los propios docentes dijeron en la encuesta.</p>`,
+
+// 2 — Panorama general
+`<span class="eyebrow">Panorama general</span>
+ <h2 class="mid">93 personas matriculadas</h2>
+ <div class="stat-row">
+   <div class="stat accent"><div class="n" data-count="64">0</div><div class="l">Con actividad<br>registrada</div></div>
+   <div class="stat crit"><div class="n" data-count="29">0</div><div class="l">Nunca<br>ingresaron</div></div>
+   <div class="stat good"><div class="n" data-count="27">0</div><div class="l">Entregaron al<br>menos 1 actividad</div></div>
+ </div>
+ <p class="source">Base: 93 matriculados, sin contar al equipo docente (Carina Quintero y Silvina Bresca)</p>`,
+
+// 3 — Nunca ingresaron
+`<span class="eyebrow">La primera alerta</span>
+ <h2 class="mid">3 de cada 10 nunca abrió el curso</h2>
+ <div class="stat-row">
+   <div class="stat crit"><div class="n" data-count="31" data-suffix="%">0</div><div class="l">de los matriculados</div></div>
+ </div>
+ <p class="lead">29 personas no dejaron ni una sola vista, ni un clic, en todo el período registrado (15 jul – 10 sep). No es que hayan entrado poco: no entraron nunca.</p>`,
+
+// 4 — Niveles de participación
+`<span class="eyebrow">Sobre quienes sí ingresaron (n=64)</span>
+ <h2 class="mid">Niveles de participación</h2>
+ <div class="bars" id="bars-tiers">
+   <div class="bar-row"><div class="bar-label" style="color:var(--good)">Alto</div><div class="bar-track"><div class="bar-fill" style="background:var(--good)" data-w="20.3"></div></div><div class="bar-val">13</div></div>
+   <div class="bar-row"><div class="bar-label" style="color:var(--warn)">Medio</div><div class="bar-track"><div class="bar-fill" style="background:var(--warn)" data-w="34.4"></div></div><div class="bar-val">22</div></div>
+   <div class="bar-row"><div class="bar-label" style="color:var(--low)">Bajo</div><div class="bar-track"><div class="bar-fill" style="background:var(--low)" data-w="32.8"></div></div><div class="bar-val">21</div></div>
+   <div class="bar-row"><div class="bar-label" style="color:var(--crit)">Nulo / mínimo</div><div class="bar-track"><div class="bar-fill" style="background:var(--crit)" data-w="12.5"></div></div><div class="bar-val">8</div></div>
+ </div>
+ <p class="source">Alto: 15+ ingresos · Medio: 7–14 · Bajo: 2–6 · Nulo: 0–1</p>`,
+
+// 5 — Correlación ingresos-entregas
+`<span class="eyebrow">El hallazgo central</span>
+ <h2 class="mid">A más ingresos, más entregas</h2>
+ <div class="stat-row">
+   <div class="stat good"><div class="n" data-count="92" data-suffix="%">0</div><div class="l">entregó — nivel Alto</div></div>
+   <div class="stat"><div class="n" data-count="59" data-suffix="%">0</div><div class="l">entregó — nivel Medio</div></div>
+   <div class="stat"><div class="n" data-count="10" data-suffix="%">0</div><div class="l">entregó — nivel Bajo</div></div>
+   <div class="stat crit"><div class="n" data-count="0" data-suffix="%">0</div><div class="l">entregó — Nulo/mínimo</div></div>
+ </div>
+ <p class="lead">Ingresar 15 veces o más casi garantiza la entrega. Ingresar 1 vez o menos, nunca la produjo — sin una sola excepción.</p>`,
+
+// 6 — Recursos más recorridos
+`<span class="eyebrow">Qué recorrieron</span>
+ <h2 class="mid">Recursos más visitados</h2>
+ <div class="hbars" id="hbars-res"></div>`,
+
+// 7 — Cuello de botella Act1 -> Act2
+`<span class="eyebrow">Dónde se pierde gente</span>
+ <h2 class="mid">El cuello de botella está en la Actividad 2</h2>
+ <div class="stat-row">
+   <div class="stat accent"><div class="n" data-count="27">0</div><div class="l">entregaron<br>Actividad 1</div></div>
+   <div class="stat crit"><div class="n" data-count="18">0</div><div class="l">llegaron a entregar<br>Actividad 2</div></div>
+ </div>
+ <p class="lead">9 personas quedaron a mitad de camino — habiendo ya entrado varias veces al curso y entregado la primera actividad.</p>`,
+
+// 8 — Recomendaciones
+`<span class="eyebrow">Para el equipo docente</span>
+ <h2 class="mid">Tres líneas de acción</h2>
+ <ul class="list-clean">
+   <li data-n="1"><b>Contactar a los "mirones activos"</b> (mucho ingreso, cero entrega): el obstáculo no es de acceso.</li>
+   <li data-n="2"><b>Reforzar el pasaje a la Actividad 2</b>, donde se pierde un tercio de quienes ya entregaron la 1.</li>
+   <li data-n="3"><b>Enviar bienvenida/soporte técnico</b> a los 29 que nunca ingresaron y a los 8 de nivel nulo.</li>
+ </ul>`,
+
+// 9 — Cierre
+`<span class="eyebrow">Gracias</span>
+ <h1 class="big">¿Seguimos con el<br>siguiente corte?</h1>
+ <p class="lead">Curva de actividad semana a semana, o el contraste contra la Lista de Control — quedan como próximos pasos. El análisis de la encuesta a docentes se aborda en un informe aparte.</p>`,
+
+];
+
+const resources = [
+  {name:"Tarea: Actividad 1", n:282},
+  {name:"Tarea: Actividad 2", n:234},
+  {name:"Foro: Armar equipos", n:52},
+  {name:"URL: Grabación 1er Sincrónico", n:50},
+  {name:"Página: Hoja de ruta", n:49},
+  {name:"URL: Horario de consulta", n:25},
+  {name:"Tarea: Actividad 3 (Eje 2)", n:16},
+];
+
+const deck = document.getElementById("deck");
+slides.forEach((html,i)=>{
+  const div = document.createElement("div");
+  div.className = "slide";
+  div.id = "slide-"+i;
+  div.innerHTML = html;
+  deck.appendChild(div);
+});
+
+// Fill resource bars on slide 6 (index 5)
+const hbarsRes = document.getElementById("hbars-res");
+const maxRes = Math.max(...resources.map(r=>r.n));
+resources.forEach(r=>{
+  const row = document.createElement("div");
+  row.className = "hbar-row";
+  row.innerHTML = `
+    <div>
+      <div class="hbar-label"><b>${r.name}</b></div>
+      <div class="hbar-track"><div class="hbar-fill" data-w="${(r.n/maxRes)*100}"></div></div>
+    </div>
+    <div class="hbar-val">${r.n}</div>
+  `;
+  hbarsRes.appendChild(row);
+});
+
+let current = 0;
+let playing = false;
+let timer = null;
+const total = slides.length;
+
+const dotsEl = document.getElementById("dots");
+for(let i=0;i<total;i++){
+  const d = document.createElement("div");
+  d.className = "dot";
+  d.innerHTML = "<i></i>";
+  dotsEl.appendChild(d);
+}
+
+function animateNumbers(slideEl){
+  slideEl.querySelectorAll(".n[data-count]").forEach(el=>{
+    const target = parseInt(el.getAttribute("data-count"),10);
+    const suffix = el.getAttribute("data-suffix") || "";
+    const dur = 900;
+    const start = performance.now();
+    function step(t){
+      const p = Math.min(1, (t-start)/dur);
+      const eased = 1 - Math.pow(1-p, 3);
+      el.textContent = Math.round(target*eased) + suffix;
+      if(p<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+  slideEl.querySelectorAll(".bar-fill[data-w]").forEach(el=>{
+    requestAnimationFrame(()=> el.style.width = el.getAttribute("data-w")+"%");
+  });
+  slideEl.querySelectorAll(".hbar-fill[data-w]").forEach(el=>{
+    requestAnimationFrame(()=> el.style.width = el.getAttribute("data-w")+"%");
+  });
+}
+
+function render(){
+  document.querySelectorAll(".slide").forEach((s,i)=>{
+    s.classList.toggle("active", i===current);
+  });
+  document.querySelectorAll(".dot").forEach((d,i)=>{
+    d.classList.toggle("done", i<=current);
+  });
+  document.getElementById("counter").textContent = (current+1)+" / "+total;
+  const activeSlide = document.getElementById("slide-"+current);
+  // reset animated values so they replay each time slide becomes active
+  activeSlide.querySelectorAll(".bar-fill,.hbar-fill").forEach(el=> el.style.width = "0%");
+  activeSlide.querySelectorAll(".n[data-count]").forEach(el=> el.textContent = "0");
+  requestAnimationFrame(()=> animateNumbers(activeSlide));
+}
+
+function goTo(i){
+  current = Math.max(0, Math.min(total-1, i));
+  render();
+}
+function next(){ if(current<total-1){ goTo(current+1); } else { stop(); } }
+function prev(){ goTo(current-1); }
+
+function play(){
+  playing = true;
+  document.getElementById("playBtn").textContent = "❚❚ Pausar";
+  scheduleNext();
+}
+function stop(){
+  playing = false;
+  document.getElementById("playBtn").textContent = "▶ Reproducir";
+  if(timer) clearTimeout(timer);
+}
+function scheduleNext(){
+  if(timer) clearTimeout(timer);
+  const ms = parseInt(document.getElementById("speed").value,10);
+  timer = setTimeout(()=>{
+    if(!playing) return;
+    if(current<total-1){ next(); scheduleNext(); } else { stop(); }
+  }, ms);
+}
+
+document.getElementById("nextBtn").addEventListener("click", ()=>{ stop(); next(); });
+document.getElementById("prevBtn").addEventListener("click", ()=>{ stop(); prev(); });
+document.getElementById("playBtn").addEventListener("click", ()=>{ playing ? stop() : play(); });
+document.getElementById("speed").addEventListener("change", ()=>{ if(playing){ scheduleNext(); } });
+
+// ---- Generative background music: uplifting arpeggio + pad + echo (Web Audio API, no files) ----
+let audioCtx = null;
+let musicPlaying = false;
+let musicMaster = null;
+let musicFilter = null;
+let delayNode = null, delayFilter = null, feedbackGain = null, pluckSend = null;
+let schedulerTimer = null;
+let nextNoteTime = 0;
+let beatCount = 0;
+
+const BPM = 108;
+const secondsPerBeat = 60 / BPM;
+
+// I - vi - IV - V in C major: bright, "hopeful" progression. Each entry: pad triad (low),
+// bass root (lower still) and a 4-note ascending arpeggio (higher octave).
+const progression = [
+  { pad:[130.81,164.81,196.00], bass:65.41,  arp:[261.63,329.63,392.00,523.25] }, // C
+  { pad:[110.00,130.81,164.81], bass:55.00,  arp:[220.00,261.63,329.63,440.00] }, // Am
+  { pad:[87.31, 110.00,130.81], bass:43.65,  arp:[174.61,220.00,261.63,349.23] }, // F
+  { pad:[98.00, 123.47,146.83], bass:49.00,  arp:[196.00,246.94,293.66,392.00] }, // G
+];
+
+function ensureAudioCtx(){
+  if(!audioCtx){
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if(audioCtx.state === "suspended"){ audioCtx.resume(); }
+}
+
+function buildMusicGraph(){
+  musicMaster = audioCtx.createGain();
+  musicMaster.gain.value = parseFloat(document.getElementById("musicVol").value);
+  musicFilter = audioCtx.createBiquadFilter();
+  musicFilter.type = "lowpass";
+  musicFilter.frequency.value = 3200;
+  musicMaster.connect(musicFilter);
+  musicFilter.connect(audioCtx.destination);
+
+  // echo/delay bus for the arpeggio — gives the "sparkle" that reads as uplifting
+  delayNode = audioCtx.createDelay(1.0);
+  delayNode.delayTime.value = secondsPerBeat * 0.75;
+  delayFilter = audioCtx.createBiquadFilter();
+  delayFilter.type = "lowpass";
+  delayFilter.frequency.value = 2600;
+  feedbackGain = audioCtx.createGain();
+  feedbackGain.gain.value = 0.28;
+  pluckSend = audioCtx.createGain();
+  pluckSend.gain.value = 0.4;
+
+  pluckSend.connect(delayNode);
+  delayNode.connect(delayFilter);
+  delayFilter.connect(feedbackGain);
+  feedbackGain.connect(delayNode);
+  delayFilter.connect(musicMaster);
+}
+
+function teardownMusicGraph(){
+  [musicMaster, musicFilter, delayNode, delayFilter, feedbackGain, pluckSend].forEach(n=>{
+    try{ n && n.disconnect(); }catch(e){}
+  });
+  musicMaster = musicFilter = delayNode = delayFilter = feedbackGain = pluckSend = null;
+}
+
+function playPad(freqs, time, dur){
+  freqs.forEach((f,i)=>{
+    const osc = audioCtx.createOscillator();
+    osc.type = (i === 0) ? "triangle" : "sine";
+    osc.frequency.setValueAtTime(f, time);
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0, time);
+    osc.connect(g); g.connect(musicMaster);
+    osc.start(time);
+    g.gain.linearRampToValueAtTime(0.16, time + dur*0.2);
+    g.gain.linearRampToValueAtTime(0.0, time + dur);
+    osc.stop(time + dur + 0.15);
+  });
+}
+
+function playBass(freq, time, dur){
+  const osc = audioCtx.createOscillator();
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(freq, time);
+  const g = audioCtx.createGain();
+  g.gain.setValueAtTime(0, time);
+  osc.connect(g); g.connect(musicMaster);
+  osc.start(time);
+  g.gain.linearRampToValueAtTime(0.5, time + 0.06);
+  g.gain.linearRampToValueAtTime(0.0, time + dur);
+  osc.stop(time + dur + 0.1);
+}
+
+function playPluck(freq, time){
+  const osc = audioCtx.createOscillator();
+  osc.type = "triangle";
+  osc.frequency.setValueAtTime(freq, time);
+  const g = audioCtx.createGain();
+  g.gain.setValueAtTime(0, time);
+  osc.connect(g);
+  g.connect(musicMaster); // dry
+  g.connect(pluckSend);   // wet (echo)
+  osc.start(time);
+  g.gain.linearRampToValueAtTime(0.55, time + 0.008);
+  g.gain.exponentialRampToValueAtTime(0.0005, time + 0.38);
+  osc.stop(time + 0.42);
+}
+
+function scheduleBeat(beat, time){
+  const barIndex = Math.floor(beat / 4) % progression.length;
+  const beatInBar = beat % 4;
+  const chord = progression[barIndex];
+  if(beatInBar === 0){
+    playPad(chord.pad, time, secondsPerBeat * 4.3);
+    playBass(chord.bass, time, secondsPerBeat * 4);
+  }
+  playPluck(chord.arp[beatInBar], time);
+}
+
+function scheduler(){
+  const scheduleAheadTime = 0.15;
+  while(nextNoteTime < audioCtx.currentTime + scheduleAheadTime){
+    scheduleBeat(beatCount, nextNoteTime);
+    nextNoteTime += secondsPerBeat;
+    beatCount++;
+  }
+}
+
+function startMusic(){
+  ensureAudioCtx();
+  if(musicPlaying) return;
+  musicPlaying = true;
+  buildMusicGraph();
+  beatCount = 0;
+  nextNoteTime = audioCtx.currentTime + 0.1;
+  schedulerTimer = setInterval(scheduler, 25);
+  document.getElementById("musicBtn").textContent = "🎵 Música: on";
+}
+
+function stopMusic(){
+  if(!musicPlaying) return;
+  musicPlaying = false;
+  if(schedulerTimer){ clearInterval(schedulerTimer); schedulerTimer = null; }
+  if(musicMaster){
+    const now = audioCtx.currentTime;
+    musicMaster.gain.cancelScheduledValues(now);
+    musicMaster.gain.setValueAtTime(musicMaster.gain.value, now);
+    musicMaster.gain.linearRampToValueAtTime(0, now + 1.0);
+  }
+  setTimeout(()=>{ try{ teardownMusicGraph(); }catch(e){} }, 1200);
+  document.getElementById("musicBtn").textContent = "🎵 Música: off";
+}
+
+document.getElementById("musicBtn").addEventListener("click", ()=>{
+  musicPlaying ? stopMusic() : startMusic();
+});
+document.getElementById("musicVol").addEventListener("input",(e)=>{
+  if(musicMaster){ musicMaster.gain.setTargetAtTime(parseFloat(e.target.value), audioCtx.currentTime, 0.05); }
+});
+
+window.addEventListener("keydown",(e)=>{
+  if(e.key==="ArrowRight" || e.key===" "){ e.preventDefault(); stop(); next(); }
+  else if(e.key==="ArrowLeft"){ stop(); prev(); }
+  else if(e.key==="p" || e.key==="P"){ playing ? stop() : play(); }
+  else if(e.key==="h" || e.key==="H"){ document.getElementById("ui").classList.toggle("hidden"); }
+  else if(e.key==="Home"){ stop(); goTo(0); }
+  else if(e.key==="End"){ stop(); goTo(total-1); }
+});
+
+// hint fade
+setTimeout(()=>{ document.getElementById("hint").classList.add("hidden"); }, 6000);
+
+render();
+</script>
