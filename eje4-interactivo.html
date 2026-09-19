@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eje 4 · IA como dispositivo formativo y evaluación situada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,600&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --tinta:#33484A;
+    --tinta-deep:#1F3032;
+    --terracota:#7CC2B9;
+    --terracota-deep:#4C948B;
+    --terracota-soft:#E7F6F3;
+    --salvia:#93C9B5;
+    --salvia-deep:#5FA089;
+    --salvia-soft:#EAF6F0;
+    --ocre:#E6A0AC;
+    --ocre-deep:#C97686;
+    --ocre-soft:#FBEBEE;
+    --coral:#EFA98D;
+    --coral-deep:#D3805F;
+    --arena:#F5FBFA;
+    --arena-deep:#E7F2F1;
+    --blanco:#FFFFFF;
+    --gris-suave:#6E8684;
+    --shadow:0 4px 16px rgba(29,37,48,0.10);
+    --shadow-lg:0 10px 30px rgba(29,37,48,0.14);
+    --radius:18px;
+    --font-display:'Fraunces', Georgia, serif;
+    --font-body:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono:'JetBrains Mono', ui-monospace, Consolas, monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--arena);color:var(--tinta);
+    font-family:var(--font-body);line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:var(--font-display);color:var(--tinta);line-height:1.18;margin:0;}
+  p{margin:0 0 16px;font-size:1.02rem;}
+  a{color:var(--terracota-deep);}
+  strong{color:var(--tinta);}
+  img{max-width:100%;}
+  .wrap{max-width:780px;margin:0 auto;padding:0 22px;}
+  code{font-family:var(--font-mono);background:var(--arena-deep);padding:2px 6px;border-radius:5px;font-size:0.88em;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    background:linear-gradient(135deg,
+      var(--tinta-deep) 0%,
+      var(--terracota) 58%,
+      var(--terracota) 70%,
+      var(--coral) 70%,
+      var(--coral) 100%);
+    padding:44px 20px 58px;
+  }
+  .hero-inner{
+    max-width:760px;margin:0 auto;
+    background:rgba(255,255,255,0.94);
+    border-radius:22px;padding:34px 34px;
+    box-shadow:var(--shadow-lg);
+    text-align:center;
+  }
+  .hero-kicker{
+    display:inline-block;font-family:var(--font-body);font-weight:800;font-size:0.78rem;
+    letter-spacing:0.09em;text-transform:uppercase;color:var(--terracota-deep);
+    background:var(--terracota-soft);padding:6px 16px;border-radius:999px;margin-bottom:16px;
+  }
+  .hero h1{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:700;margin-bottom:14px;}
+  .hero .dek{font-size:1.04rem;color:var(--gris-suave);max-width:580px;margin:0 auto;}
+  .hero-trail{
+    display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;
+    font-size:0.82rem;color:var(--gris-suave);font-weight:600;flex-wrap:wrap;
+  }
+  .hero-trail span.dot{width:5px;height:5px;border-radius:50%;background:var(--gris-suave);opacity:0.5;}
+  .hero-trail span.here{color:var(--terracota-deep);}
+  .hero-trail-link{color:var(--terracota-deep);font-weight:800;text-decoration:none;cursor:pointer;}
+  .hero-trail-link:hover{text-decoration:underline;}
+
+  /* ---------- Tab nav (Eje 4.1 / 4.2) ---------- */
+  .tab-nav{
+    position:sticky;top:0;z-index:70;background:var(--blanco);
+    border-bottom:1px solid rgba(46,58,70,0.10);box-shadow:0 2px 8px rgba(29,37,48,0.05);
+  }
+  .tab-nav ul{list-style:none;display:flex;max-width:640px;margin:0 auto;padding:0;}
+  .tab-nav li{flex:1;}
+  .tab-btn{
+    width:100%;background:none;border:none;cursor:pointer;
+    padding:12px 8px 10px;display:flex;flex-direction:column;align-items:center;gap:3px;
+    border-bottom:3px solid transparent;transition:all .18s ease;font-family:var(--font-body);
+  }
+  .tab-btn .dot{
+    width:24px;height:24px;border-radius:50%;background:var(--arena-deep);color:var(--gris-suave);
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.76rem;
+  }
+  .tab-btn .cap{font-size:0.68rem;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;color:var(--gris-suave);}
+  .tab-btn .label{font-size:0.74rem;color:var(--gris-suave);display:none;}
+  .tab-btn.active{border-bottom-color:var(--terracota);}
+  .tab-btn.active .dot{background:var(--terracota);color:#fff;}
+  .tab-btn.active .cap{color:var(--terracota-deep);}
+  @media (min-width:600px){.tab-btn .label{display:block;}}
+
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+
+  .panel-hero{max-width:780px;margin:0 auto;padding:34px 22px 2px;text-align:center;}
+  .panel-hero h1{font-size:clamp(1.45rem,3.6vw,2rem);margin-bottom:10px;}
+  .panel-hero .dek{color:var(--gris-suave);font-size:1rem;max-width:580px;margin:0 auto;}
+
+  /* ---------- Sticky TOC nav (per tab) ---------- */
+  .toc-bar{
+    position:sticky;top:55px;z-index:50;
+    background:rgba(246,240,230,0.94);backdrop-filter:blur(6px);
+    border-bottom:1px solid rgba(46,58,70,0.10);
+  }
+  .toc-scroll{
+    max-width:820px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;
+    padding:10px 16px;scrollbar-width:thin;
+  }
+  .toc-scroll::-webkit-scrollbar{height:4px;}
+  .toc-scroll::-webkit-scrollbar-thumb{background:var(--terracota-soft);border-radius:4px;}
+  .toc-link{
+    flex:0 0 auto;font-size:0.78rem;font-weight:700;color:var(--gris-suave);
+    background:transparent;border:1.5px solid rgba(46,58,70,0.14);border-radius:999px;
+    padding:6px 13px;text-decoration:none;white-space:nowrap;transition:all .18s ease;
+  }
+  .toc-link:hover{border-color:var(--terracota);color:var(--terracota-deep);}
+  .toc-link.active{background:var(--tinta);border-color:var(--tinta);color:#fff;}
+
+  /* ---------- Sections / typography ---------- */
+  section.block{max-width:780px;margin:0 auto;padding:44px 22px;}
+  section.block + section.block{border-top:1px solid rgba(46,58,70,0.08);}
+  .eyebrow{
+    display:inline-block;font-weight:800;font-size:0.76rem;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--terracota-deep);margin-bottom:10px;
+  }
+  h2{font-size:clamp(1.35rem,3vw,1.7rem);font-weight:700;margin-bottom:18px;clear:both;}
+  h3{font-size:1.18rem;font-weight:700;margin:30px 0 12px;clear:both;color:var(--tinta);}
+  h4.subhead{font-size:0.98rem;font-weight:800;margin:20px 0 8px;color:var(--terracota-deep);font-family:var(--font-body);}
+  .lead{font-size:1.1rem;color:var(--tinta);}
+  .lead strong{color:var(--terracota-deep);}
+  em.q{font-style:italic;color:var(--terracota-deep);}
+
+  .pull{
+    background:var(--blanco);border-left:5px solid var(--terracota);
+    border-radius:0 var(--radius) var(--radius) 0;
+    padding:22px 26px;margin:26px 0;box-shadow:var(--shadow);
+    font-family:var(--font-display);font-style:italic;font-size:1.14rem;color:var(--tinta);
+    clear:both;
+  }
+
+  .callout{
+    background:var(--salvia-soft);border-radius:var(--radius);
+    padding:22px 26px;margin:26px 0;clear:both;
+  }
+  .callout h4{margin:0 0 10px;font-family:var(--font-body);font-weight:800;font-size:0.95rem;color:var(--salvia-deep);text-transform:uppercase;letter-spacing:0.04em;}
+  .callout p:last-child{margin-bottom:0;}
+  .callout.ocre{background:var(--ocre-soft);}
+  .callout.ocre h4{color:var(--ocre-deep);}
+
+  .behind-scenes{
+    background:var(--tinta);color:#EDE6DB;border-radius:22px;
+    padding:30px 28px;margin:30px 0;clear:both;box-shadow:var(--shadow-lg);
+  }
+  .behind-scenes h3{color:#fff;margin-top:0;}
+  .behind-scenes p{color:#D8D0C3;}
+  .behind-scenes strong{color:#fff;}
+
+  .note-box{
+    border:1.5px dashed rgba(46,58,70,0.25);border-radius:14px;padding:16px 18px;margin:22px 0;clear:both;
+    font-size:0.9rem;color:var(--gris-suave);
+  }
+  .note-box strong{color:var(--tinta);}
+
+  .warn-list{list-style:none;margin:22px 0;padding:0;clear:both;}
+  .warn-list li{
+    background:var(--blanco);border-left:4px solid var(--ocre);border-radius:0 12px 12px 0;
+    padding:12px 16px;margin-bottom:8px;box-shadow:var(--shadow);font-size:0.95rem;
+  }
+
+  /* ---------- Accordion (shared) ---------- */
+  details.acc{
+    background:var(--blanco);border-radius:14px;margin-bottom:10px;
+    box-shadow:var(--shadow);overflow:hidden;clear:both;
+  }
+  details.acc summary{
+    list-style:none;cursor:pointer;padding:15px 18px;display:flex;align-items:center;gap:12px;
+    font-weight:700;color:var(--tinta);font-family:var(--font-body);
+  }
+  details.acc summary::-webkit-details-marker{display:none;}
+  details.acc .num{
+    flex:0 0 auto;width:30px;height:30px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;
+    background:var(--terracota-soft);color:var(--terracota-deep);
+  }
+  details.acc .chev{margin-left:auto;color:var(--gris-suave);transition:transform .2s ease;flex:0 0 auto;}
+  details.acc[open] .chev{transform:rotate(180deg);}
+  details.acc .acc-body{padding:0 20px 20px 68px;color:var(--tinta);}
+  details.acc .acc-body p{margin-bottom:10px;}
+  details.acc .acc-body p:last-child{margin-bottom:0;}
+  details.acc .acc-body ol,details.acc .acc-body ul{margin:10px 0;padding-left:20px;}
+  details.acc .acc-body li{margin-bottom:6px;}
+  details.acc .acc-body h5{font-size:0.86rem;font-weight:800;color:var(--terracota-deep);margin:16px 0 6px;font-family:var(--font-body);text-transform:uppercase;letter-spacing:0.03em;}
+  details.acc .acc-body pre{
+    background:var(--tinta-deep);color:#E8E2D6;border-radius:10px;padding:12px 14px;
+    font-family:var(--font-mono);font-size:0.8rem;overflow-x:auto;margin:10px 0;line-height:1.5;
+  }
+
+  .grp-salvia details.acc .num{background:var(--salvia-soft);color:var(--salvia-deep);}
+  .grp-ocre details.acc .num{background:var(--ocre-soft);color:var(--ocre-deep);}
+
+  /* ---------- 2-col grid for accordions ---------- */
+  .usos-grid{display:grid;gap:12px;grid-template-columns:repeat(2,1fr);margin:22px 0;clear:both;}
+  .usos-grid details.acc{margin-bottom:0;}
+  @media (max-width:600px){.usos-grid{grid-template-columns:1fr;}}
+
+  /* ---------- Family-style 3-card ---------- */
+  .fam-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin:22px 0;clear:both;}
+  details.fam{background:var(--blanco);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;}
+  details.fam summary{list-style:none;cursor:pointer;padding:16px 18px;display:flex;align-items:center;gap:12px;font-weight:700;font-family:var(--font-body);}
+  details.fam summary::-webkit-details-marker{display:none;}
+  details.fam .icon{
+    width:40px;height:40px;border-radius:11px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+    font-size:1.2rem;
+  }
+  details.fam.f1 .icon{background:var(--terracota-soft);color:var(--terracota-deep);}
+  details.fam.f2 .icon{background:var(--ocre-soft);color:var(--ocre-deep);}
+  details.fam.f3 .icon{background:var(--salvia-soft);color:var(--salvia-deep);}
+  details.fam .chev{margin-left:auto;color:var(--gris-suave);transition:transform .2s ease;}
+  details.fam[open] .chev{transform:rotate(180deg);}
+  details.fam .fam-body{padding:0 18px 18px;color:var(--tinta);}
+  details.fam .fam-body p{margin-bottom:0;font-size:0.96rem;}
+
+  /* ---------- Matrix (redesign tables) ---------- */
+  .matrix-note{font-size:0.86rem;color:var(--gris-suave);text-align:center;margin:-6px 0 18px;}
+  details.matrix{
+    background:var(--blanco);border-radius:14px;margin-bottom:10px;box-shadow:var(--shadow);overflow:hidden;clear:both;
+  }
+  details.matrix summary{
+    list-style:none;cursor:pointer;padding:15px 18px;font-weight:700;color:var(--tinta);
+    display:flex;align-items:center;gap:10px;font-family:var(--font-body);
+  }
+  details.matrix summary::-webkit-details-marker{display:none;}
+  details.matrix .chev{margin-left:auto;color:var(--gris-suave);transition:transform .2s ease;}
+  details.matrix[open] .chev{transform:rotate(180deg);}
+  details.matrix .m-body{padding:2px 18px 18px;}
+  .m-row{padding:12px 0;border-top:1px solid var(--arena-deep);}
+  .m-row:first-child{border-top:none;}
+  .m-label{font-size:0.74rem;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--gris-suave);margin-bottom:4px;}
+  .m-before{color:var(--tinta);}
+  .m-after{color:var(--terracota-deep);font-weight:600;}
+  .m-evidence{color:var(--salvia-deep);font-weight:600;}
+
+  .map-list{list-style:none;margin:20px 0;padding:0;clear:both;}
+  .map-list li{
+    background:var(--blanco);border-radius:12px;box-shadow:var(--shadow);
+    padding:14px 18px;margin-bottom:8px;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;
+  }
+  .map-list .map-need{font-weight:700;color:var(--tinta);flex:1 1 220px;}
+  .map-list .map-arrow{color:var(--terracota);font-weight:800;flex:0 0 auto;}
+  .map-list .map-solution{color:var(--salvia-deep);font-weight:700;flex:1 1 220px;}
+
+  /* ---------- Comparison table (scrollable) ---------- */
+  .compare-wrap{overflow-x:auto;margin:22px 0;border-radius:14px;box-shadow:var(--shadow);clear:both;-webkit-overflow-scrolling:touch;}
+  table.compare{border-collapse:collapse;width:100%;min-width:640px;background:var(--blanco);}
+  table.compare th,table.compare td{padding:12px 16px;text-align:left;font-size:0.88rem;border-bottom:1px solid var(--arena-deep);vertical-align:top;}
+  table.compare thead th{background:var(--tinta);color:#fff;font-weight:800;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.03em;}
+  table.compare tbody th{font-weight:800;color:var(--terracota-deep);background:var(--arena);white-space:nowrap;}
+  table.compare tbody tr:last-child td,table.compare tbody tr:last-child th{border-bottom:none;}
+  .compare-source{font-size:0.78rem;color:var(--gris-suave);font-style:italic;text-align:center;margin-top:-8px;margin-bottom:24px;}
+
+  /* ---------- Segmented toggle ---------- */
+  .segmented{display:flex;gap:6px;background:var(--arena-deep);border-radius:999px;padding:5px;margin:22px 0 0;clear:both;}
+  .segmented button{
+    flex:1;border:none;background:transparent;border-radius:999px;padding:10px 14px;cursor:pointer;
+    font-family:var(--font-body);font-weight:700;color:var(--gris-suave);font-size:0.92rem;transition:all .18s ease;
+  }
+  .segmented button.active{background:var(--tinta);color:#fff;}
+  .compare-panel{display:none;margin-top:16px;}
+  .compare-panel.active{display:block;}
+  .compare-panel .card{background:var(--blanco);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);}
+  .compare-panel .card p:last-child{margin-bottom:0;}
+
+  /* ---------- Criteria checklist ---------- */
+  .crit-list{display:grid;gap:10px;grid-template-columns:repeat(2,1fr);margin:22px 0;clear:both;}
+  @media (max-width:600px){.crit-list{grid-template-columns:1fr;}}
+  .crit{background:var(--blanco);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);}
+  .crit .crit-name{font-weight:800;color:var(--ocre-deep);font-size:0.92rem;display:block;margin-bottom:3px;}
+  .crit .crit-q{font-size:0.9rem;color:var(--tinta);}
+
+  /* ---------- Resource / video cards ---------- */
+  .resource-grid{display:grid;gap:14px;grid-template-columns:1fr;margin:22px 0;clear:both;}
+  .resource-card{
+    display:flex;gap:14px;align-items:center;background:var(--blanco);border-radius:14px;
+    padding:14px 16px;box-shadow:var(--shadow);text-decoration:none;transition:transform .15s ease;
+  }
+  .resource-card:hover{transform:translateY(-2px);}
+  .resource-thumb{
+    flex:0 0 auto;width:64px;height:64px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    font-size:1.5rem;color:#fff;
+  }
+  .resource-thumb.vid{background:var(--terracota);}
+  .resource-thumb.art{background:var(--salvia);}
+  .resource-text{flex:1;min-width:0;}
+  .resource-kind{font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--gris-suave);}
+  .resource-title{font-weight:700;color:var(--tinta);font-size:0.96rem;line-height:1.3;}
+  .resource-by{font-size:0.84rem;color:var(--gris-suave);margin-top:2px;}
+
+  /* ---------- Bibliography ---------- */
+  .biblio-list{margin:0;padding-left:0;list-style:none;}
+  .biblio-list li{margin-bottom:12px;padding-left:20px;position:relative;font-size:0.95rem;}
+  .biblio-list li::before{content:"—";position:absolute;left:0;color:var(--terracota);}
+  .biblio-note{font-size:0.82rem;color:var(--gris-suave);font-style:italic;margin-top:14px;}
+
+  /* ---------- Closing spiral (planificación / desarrollo) ---------- */
+  .duo-cycle{
+    display:flex;align-items:center;justify-content:center;gap:0;margin:30px auto;flex-wrap:wrap;clear:both;max-width:520px;
+  }
+  .duo-node{
+    background:#fff;border:2px solid var(--terracota);border-radius:16px;padding:16px 20px;
+    text-align:center;font-weight:700;color:var(--tinta);box-shadow:var(--shadow);flex:1 1 160px;min-width:150px;
+  }
+  .duo-node span{display:block;font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--terracota-deep);margin-bottom:4px;}
+  .duo-arrows{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;color:var(--gris-suave);font-size:1.3rem;font-weight:800;padding:0 14px;line-height:1;}
+  .duo-arrows small{font-size:0.62rem;font-weight:700;color:var(--gris-suave);letter-spacing:0.03em;}
+
+  /* ---------- Flow diagram (mediation sequence) ---------- */
+  .flow-diagram{margin:26px 0;clear:both;}
+  .flow-title{text-align:center;font-weight:800;font-size:0.95rem;color:var(--tinta);margin-bottom:16px;}
+  .flow-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;}
+  .flow-step{
+    background:var(--blanco);border:2px solid var(--arena-deep);border-radius:12px;
+    padding:12px 14px;font-size:0.82rem;font-weight:700;color:var(--tinta);text-align:center;
+    box-shadow:var(--shadow);flex:1 1 120px;min-width:100px;max-width:150px;
+  }
+  .flow-step.hi{border-color:var(--terracota);background:var(--terracota-soft);color:var(--terracota-deep);}
+  .flow-arrow{color:var(--gris-suave);font-weight:800;flex:0 0 auto;}
+  .flow-caption{text-align:center;font-size:0.82rem;color:var(--gris-suave);font-style:italic;margin-top:14px;}
+  @media (max-width:600px){
+    .flow-row{flex-direction:column;}
+    .flow-arrow{transform:rotate(90deg);}
+    .flow-step{max-width:none;width:100%;}
+  }
+
+  /* ---------- Branch diagram (dos caminos) ---------- */
+  .branch-diagram{margin:26px 0;clear:both;display:flex;flex-direction:column;align-items:center;gap:6px;}
+  .branch-title{text-align:center;font-weight:800;font-size:0.95rem;color:var(--tinta);margin-bottom:10px;}
+  .branch-box{
+    background:var(--blanco);border:2px solid var(--arena-deep);border-radius:12px;padding:12px 18px;
+    text-align:center;font-weight:700;font-size:0.86rem;color:var(--tinta);box-shadow:var(--shadow);max-width:320px;
+  }
+  .branch-connector{color:var(--gris-suave);font-size:1.2rem;line-height:1;}
+  .branch-pair{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;width:100%;}
+  .branch-box.a{border-color:var(--terracota);background:var(--terracota-soft);flex:1 1 200px;max-width:260px;}
+  .branch-box.b{border-color:var(--ocre);background:var(--ocre-soft);flex:1 1 200px;max-width:260px;}
+  .branch-box .branch-cap{display:block;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;opacity:0.75;}
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--tinta);padding:34px 20px;text-align:center;}
+  footer .credit{color:#B9C0C8;font-size:0.82rem;margin:0;}
+
+  ul.plain{margin:14px 0;padding-left:20px;}
+  ul.plain li{margin-bottom:8px;}
+
+  @media (max-width:600px){
+    .hero{padding:32px 14px 44px;}
+    .hero-inner{padding:24px 18px;}
+    section.block{padding:36px 18px;}
+    .toc-bar{top:50px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <span class="hero-kicker">Trayecto formador · Enseñar con IA</span>
+    <h1>Eje 4: enseñar y evaluar con IA</h1>
+    <p class="dek">El cierre del trayecto, en dos miradas: primero la decisión pedagógica —qué evidenciar, cómo retroalimentar, cómo mostrar el proceso—, y después la decisión tecnológica —con qué herramientas diseñamos y comunicamos lo que armamos.</p>
+    <a href="https://drive.google.com/file/d/1GX7Earj5zmkEuMT5aggLQntE5rMKLNBU/view?usp=drive_link" target="_blank" rel="noopener" style="display:inline-block;margin-top:18px;padding:9px 18px;border-radius:999px;border:1px solid rgba(46,58,70,0.2);background:#fff;color:var(--tinta);font-weight:800;font-size:0.85rem;text-decoration:none;font-family:var(--font-body);box-shadow:var(--shadow);">📄 Descargar PDF completo</a>
+  </div>
+</div>
+
+<nav class="tab-nav">
+  <ul>
+    <li>
+      <button class="tab-btn active" data-tab="41" id="tabbtn-41">
+        <span class="dot">1</span>
+        <span class="cap">Eje 4.1</span>
+        <span class="label">Evaluación situada</span>
+      </button>
+    </li>
+    <li>
+      <button class="tab-btn" data-tab="42" id="tabbtn-42">
+        <span class="dot">2</span>
+        <span class="cap">Eje 4.2</span>
+        <span class="label">Mirada tecnológica</span>
+      </button>
+    </li>
+  </ul>
+</nav>
+
+<!-- ===================== TAB 4.1 ===================== -->
+<section class="tab-panel active" id="tab-41">
+
+  <div class="panel-hero">
+    <span class="hero-kicker">Eje 4.1 · Mirada pedagógica</span>
+    <h1>IA como dispositivo formativo y evaluación situada</h1>
+    <p class="dek">De usos pedagógicos posibles a una evaluación que hace visible el proceso, cuando la IA atraviesa por completo la forma en que enseñamos y evaluamos.</p>
+  </div>
+
+  <nav class="toc-bar">
+    <div class="toc-scroll" id="tocScroll41">
+      <a class="toc-link" href="#s41" data-target="s41">Usos posibles</a>
+      <a class="toc-link" href="#s42" data-target="s42">Evaluar</a>
+      <a class="toc-link" href="#s43" data-target="s43">Retroalimentación</a>
+      <a class="toc-link" href="#s44" data-target="s44">El hackeo</a>
+      <a class="toc-link" href="#s45" data-target="s45">Mostrar el proceso</a>
+      <a class="toc-link" href="#cierre41" data-target="cierre41">Cierre</a>
+    </div>
+  </nav>
+
+  <section class="block" id="s41">
+    <h2>Usos pedagógicos posibles</h2>
+    <p class="lead">Cuando pensamos en incorporar inteligencia artificial generativa a una propuesta de enseñanza, una de las primeras preguntas suele ser <em class="q">qué puede hacer la herramienta</em>. Sin embargo, desde una perspectiva didáctica resulta más pertinente invertir la pregunta: <strong>¿qué necesitamos que suceda para favorecer el aprendizaje y de qué manera la IA podría colaborar con ello?</strong></p>
+    <p>Este desplazamiento permite pensar la IA no solamente como una herramienta capaz de producir textos, imágenes, explicaciones o respuestas, sino como una <strong>mediación que puede apoyar algunas decisiones docentes y acompañar diferentes momentos del aprendizaje</strong>.</p>
+
+    <p class="matrix-note">Cuatro usos posibles · tocá cada uno para desplegarlo.</p>
+    <div class="usos-grid">
+      <details class="acc">
+        <summary><span class="num">1</span> Andamiajes <span class="chev">▾</span></summary>
+        <div class="acc-body"><p>Frente a una tarea compleja, la IA puede ofrecer pistas, formular preguntas orientadoras, proponer pasos intermedios o generar explicaciones alternativas que ayuden al estudiante a avanzar. El desafío consiste en que ese apoyo no resuelva aquello que necesitamos que el estudiante aprenda a hacer: un andamiaje tiene sentido cuando sostiene temporalmente el proceso y permite avanzar hacia mayores niveles de autonomía.</p></div>
+      </details>
+      <details class="acc">
+        <summary><span class="num">2</span> Variantes de consigna <span class="chev">▾</span></summary>
+        <div class="acc-body"><p>A partir de una misma intención pedagógica, el docente puede explorar diferentes niveles de complejidad, modificar el contexto de un problema, incorporar apoyos adicionales o generar distintas puertas de entrada a un mismo contenido. La IA puede agilizar esa producción de alternativas, pero es el docente quien decide cuáles resultan pertinentes y cuáles conservan el propósito de aprendizaje de la propuesta original.</p></div>
+      </details>
+      <details class="acc">
+        <summary><span class="num">3</span> Ejemplos y contraejemplos <span class="chev">▾</span></summary>
+        <div class="acc-body"><p>Podemos solicitar a una IA casos para comparar, argumentos contrapuestos, resoluciones correctas e incorrectas o producciones con distintos niveles de calidad. Su potencial pedagógico no reside en generar esos ejemplos, sino en lo que proponemos hacer con ellos: comparar, establecer criterios, identificar errores, reconocer supuestos, justificar una elección o elaborar una alternativa superadora.</p></div>
+      </details>
+      <details class="acc">
+        <summary><span class="num">4</span> Anticipación de dificultades <span class="chev">▾</span></summary>
+        <div class="acc-body"><p>Antes de implementar una actividad, el docente puede utilizarla para explorar posibles errores, confusiones conceptuales, interpretaciones alternativas de una consigna o conocimientos previos que podrían resultar necesarios. Esta anticipación no sustituye el conocimiento que el profesor tiene de sus estudiantes, pero puede ofrecer nuevas hipótesis para prever apoyos e intervenciones.</p></div>
+      </details>
+    </div>
+
+    <p>En todos estos casos aparece una distinción importante: <strong>usar IA para producir no es necesariamente lo mismo que usar IA para aprender</strong>. Una misma herramienta puede resolver una tarea en lugar del estudiante o convertirse en una oportunidad para que compare, analice, revise, argumente y tome decisiones.</p>
+    <p>Por eso, antes de incorporar IA conviene preguntarnos: ¿qué dificultad de enseñanza o de aprendizaje estamos intentando abordar?, ¿qué tipo de apoyo necesita el estudiante?, ¿la intervención de la IA amplía sus posibilidades de pensar y actuar o sustituye la actividad que necesitamos que realice?</p>
+
+    <div class="pull">La respuesta no está en la herramienta. Continúa siendo una decisión pedagógica situada.</div>
+
+    <h3>Enseñar a usar IA también forma parte de la propuesta</h3>
+    <p>Si esperamos que los estudiantes utilicen la IA de manera crítica, no podemos suponer que sabrán hacerlo simplemente porque utilizan estas herramientas cotidianamente. <strong>Usar una IA no equivale a saber utilizarla para aprender.</strong> Esto también necesita ser enseñado.</p>
+    <p>Podemos generar pequeñas situaciones de experimentación en las que los estudiantes aprendan, por ejemplo, a:</p>
+
+    <div class="grp-salvia">
+      <details class="acc">
+        <summary><span class="num">1</span> Comparar respuestas <span class="chev">▾</span></summary>
+        <div class="acc-body"><p>Formular una misma pregunta de diferentes maneras, analizar qué cambia entre las respuestas y discutir por qué.</p></div>
+      </details>
+      <details class="acc">
+        <summary><span class="num">2</span> Interrogar una respuesta <span class="chev">▾</span></summary>
+        <div class="acc-body"><p>Identificar afirmaciones que necesitan ser verificadas, buscar fuentes y contrastar la información.</p></div>
+      </details>
+      <details class="acc">
+        <summary><span class="num">3</span> Trabajar con el error <span class="chev">▾</span></summary>
+        <div class="acc-body"><p>Ofrecer una respuesta generada por IA que contenga problemas conceptuales para que los estudiantes los identifiquen, expliquen y corrijan.</p></div>
+      </details>
+      <details class="acc">
+        <summary><span class="num">4</span> Pedir ayuda sin delegar la resolución <span class="chev">▾</span></summary>
+        <div class="acc-body"><p>Utilizar la IA para solicitar pistas, preguntas orientadoras o explicaciones alternativas antes que una respuesta terminada.</p></div>
+      </details>
+      <details class="acc">
+        <summary><span class="num">5</span> Tomar decisiones frente a lo generado <span class="chev">▾</span></summary>
+        <div class="acc-body"><p>Comparar diferentes alternativas propuestas por la IA, seleccionar una, descartarla o modificarla y fundamentar esa decisión.</p></div>
+      </details>
+      <details class="acc">
+        <summary><span class="num">6</span> Revisar una producción propia <span class="chev">▾</span></summary>
+        <div class="acc-body"><p>Utilizar determinados criterios para solicitar retroalimentación sobre un borrador y decidir cuáles de las sugerencias recibidas resultan pertinentes.</p></div>
+      </details>
+      <details class="acc">
+        <summary><span class="num">7</span> Reconocer cuándo no utilizarla <span class="chev">▾</span></summary>
+        <div class="acc-body"><p>Analizar tareas o momentos del proceso en los que delegar una operación en la IA impediría desarrollar precisamente aquello que se pretende aprender.</p></div>
+      </details>
+    </div>
+
+    <p>En estas situaciones, el aprendizaje no reside en obtener una mejor respuesta de la herramienta, sino en las <strong>operaciones cognitivas que realiza el estudiante frente a ella</strong>: comparar, verificar, cuestionar, seleccionar, justificar, revisar y decidir.</p>
+    <p>Por eso, enseñar a utilizar IA no puede reducirse a enseñar a escribir <em>prompts</em>. Supone construir progresivamente criterios para reconocer para qué utilizarla, cuándo hacerlo, qué delegar, qué conservar bajo decisión propia y cómo valorar críticamente aquello que produce.</p>
+  </section>
+
+  <section class="block" id="s42">
+    <h2>Evaluación en tiempos de IA: qué evidenciar</h2>
+    <p class="lead">La posibilidad de que una inteligencia artificial produzca textos, explicaciones, imágenes, resoluciones o argumentos vuelve más compleja una relación sobre la que tradicionalmente se apoyaron muchas prácticas de evaluación: la relación entre lo que el estudiante entrega y lo que podemos inferir que aprendió.</p>
+    <p>Un buen ensayo podía considerarse evidencia de determinadas capacidades de escritura y argumentación; una resolución correcta, de ciertos conocimientos y procedimientos; un informe, de procesos de búsqueda, selección y elaboración de información. La IA generativa no elimina el valor de esas producciones, pero nos obliga a reconocer que el producto final, considerado de manera aislada, puede resultar insuficiente para comprender qué aprendió el estudiante y qué decisiones tomó durante el proceso.</p>
+    <p>Linda Castañeda (2024), al analizar las relaciones entre inteligencia artificial, evaluación y <em>accountability</em>, invita precisamente a revisar qué podemos <strong>atribuir</strong> al estudiante cuando las tecnologías participan en sus producciones. El problema deja de ser solamente descubrir si utilizó o no IA y pasa a ser pedagógicamente más relevante: <strong>¿qué evidencias necesitamos para reconocer el aprendizaje?</strong></p>
+    <p>Podemos observar el <strong>producto</strong>: qué logró construir y con qué nivel de calidad. Pero también el <strong>proceso</strong>: cómo llegó a esa producción, qué decisiones tomó, qué fuentes consultó, qué alternativas consideró, qué revisó y qué modificaciones realizó. A estas evidencias podemos sumar el <strong>desempeño</strong>: qué puede explicar, fundamentar, relacionar o resolver frente a preguntas o situaciones nuevas. Y adquiere especial relevancia la <strong>argumentación con fuentes</strong>: no solamente incorporar referencias, sino poder contrastar la información obtenida —también aquella generada por IA—, reconocer su procedencia y justificar por qué determinadas fuentes resultan pertinentes.</p>
+
+    <div class="callout">
+      <h4>Evaluación formativa</h4>
+      <p>Como plantean Anijovich y Cappelletti (2023), las evidencias no constituyen un fin en sí mismas: forman parte de una trama de decisiones que articula aquello que esperamos que los estudiantes aprendan, las actividades que proponemos y la información que recogemos para acompañar y valorar esos aprendizajes.</p>
+    </div>
+
+    <p>Por eso, en tiempos de IA la pregunta no debería ser únicamente "¿qué producto voy a evaluar?", sino también: <strong>¿qué necesito observar para reconocer el aprendizaje que quiero promover?</strong> El cambio consiste en rediseñar la situación para que aquello que queremos reconocer como aprendizaje tenga que hacerse visible. Por ejemplo:</p>
+
+    <p class="matrix-note">Tocá cada actividad para ver cómo rediseñarla y qué evidencia observar.</p>
+
+    <details class="matrix">
+      <summary>Un informe sobre un tema <span class="chev">▾</span></summary>
+      <div class="m-body">
+        <div class="m-row"><div class="m-label">Si antes proponíamos</div><div class="m-before">Un informe sobre un tema.</div></div>
+        <div class="m-row"><div class="m-label">Con IA podemos rediseñar para solicitar</div><div class="m-after">Informe + selección y contraste de fuentes + explicación de dos decisiones tomadas durante su elaboración.</div></div>
+        <div class="m-row"><div class="m-label">¿Qué evidencia observamos?</div><div class="m-evidence">Comprensión, criterios de selección, argumentación.</div></div>
+      </div>
+    </details>
+    <details class="matrix">
+      <summary>Un ensayo domiciliario <span class="chev">▾</span></summary>
+      <div class="m-body">
+        <div class="m-row"><div class="m-label">Si antes proponíamos</div><div class="m-before">Un ensayo domiciliario.</div></div>
+        <div class="m-row"><div class="m-label">Con IA podemos rediseñar para solicitar</div><div class="m-after">Ensayo elaborado con o sin IA + instancia breve en la que el estudiante defiende una idea, responde objeciones y explica revisiones.</div></div>
+        <div class="m-row"><div class="m-label">¿Qué evidencia observamos?</div><div class="m-evidence">Apropiación conceptual y capacidad de argumentar.</div></div>
+      </div>
+    </details>
+    <details class="matrix">
+      <summary>Resolución de un problema <span class="chev">▾</span></summary>
+      <div class="m-body">
+        <div class="m-row"><div class="m-label">Si antes proponíamos</div><div class="m-before">Resolución de un problema.</div></div>
+        <div class="m-row"><div class="m-label">Con IA podemos rediseñar para solicitar</div><div class="m-after">Comparar la resolución propia con una generada por IA, detectar diferencias y justificar cuál procedimiento resulta adecuado.</div></div>
+        <div class="m-row"><div class="m-label">¿Qué evidencia observamos?</div><div class="m-evidence">Razonamiento y comprensión del procedimiento.</div></div>
+      </div>
+    </details>
+    <details class="matrix">
+      <summary>Una síntesis de un texto <span class="chev">▾</span></summary>
+      <div class="m-body">
+        <div class="m-row"><div class="m-label">Si antes proponíamos</div><div class="m-before">Una síntesis de un texto.</div></div>
+        <div class="m-row"><div class="m-label">Con IA podemos rediseñar para solicitar</div><div class="m-after">Comparar una síntesis producida por IA con el texto original: identificar omisiones, simplificaciones y errores, y producir una nueva versión.</div></div>
+        <div class="m-row"><div class="m-label">¿Qué evidencia observamos?</div><div class="m-evidence">Comprensión y jerarquización.</div></div>
+      </div>
+    </details>
+    <details class="matrix">
+      <summary>Investigación sobre un tema <span class="chev">▾</span></summary>
+      <div class="m-body">
+        <div class="m-row"><div class="m-label">Si antes proponíamos</div><div class="m-before">Investigación sobre un tema.</div></div>
+        <div class="m-row"><div class="m-label">Con IA podemos rediseñar para solicitar</div><div class="m-after">Utilizar IA para construir hipótesis iniciales y luego verificarlas mediante fuentes pertinentes.</div></div>
+        <div class="m-row"><div class="m-label">¿Qué evidencia observamos?</div><div class="m-evidence">Búsqueda, contrastación y validación.</div></div>
+      </div>
+    </details>
+    <details class="matrix">
+      <summary>Proyecto o producción <span class="chev">▾</span></summary>
+      <div class="m-body">
+        <div class="m-row"><div class="m-label">Si antes proponíamos</div><div class="m-before">Proyecto o producción.</div></div>
+        <div class="m-row"><div class="m-label">Con IA podemos rediseñar para solicitar</div><div class="m-after">Presentar el producto junto con dos o tres decisiones relevantes del proceso: qué se modificó, por qué y con qué criterios.</div></div>
+        <div class="m-row"><div class="m-label">¿Qué evidencia observamos?</div><div class="m-evidence">Proceso, autorregulación y autoría.</div></div>
+      </div>
+    </details>
+    <details class="matrix">
+      <summary>Exposición oral <span class="chev">▾</span></summary>
+      <div class="m-body">
+        <div class="m-row"><div class="m-label">Si antes proponíamos</div><div class="m-before">Exposición oral.</div></div>
+        <div class="m-row"><div class="m-label">Con IA podemos rediseñar para solicitar</div><div class="m-after">Preparar la exposición con IA y luego responder preguntas nuevas, establecer relaciones o aplicar lo trabajado a otro caso.</div></div>
+        <div class="m-row"><div class="m-label">¿Qué evidencia observamos?</div><div class="m-evidence">Desempeño y transferencia.</div></div>
+      </div>
+    </details>
+
+    <p style="margin-top:20px;">No se trata de sumar requisitos para comprobar que "el estudiante realmente hizo el trabajo". Se trata de diseñar situaciones en las que el aprendizaje pueda hacerse visible.</p>
+  </section>
+
+  <section class="block" id="s43">
+    <h2>Retroalimentación mediada por IA</h2>
+    <p class="lead">Si evaluar implica recoger evidencias para tomar decisiones que ayuden a mejorar los aprendizajes, la <strong>retroalimentación</strong> ocupa un lugar central en ese proceso.</p>
+    <p>Desde una perspectiva formativa, retroalimentar no significa simplemente indicar qué está bien y qué está mal. Supone ofrecer información que ayude al estudiante a comprender dónde se encuentra respecto de los propósitos y criterios de la tarea, reconocer qué necesita revisar y, fundamentalmente, <strong>decidir qué puede hacer para avanzar</strong>.</p>
+    <p>La inteligencia artificial generativa amplía las posibilidades de producir retroalimentación y permite que esta aparezca en diferentes momentos del proceso.</p>
+
+    <div class="segmented" role="tablist" aria-label="Quién usa la retroalimentación con IA">
+      <button type="button" class="cmp-btn active" data-cmp="docente">El docente</button>
+      <button type="button" class="cmp-btn" data-cmp="estudiante">El estudiante</button>
+    </div>
+    <div class="compare-panel active" data-cmp-panel="docente">
+      <div class="card"><p>Puede utilizarla para anticipar errores frecuentes, generar preguntas que orienten la revisión de una producción, explorar diferentes maneras de formular una devolución o producir alternativas que luego serán seleccionadas y ajustadas.</p></div>
+    </div>
+    <div class="compare-panel" data-cmp-panel="estudiante">
+      <div class="card"><p>Frente a un borrador, puede solicitar preguntas para revisar su trabajo, pedir que se identifiquen aspectos poco claros, contrastar su producción con determinados criterios o explorar alternativas antes de elaborar una nueva versión.</p></div>
+    </div>
+
+    <p style="margin-top:22px;">Esta posibilidad resulta especialmente interesante porque permite multiplicar las oportunidades de revisión. Sin embargo, <strong>recibir más retroalimentación no significa necesariamente recibir mejor retroalimentación</strong>.</p>
+    <p>Una IA puede producir devoluciones genéricas, interpretar incorrectamente una producción, sugerir modificaciones que no responden al propósito de aprendizaje o formular recomendaciones aparentemente convincentes pero conceptualmente erróneas (alucinaciones). Tampoco conoce necesariamente la trayectoria del estudiante, las decisiones tomadas durante la enseñanza ni el contexto particular en el que se desarrolla la tarea. Por eso, la retroalimentación generada por IA necesita ser <strong>interpretada y valorada</strong>, no simplemente aceptada.</p>
+
+    <p class="matrix-note">Seis criterios para analizar la calidad de una devolución generada por IA.</p>
+    <div class="crit-list">
+      <div class="crit"><span class="crit-name">Pertinencia</span><span class="crit-q">¿Se relaciona con el propósito y los criterios de la tarea?</span></div>
+      <div class="crit"><span class="crit-name">Especificidad</span><span class="crit-q">¿Se refiere concretamente a la producción o podría aplicarse a cualquier trabajo?</span></div>
+      <div class="crit"><span class="crit-name">Comprensibilidad</span><span class="crit-q">¿El estudiante puede comprender qué necesita revisar?</span></div>
+      <div class="crit"><span class="crit-name">Orientación hacia la acción</span><span class="crit-q">¿Ofrece preguntas o pistas que permitan avanzar sin resolver directamente la tarea?</span></div>
+      <div class="crit"><span class="crit-name">Validez</span><span class="crit-q">¿La información y las sugerencias son conceptualmente correctas?</span></div>
+      <div class="crit"><span class="crit-name">Oportunidad</span><span class="crit-q">¿Esa devolución resulta adecuada para el momento del proceso en que se encuentra el estudiante?</span></div>
+    </div>
+
+    <p>La IA puede, incluso, convertirse en objeto de análisis. En lugar de pedir al estudiante que aplique automáticamente sus recomendaciones, podemos proponerle que valore la devolución recibida: ¿qué sugerencias acepta?, ¿cuáles descarta?, ¿qué necesita verificar?, ¿qué cambios decide realizar y por qué? De este modo, la retroalimentación mediada por IA puede convertirse en una oportunidad para desarrollar <strong>autoevaluación, pensamiento crítico y autorregulación</strong>.</p>
+
+    <div class="pull">La pregunta no es si la IA puede ofrecer retroalimentación —sabemos que puede hacerlo—, sino qué condiciones necesitamos generar para que esa retroalimentación contribuya efectivamente al aprendizaje.</div>
+  </section>
+
+  <section class="block" id="s44">
+    <h2>Cuando la IA hackea la evaluación</h2>
+    <p class="lead">Hasta aquí hemos planteado que la inteligencia artificial generativa vuelve insuficiente una relación sobre la que se sostuvieron muchas prácticas de evaluación: asumir que el producto entregado por el estudiante permite inferir directamente aquello que aprendió. Pero podemos llevar esta discusión un poco más lejos.</p>
+    <p>Mariana Maggio (2026) propone pensar la irrupción de la IA generativa como un <strong>"hackeo" al corazón del sistema educativo: la evaluación</strong>. Muchas de las tareas que durante décadas utilizamos para enseñar y evaluar —resumir, responder preguntas, explicar un concepto, producir un texto, resolver determinadas consignas— hoy pueden ser realizadas, al menos parcialmente, por sistemas de inteligencia artificial generativa.</p>
+    <p>Frente a este escenario podríamos intentar preservar las prácticas conocidas restringiendo el acceso a estas tecnologías, o buscando mecanismos cada vez más sofisticados para determinar si una producción fue realizada con IA. Pero también podemos interpretar este momento como una oportunidad para <strong>interrogar las prácticas que fueron hackeadas con tanta facilidad</strong>.</p>
+
+    <div class="pull">¿Qué características tenían nuestras propuestas de enseñanza y evaluación para que una tecnología pudiera resolverlas con tanta facilidad?</div>
+
+    <p>Maggio invita a recuperar aquí la necesidad de <strong>problematizar la enseñanza</strong>. Si nuestras propuestas se concentran fundamentalmente en recuperar información, sintetizar conocimientos ya producidos, reproducir explicaciones o elaborar respuestas previsibles, estamos solicitando justamente algunas de las operaciones que estas tecnologías pueden realizar con enorme eficacia.</p>
+    <p>Reinventar la enseñanza supone entonces desplazar el centro hacia aquello que requiere de los estudiantes <strong>formular preguntas, abordar problemas abiertos, construir criterios propios, tomar decisiones, producir interpretaciones, experimentar, crear y construir conocimiento con otros</strong>. Esto no significa buscar actividades que la IA "no pueda hacer" para ganarle una carrera a la tecnología: significa volver a preguntarnos qué experiencias vale la pena construir porque tienen sentido educativo y porque permiten a los estudiantes apropiarse del conocimiento, producir algo con él y participar en su construcción.</p>
+
+    <p>Aquí recupera fuerza otra idea desarrollada por Maggio a lo largo de su obra: la necesidad de construir una <strong>didáctica en vivo</strong>, capaz de reconocer las transformaciones culturales mientras están ocurriendo. No podemos esperar a que las tecnologías se estabilicen para decidir qué hacer pedagógicamente con ellas: necesitamos experimentar, analizar lo que sucede, revisar nuestras decisiones y construir nuevas respuestas junto con nuestros estudiantes.</p>
+    <p>Desde esta perspectiva, la incorporación de IA tampoco puede reducirse al aprendizaje instrumental de una herramienta ni a enseñar a escribir mejores <em>prompts</em>. Las tecnologías actuales seguirán transformándose: ya comenzamos a transitar desde sistemas centrados fundamentalmente en la conversación y la generación de contenidos hacia desarrollos capaces de articular herramientas, encadenar acciones y automatizar procesos. Por eso, más que preparar a los estudiantes para utilizar correctamente la herramienta disponible hoy, necesitamos generar condiciones para que puedan comprender estas transformaciones, interrogarlas, experimentar con ellas y tomar decisiones críticas acerca de qué delegar, qué verificar, qué transformar y qué conservar bajo decisión humana.</p>
+
+    <div class="callout">
+      <h4>Dimensiones humanas</h4>
+      <p>En ese proceso, Maggio propone recuperar dimensiones profundamente humanas de la experiencia educativa: el cuerpo, el encuentro, la construcción colectiva, la creatividad, la producción de conocimiento original y la posibilidad de imaginar con otros. La enseñanza no se reinventa solamente agregando tecnología; también puede hacerlo recuperando aquello que la cultura digital vuelve especialmente necesario.</p>
+    </div>
+
+    <p>Tal vez allí radique una de las oportunidades más interesantes de este "hackeo": la IA nos obliga a revisar prácticas que parecían naturales y nos devuelve preguntas profundamente didácticas.</p>
+    <p style="font-weight:600;">¿Qué queremos que nuestros estudiantes aprendan? ¿Qué problemas vale la pena que enfrenten? ¿Qué queremos que puedan hacer sin delegarlo? ¿Qué pueden hacer con otros y con tecnologías? ¿Y qué evidencias nos permitirán reconocer que efectivamente están aprendiendo?</p>
+    <p>Estas preguntas nos llevan nuevamente al problema de la evaluación. Si las propuestas cambian, también necesitamos revisar las maneras en que hacemos visible el aprendizaje.</p>
+  </section>
+
+  <section class="block" id="s45">
+    <h2>¿Cómo el estudiante puede mostrar su proceso?</h2>
+    <p class="lead">Cuando la inteligencia artificial interviene en una producción, una de las preguntas que aparece con mayor fuerza es la de la <strong>autoría</strong>: ¿qué podemos considerar propio del estudiante cuando utilizó IA para buscar alternativas, generar ideas, revisar un texto, resolver parte de una tarea o recibir retroalimentación?</p>
+    <p>Pensar la autoría únicamente como "haber hecho todo sin ayuda" resulta insuficiente en estos nuevos escenarios. Podemos comenzar a entenderla también como la capacidad del estudiante de <strong>apropiarse de su producción y dar cuenta de las decisiones tomadas durante el proceso</strong>: para qué utilizó IA, qué aportes recuperó, cuáles descartó o modificó, cómo verificó la información y qué decisiones puede fundamentar como propias.</p>
+    <p>Desde esta perspectiva, la <strong>transparencia en el uso de IA</strong> no debería convertirse en un mecanismo de vigilancia ni reducirse a solicitar capturas de pantalla o historiales completos de conversaciones. Puede constituirse en una oportunidad formativa para que el estudiante reconstruya y analice su propio proceso.</p>
+
+    <h3>Instrumentos para hacer visible el proceso</h3>
+    <p>Esto nos lleva a revisitar instrumentos de evaluación que ya conocemos, pero que adquieren una especial relevancia en escenarios atravesados por IA.</p>
+
+    <div class="fam-grid">
+      <details class="fam f1">
+        <summary><span class="icon" aria-hidden="true">◨</span> La rúbrica <span class="chev">▾</span></summary>
+        <div class="fam-body"><p>Permite hacer visibles los criterios de calidad y orientar la producción desde el comienzo. En propuestas que incorporan IA, esos criterios pueden incluir no solo las características del producto final, sino también decisiones del proceso: la selección y contrastación de fuentes, la revisión crítica de las respuestas generadas, la fundamentación de decisiones o la capacidad de modificar una primera producción. Utilizada durante el proceso, puede orientar la autoevaluación, la coevaluación y la retroalimentación, y no solamente la calificación final.</p></div>
+      </details>
+      <details class="fam f2">
+        <summary><span class="icon" aria-hidden="true">✎</span> El diario de aprendizaje <span class="chev">▾</span></summary>
+        <div class="fam-body"><p>Permite recuperar la reflexión del estudiante sobre cómo está aprendiendo. Breves registros pueden ayudar a documentar qué dificultades encontró, qué estrategias utilizó, cuándo recurrió a la IA, para qué le resultó útil, qué respuestas puso en duda y qué decisiones tomó a partir de ellas. Favorece procesos de metacognición y autorregulación, y permite acceder a aspectos del aprendizaje que no siempre quedan visibles en el producto final.</p></div>
+      </details>
+      <details class="fam f3">
+        <summary><span class="icon" aria-hidden="true">▤</span> El portafolio digital <span class="chev">▾</span></summary>
+        <div class="fam-body"><p>Permite reconstruir la trayectoria mediante una selección intencionada de evidencias: borradores, producciones intermedias, fuentes consultadas, retroalimentaciones, registros del diario, modificaciones y versiones finales. Como sostienen Anijovich y González (2017), su valor no reside en acumular trabajos sino en seleccionar evidencias que permitan reconocer el progreso y reflexionar sobre él.</p></div>
+      </details>
+    </div>
+
+    <p>En tiempos de IA, estos dispositivos pueden ayudarnos a desplazar la mirada desde "¿quién produjo esto?" hacia "¿qué proceso de aprendizaje puede mostrar y explicar este estudiante?".</p>
+    <p>No se trata, sin embargo, de acumular evidencias. Solicitar el producto final, todos los borradores, el historial de prompts, capturas de pantalla, un diario y además una defensa oral puede transformar la evaluación en un dispositivo de vigilancia más que de formación. La pregunta debería ser otra: <strong>¿qué evidencia necesito para reconocer aquello que quiero que el estudiante aprenda?</strong></p>
+
+    <ul class="map-list">
+      <li><span class="map-need">La evolución de una producción</span><span class="map-arrow">→</span><span class="map-solution">Portafolio digital</span></li>
+      <li><span class="map-need">Las decisiones, dificultades y reflexiones</span><span class="map-arrow">→</span><span class="map-solution">Diario o bitácora de aprendizaje</span></li>
+      <li><span class="map-need">La apropiación de criterios y los procesos de mejora</span><span class="map-arrow">→</span><span class="map-solution">Rúbrica utilizada durante el proceso</span></li>
+      <li><span class="map-need">La capacidad de explicar y fundamentar</span><span class="map-arrow">→</span><span class="map-solution">Instancias de argumentación, intercambio o defensa</span></li>
+      <li><span class="map-need">El uso crítico de IA</span><span class="map-arrow">→</span><span class="map-solution">Breves registros de qué se utilizó, para qué y qué decisiones se tomaron</span></li>
+    </ul>
+
+    <h3>Hacer visible el proceso también requiere enseñar a hacerlo</h3>
+    <p>Pedir a los estudiantes que transparenten y analicen críticamente el uso de IA supone que hayan tenido oportunidades para <strong>aprender a utilizarla de ese modo</strong>.</p>
+    <p>La alfabetización en inteligencia artificial no puede reducirse al manejo instrumental de una herramienta o a la capacidad de formular buenos <em>prompts</em>. Desde una perspectiva crítica y situada, como propone Mariana Ferrarelli, supone también aprender a interrogar las respuestas, reconocer límites y sesgos, contrastar información, verificar fuentes y decidir qué tareas resulta pertinente delegar y cuáles requieren mantener el juicio y la decisión humana.</p>
+    <p>Esta perspectiva introduce una cuestión de <strong>justicia curricular y epistémica</strong>. No todos los estudiantes disponen del mismo acceso a las herramientas, de iguales condiciones de conectividad ni de las mismas experiencias y conocimientos para utilizarlas críticamente. Por eso, incorporar IA en una propuesta de evaluación requiere prever condiciones de acceso, alfabetización y apoyos, evitando convertir en requisito implícito un saber que no ha sido enseñado.</p>
+
+    <div class="pull">Hacer visible el proceso no significa controlar cada paso, sino generar evidencias pertinentes que permitan al estudiante reconocer, reconstruir y comunicar su propio aprendizaje.</div>
+  </section>
+
+  <section class="block" id="cierre41">
+    <span class="eyebrow">Para cerrar</span>
+    <h2>Una didáctica en vivo para una tecnología que cambia</h2>
+
+    <div class="behind-scenes">
+      <h3>Mientras construíamos este curso</h3>
+      <p>Hay una última cuestión que atraviesa este eje y también la propia experiencia de construcción de este curso. Cuando comenzamos a diseñarlo, en enero de este año, la inteligencia artificial generativa ya formaba parte de nuestras preocupaciones. Sin embargo, en pocos meses las tecnologías, sus posibilidades y las formas de interactuar con ellas continuaron transformándose. Del <em>prompteo</em> y la conversación con chatbots comenzamos a desplazarnos hacia sistemas capaces de articular herramientas y automatizar procesos, como sucede con la llamada <strong>IA agéntica</strong>.</p>
+      <div class="duo-cycle">
+        <div class="duo-node"><span>Enero</span>Planificación del curso</div>
+        <div class="duo-arrows">⇄<small>revisar</small></div>
+        <div class="duo-node"><span>En proceso</span>Desarrollo del curso</div>
+      </div>
+      <p>La experiencia del propio curso <em>Enseñar y evaluar en tiempos de IA</em> funciona como evidencia de esta idea de Maggio: no estamos hablando de una transformación futura. Entre el diseño del curso y su desarrollo tuvimos que volver a mirar aquello que estábamos diseñando, porque mientras construíamos la propuesta, la propia tecnología y las prácticas asociadas a ella seguían transformándose.</p>
+    </div>
+
+    <p>Esta transformación muestra que <strong>formarnos en IA no puede consistir solamente en conocer las herramientas tal como existen hoy</strong>. Necesitamos aprender a reconocer las lógicas que van emergiendo y construir criterios que nos permitan interrogarlas y tomar decisiones pedagógicas frente a ellas.</p>
+    <p>Aquí cobra especial sentido la idea de <strong>didáctica en vivo</strong> de Mariana Maggio: una enseñanza capaz de leer las transformaciones culturales mientras están ocurriendo y de revisar sus propias prácticas en ese movimiento.</p>
+
+    <div class="pull">No formar solamente para utilizar las tecnologías del presente, sino construir criterios que nos permitan seguir tomando decisiones pedagógicas mientras ese presente se transforma.</div>
+
+    <p style="text-align:center;font-weight:700;color:var(--terracota-deep);">→ La mirada pedagógica continúa en el Eje 4.2, desde la dimensión tecnológica.</p>
+
+    <h3>Para seguir ampliando</h3>
+    <div class="resource-grid">
+      <a class="resource-card" href="https://www.infobae.com/educacion/2026/03/10/mariana-ferrarelli-en-el-podcast-de-ticmas-es-ingenuo-creer-que-podemos-prohibir-la-ia-en-la-educacion/" target="_blank" rel="noopener">
+        <span class="resource-thumb art">▤</span>
+        <span class="resource-text">
+          <span class="resource-kind">Artículo</span><br>
+          <span class="resource-title">"Es ingenuo creer que podemos prohibir la IA en la educación"</span>
+          <div class="resource-by">Mariana Ferrarelli, en el podcast de Ticmas (Infobae)</div>
+        </span>
+      </a>
+      <a class="resource-card" href="https://www.youtube.com/watch?v=uW2sEAroaLo" target="_blank" rel="noopener">
+        <span class="resource-thumb vid">▶</span>
+        <span class="resource-text">
+          <span class="resource-kind">Video</span><br>
+          <span class="resource-title">Reflexiones docentes: sobre IA, evaluación y accountability</span>
+          <div class="resource-by">Linda Castañeda (2025)</div>
+        </span>
+      </a>
+      <a class="resource-card" href="https://www.youtube.com/watch?v=N7hfEHTeTaM" target="_blank" rel="noopener">
+        <span class="resource-thumb vid">▶</span>
+        <span class="resource-text">
+          <span class="resource-kind">Video</span><br>
+          <span class="resource-title">Una experiencia con los estudiantes #rict2223 y ChatGPT</span>
+          <div class="resource-by">Linda Castañeda (2023)</div>
+        </span>
+      </a>
+    </div>
+
+    <h3>Bibliografía del eje</h3>
+    <details class="acc grp-ocre" style="margin-top:10px;">
+      <summary><span class="num">📖</span> Bibliografía (5 referencias) <span class="chev">▾</span></summary>
+      <div class="acc-body">
+        <ul class="biblio-list">
+          <li>Anijovich, R., y Cappelletti, G. (2023). Evidencias de aprendizaje y evaluación formativa.</li>
+          <li>Anijovich, R., y González, C. (2017). El portafolio como dispositivo para seleccionar y reflexionar sobre evidencias de aprendizaje.</li>
+          <li>Castañeda, L. (2024). Inteligencia artificial, evaluación y <em>accountability</em> educativa.</li>
+          <li>Ferrarelli, M. (2026). <a href="https://www.infobae.com/educacion/2026/03/10/mariana-ferrarelli-en-el-podcast-de-ticmas-es-ingenuo-creer-que-podemos-prohibir-la-ia-en-la-educacion/" target="_blank" rel="noopener">"Es ingenuo creer que podemos prohibir la IA en la educación"</a>. Podcast de Ticmas, entrevista publicada en Infobae.</li>
+          <li>Maggio, M. (2026). La IA generativa como hackeo a la evaluación: hacia una didáctica en vivo.</li>
+        </ul>
+        <p class="biblio-note">Las referencias de Anijovich, Castañeda y Maggio se citan tal como aparecen en el desarrollo del eje; si tenés el dato editorial completo (libro, capítulo o publicación de origen), decímelo y lo completo.</p>
+      </div>
+    </details>
+  </section>
+
+</section>
+
+<!-- ===================== TAB 4.2 ===================== -->
+<section class="tab-panel" id="tab-42">
+
+  <div class="panel-hero">
+    <span class="hero-kicker">Eje 4.2 · Mirada tecnológica</span>
+    <h1>Diseñar es también comunicar</h1>
+    <p class="dek">Gems, Habilidades, Design, Code y Codex: de la decisión pedagógica a la decisión tecnológica.</p>
+  </div>
+
+  <nav class="toc-bar">
+    <div class="toc-scroll" id="tocScroll42">
+      <a class="toc-link" href="#t42-intro" data-target="t42-intro">Puente</a>
+      <a class="toc-link" href="#t42-bisagra" data-target="t42-bisagra">Instrumentos</a>
+      <a class="toc-link" href="#t42-herramientas" data-target="t42-herramientas">Herramientas</a>
+      <a class="toc-link" href="#t42-desafios" data-target="t42-desafios">Desafíos</a>
+      <a class="toc-link" href="#t42-cierre" data-target="t42-cierre">Cierre</a>
+    </div>
+  </nav>
+
+  <section class="block" id="t42-intro">
+    <h2>De la decisión pedagógica a la decisión tecnológica</h2>
+    <p class="lead">En la primera parte de este eje nos preguntamos qué queremos que aprendan nuestros estudiantes, qué lugar puede ocupar la IA en ese proceso, qué tareas resulta pertinente delegar y cuáles necesitamos conservar bajo decisión humana. En esta segunda parte miramos esas mismas preguntas desde la dimensión tecnológica.</p>
+    <p>No todas las IA hacen lo mismo ni implican el mismo grado de delegación. Algunas sostienen criterios o ayudan a producir alternativas; otras diseñan, trabajan sobre archivos, encadenan acciones o ejecutan procesos. Comprender estas diferencias también forma parte de una <strong>alfabetización crítica en IA</strong>: no se trata solamente de saber usar una herramienta, sino de reconocer qué estamos delegando cuando la usamos, qué decisiones seguimos tomando nosotros y qué necesitamos revisar antes de aceptar su resultado.</p>
+    <div class="pull">Desde esta perspectiva, la pregunta tecnológica vuelve a ser pedagógica: ¿qué queremos que haga la IA y qué necesitamos seguir decidiendo nosotros?</div>
+  </section>
+
+  <section class="block" id="t42-bisagra">
+    <h2>Los instrumentos de evaluación como bisagra</h2>
+    <p>Los instrumentos trabajados en la mirada pedagógica —rúbrica, diario de aprendizaje y portafolio digital— no son ajenos a estas transformaciones. Pueden ser diseñados, organizados o revisados con asistencia de IA. Sin embargo, su incorporación introduce una pregunta adicional: <strong>¿qué parte del proceso estamos delegando y qué decisiones necesitamos conservar bajo criterio docente?</strong></p>
+    <p>No es lo mismo utilizar una IA para generar una primera versión de una rúbrica que delegarle su aplicación; solicitar preguntas que orienten un diario de aprendizaje que producir la reflexión en lugar del estudiante; u organizar las evidencias de un portafolio que decidir automáticamente cuáles muestran aprendizaje. La potencia de la tecnología depende de qué operación realiza y del lugar que esa operación ocupa en la propuesta de evaluación. Les compartimos una tabla que muestra, claramente, en lo que puede colaborar la IA sin perder autoridad docente.</p>
+
+    <div class="compare-wrap">
+      <table class="compare">
+        <thead>
+          <tr><th>Instrumento</th><th>La IA puede colaborar en...</th><th>No conviene delegar...</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Rúbrica</th><td>Proponer criterios, reformular descriptores, generar versiones iniciales y revisar claridad.</td><td>Decidir qué cuenta como aprendizaje valioso ni valorar automáticamente sin revisión docente.</td></tr>
+          <tr><th>Diario de aprendizaje</th><td>Generar preguntas metacognitivas, ayudar a organizar registros y ofrecer disparadores para revisar el proceso.</td><td>Producir la reflexión que debería realizar el estudiante ni sustituir su reconstrucción del aprendizaje.</td></tr>
+          <tr><th>Portafolio digital</th><td>Organizar evidencias, proponer estructuras, ayudar a comparar versiones y visualizar una trayectoria.</td><td>Decidir por sí sola qué evidencia demuestra aprendizaje ni seleccionar sin criterios pedagógicos explícitos.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="compare-source">Fuente: elaborado por ChatGPT, revisado por las docentes responsables del taller.</p>
+
+    <p>Por eso, junto con preguntarnos qué instrumento permite hacer visible determinado aprendizaje, necesitamos comprender qué hacen las tecnologías con las que intervenimos sobre esos instrumentos, qué podemos delegar en ellas y qué requiere revisión y decisión humana.</p>
+  </section>
+
+  <section class="block" id="t42-herramientas">
+    <h2>Diseñar también es comunicar: la mediación sigue siendo la pregunta</h2>
+    <p class="lead">Este eje complementario ya no separa diseñar de comunicar. La pregunta que lo guía es: ¿cómo diseño mis propuestas —consignas, secuencias, materiales, rúbricas— y las comunico? Comunicar, acá, no es publicar un documento de política para colegas: es notar que todo lo que armamos para nuestros estudiantes —materiales, recursos, artefactos, discursos— tiene que estar mediado. Un material mal diseñado comunica igual. Solo que se comunica mal.</p>
+    <p>Tal como venimos planteando, pensamos la planificación como arquitectura flexible y no como secuencia rígida. En este apartado esta perspectiva se pone en juego en situaciones concretas de diseño y producción, a través de cinco posibilidades: un Gem en Gemini, una habilidad en Claude, un diseño visual en Design, y el trabajo con Code y Codex en ChatGPT.</p>
+    <p>En todos los casos, la secuencia de mediación conserva una lógica común: se formula el pedido, la IA propone o planifica, se revisan los pasos, se aprueba o corrige, la IA produce o ejecuta y se revisa el resultado. Lo que cambia entre herramientas es dónde ocurre esto, qué grado de autonomía tiene el sistema y qué parte del proceso queda delegada.</p>
+
+    <div class="flow-diagram">
+      <p class="flow-title">La mediación, en cualquiera de las plataformas</p>
+      <div class="flow-row">
+        <div class="flow-step">Se formula el pedido</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">La IA propone los pasos</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step hi">Se revisan los pasos</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step hi">Se aprueba o se corrige</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">La IA ejecuta</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">Se revisa el resultado</div>
+      </div>
+      <p class="flow-caption">Lo que cambia entre Gems, Habilidades, Design, Code y Codex es dónde ocurre esto, y si además queda enseñado.</p>
+    </div>
+
+    <h3>¿Qué cambia entre las herramientas?</h3>
+    <p>Antes de entrar en cada uno, una aclaración que ordena todo lo que sigue: no todas estas posibilidades tienen las mismas condiciones de acceso. Gems puede utilizarse sin un plan pago, y también es posible trabajar con una habilidad en Claude sin necesidad de acceder a Code. Design y Code, en cambio, requieren los planes de Claude que los incluyen. Codex está actualmente disponible en los distintos planes de ChatGPT, aunque con límites de uso diferentes. Por eso, los desafíos que aparecen al final de este módulo están organizados en dos niveles: un nivel inicial, pensado para trabajar con las posibilidades de acceso más amplio, y un nivel intermedio, para experimentar con herramientas que permiten avanzar hacia el diseño y la ejecución de acciones sobre archivos.</p>
+
+    <div class="compare-wrap">
+      <table class="compare">
+        <thead>
+          <tr><th>Aspecto</th><th>Gems (Gemini)</th><th>Habilidades (Claude)</th><th>Design + Code (Claude)</th><th>Codex (ChatGPT)</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Costo / acceso</th><td>Cuenta gratuita</td><td>Disponible según la configuración y el plan de Claude</td><td>Planes pagos según la herramienta</td><td>Incluido en los planes de ChatGPT; los límites varían según el plan</td></tr>
+          <tr><th>Dónde ocurre</th><td>Conversación, en el navegador</td><td>Claude, con la habilidad configurada</td><td>Design en entorno visual; Code en terminal/editor</td><td>Web, app de escritorio, terminal o extensión de editor</td></tr>
+          <tr><th>Qué tan ejecutivo es</th><td>No ejecuta: conversa, redacta y sostiene un rol</td><td>Sostiene un procedimiento o criterio reutilizable</td><td>Design compone; Code puede ejecutar sobre archivos</td><td>Puede trabajar sobre archivos y ejecutar tareas de varios pasos</td></tr>
+          <tr><th>Para qué sirve acá</th><td>Diseñar y revisar borradores o variantes</td><td>Sostener un criterio de diseño sin repetirlo</td><td>Diseñar visualmente y luego fortalecer/transformar archivos</td><td>Producir y revisar una versión final lista para compartir</td></tr>
+          <tr><th>¿Qué estamos delegando?</th><td>Generación de alternativas bajo un rol o criterio</td><td>Aplicación repetida de un procedimiento previamente definido</td><td>Composición visual y, con Code, ejecución de acciones sobre archivos</td><td>Planificación y ejecución de una secuencia de acciones sobre archivos</td></tr>
+          <tr><th>¿Dónde necesitamos intervenir?</th><td>Al definir el contexto, seleccionar y ajustar lo generado</td><td>Al definir el criterio y revisar si sigue siendo pertinente</td><td>Antes de aprobar acciones y al revisar el resultado en relación con el grupo real</td><td>Antes de autorizar pasos, especialmente los que modifican archivos, y al validar el resultado final</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="compare-source">Fuente: elaborado con Claude y ChatGPT, revisado por las docentes a cargo.</p>
+
+    <p>La tabla no busca ordenar las herramientas de menor a mayor, sino hacer visible una diferencia pedagógicamente relevante: a medida que aumenta la capacidad de ejecución, también aumenta la importancia de decidir qué autorizamos, qué supervisamos y qué conservamos bajo responsabilidad humana.</p>
+
+    <div class="callout ocre">
+      <h4>Un dato</h4>
+      <p>Desde una cuenta personal de ChatGPT no contamos hoy con un equivalente directo a Gems o Skills que permita crear y distribuir ese tipo de recurso reutilizable. Codex introduce otra lógica: en lugar de configurar un recurso para que sostenga un criterio en sucesivas interacciones, permite delegar la ejecución de acciones sobre archivos y proyectos. Ese cambio vuelve especialmente importante decidir qué autorizamos, qué supervisamos y qué conservamos bajo decisión humana.</p>
+    </div>
+
+    <p class="matrix-note">Cinco herramientas · tocá cada una para ver qué es y cómo se hace.</p>
+
+    <details class="acc">
+      <summary><span class="num">①</span> Un Gem que ayuda a diseñar — Gemini <span class="chev">▾</span></summary>
+      <div class="acc-body">
+        <h5>Qué es</h5>
+        <p>Ya conocen los Gems, del Eje complementario 2: un asistente de Gemini al que se le fija un rol y un criterio que se sostiene en cada conversación nueva, sin tener que repetirlo cada vez. Acá el rol no es redactar una política: es ayudar a diseñar —variantes de una consigna, una secuencia con andamiajes, una rúbrica—.</p>
+        <p>Un Gem no ejecuta nada por sí solo: sigue siendo conversacional. Lo que aporta acá no es autonomía, sino sostener, en cada diseño que ayuda a producir, la pregunta por la mediación: este material, tal como quedó armado, ¿comunica lo que necesito que le llegue a este grupo en particular, o solo suena bien en general?</p>
+        <h5>Cómo se hace</h5>
+        <ol>
+          <li>Entren a <a href="https://gemini.google.com" target="_blank" rel="noopener">gemini.google.com</a> y busquen la opción para explorar o crear Gems.</li>
+          <li>En las instrucciones, describan el rol con precisión. Por ejemplo: "Sos un asesor que me ayuda a diseñar materiales y consignas para mis estudiantes. Antes de dar por buena cualquier propuesta, preguntate: ¿es clara para quien la va a recibir?, ¿qué necesito saber del grupo para ajustarla bien?, ¿qué se pierde si se usa igual para cualquier curso?".</li>
+          <li>Agreguen, si lo tienen, un material o consigna que ya vienen trabajando como contexto.</li>
+          <li>Guarden el Gem con un nombre que lo identifique, por ejemplo: "Diseñador de consignas – [su cátedra]".</li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="acc">
+      <summary><span class="num">②</span> Enseñarle una habilidad que se repite — Claude <span class="chev">▾</span></summary>
+      <div class="acc-body">
+        <h5>Qué es</h5>
+        <p>Hay una diferencia entre pedirle algo a una IA una vez y enseñarle un procedimiento que va a aplicar cada vez que corresponda, sin que se lo tengan que volver a explicar. En Claude esto puede organizarse como una habilidad (<em>skill</em>): una configuración que describe cuándo usarla y qué hacer.</p>
+        <p>La idea pedagógica que nos interesa no es el formato técnico del archivo, sino la posibilidad de dejar explícito un criterio para que se sostenga en tareas sucesivas. Por ejemplo: cuando se pida diseñar una variante de una consigna, producir alternativas ajustadas por nivel de lectura, tiempo disponible o acceso a conectividad, y explicitar qué cambia y por qué.</p>
+        <p>A diferencia de Code, esto no requiere terminal ni plan pago: funciona en claude.ai, en cuenta gratuita, con la ejecución de código habilitada en la configuración. Es, de todo lo que propone este módulo, lo más accesible después de Gems —y lo único, además de Gems, que no depende de una suscripción.</p>
+        <h5>Cómo se hace (en claude.ai, sin Code)</h5>
+        <ol>
+          <li>Escriban un archivo de texto llamado <code>SKILL.md</code> con dos partes: una descripción breve —para que Claude sepa cuándo usarla— y las instrucciones que quieren que siga siempre.</li>
+          <li>Guarden ese archivo dentro de una carpeta comprimida (.zip).</li>
+          <li>En claude.ai, entren a Configuración › Capacidades › Habilidades, y suban ese archivo .zip.</li>
+          <li>Actívenla, y pruébenla pidiendo algo que coincida con la descripción —por ejemplo, "diseñame una variante de esta consigna".</li>
+        </ol>
+        <pre>Usar cuando se pida diseñar una variante de una consigna.
+Producir siempre tres versiones —ajustada por nivel de lectura, por
+tiempo disponible, y por acceso a conectividad— y explicitar, para
+cada una, qué cambia y por qué.</pre>
+        <h5>Si además tienen Claude Code</h5>
+        <p>El mecanismo de fondo es el mismo estándar abierto, pero cambia dónde vive el archivo: en vez de subir un .zip, se crea una carpeta en la propia computadora.</p>
+        <pre>mkdir -p ~/.claude/skills/disenar-variante</pre>
+        <p>Y dentro, el mismo archivo <code>SKILL.md</code> de arriba. Code la reconoce sola, sin subir nada, y además puede ejecutar lo que la habilidad describe sobre archivos reales —no solo redactarlo—. Esta parte de Claude Code todavía está en fase beta.</p>
+        <h5>Qué conviene observar</h5>
+        <p>Una habilidad bien configurada puede sostener un criterio, pero no decide si ese criterio sigue siendo correcto. Por eso, el procedimiento automatizado necesita revisión periódica: aquello que ayer resultaba pertinente puede dejar de serlo cuando cambia el grupo, la tarea o el contexto.</p>
+      </div>
+    </details>
+
+    <details class="acc">
+      <summary><span class="num">③</span> Un diseño visual armado en Design — Claude <span class="chev">▾</span></summary>
+      <div class="acc-body">
+        <h5>Qué es</h5>
+        <p>Design permite producir una composición visual a partir de una descripción en lenguaje natural: un afiche, una infografía, una diapositiva o un mockup de una rúbrica. De las herramientas de este módulo, es la más directamente orientada a diseñar en sentido visual.</p>
+        <p>La pregunta vuelve a ser la misma: ¿esto comunica lo que necesito que le llegue a quien lo va a recibir, o solamente se ve prolijo? El diseño visual también es una mediación y, por eso, necesita considerar legibilidad, jerarquía de la información, accesibilidad y condiciones reales de uso.</p>
+        <h5>Cómo se hace</h5>
+        <ol>
+          <li>Entren a <a href="https://claude.ai/design" target="_blank" rel="noopener">claude.ai/design</a> con su cuenta Pro, Max, Team o Enterprise.</li>
+          <li>Describan qué necesitan diseñar, a partir de una consigna o material que ya vienen trabajando —por ejemplo, una infografía con las variantes armadas en los apartados anteriores.</li>
+          <li>Ajusten el diseño en el lienzo: los elementos son editables uno por uno.</li>
+          <li>Exporten el resultado —como PDF, PPTX o HTML—, o dejen el proyecto abierto para llevarlo a Code, en el apartado siguiente.</li>
+        </ol>
+      </div>
+    </details>
+
+    <h3>De la IA generativa a la IA agéntica: cambia la lógica de interacción</h3>
+    <p>Hasta aquí predominan usos en los que la IA conversa, genera alternativas, sostiene criterios o compone un objeto. Con herramientas capaces de trabajar sobre archivos y encadenar acciones aparece otra lógica: la IA ya no solo responde a un pedido, sino que puede planificar una secuencia de pasos y ejecutarla.</p>
+    <p>Este pasaje permite reconocer una diferencia entre la lógica <strong>generativa</strong> —centrada en producir respuestas, textos, imágenes o diseños a partir de un pedido— y una lógica <strong>agéntica</strong>, en la que el sistema puede articular herramientas, operar sobre archivos y realizar acciones sucesivas para alcanzar un resultado.</p>
+    <p>Aquí aumenta aquello que podemos delegar y, precisamente por eso, aumenta también la necesidad de supervisión.</p>
+    <div class="pull">La pregunta deja de ser solamente "¿qué respuesta me dio la IA?" y pasa a incluir: ¿qué acciones va a realizar?, ¿sobre qué archivos?, ¿qué puede modificar?, ¿qué necesito autorizar?, ¿qué resultado debo verificar?</div>
+    <p>Esta diferencia vuelve concreta una de las preguntas del documento pedagógico: qué podemos delegar, qué necesitamos verificar y qué decisiones queremos conservar bajo responsabilidad humana.</p>
+
+    <details class="acc">
+      <summary><span class="num">④</span> Code para fortalecer un diseño y ejecutar — Claude <span class="chev">▾</span></summary>
+      <div class="acc-body">
+        <h5>Qué es</h5>
+        <p>Claude Code ya apareció, brevemente, en la Parte 3 del Eje complementario 3: corre en la terminal, o en un editor como VS Code, y requiere un plan Pro o Max —no tiene versión gratuita, y comparte el límite de uso mensual con el resto de Claude—. A diferencia de un Gem o de Design, no solo responde ni solo compone: <strong>ejecuta</strong>. Recibe un pedido, decide qué pasos dar, y los concreta sobre archivos reales —abre, compara, reorganiza, guarda— sin que haya alguien copiando cada instrucción intermedia.</p>
+        <p>Hay una integración oficial entre Design y Code, pensada exactamente para esto: el comando <code>/design-sync</code> trae un proyecto armado en Design al entorno de Code, para seguir trabajándolo ahí. Es la manera de llevar algo que se diseñó visualmente y pedirle a Code que lo fortalezca —que revise la legibilidad, que genere una versión lista para publicar, que produzca variantes aplicando la habilidad del apartado ②—.</p>
+        <p>Aquí cambia el grado de delegación: ya no le pedimos solamente a la IA que genere una respuesta o que sostenga un criterio, sino que le permitimos actuar sobre archivos y encadenar acciones. Por eso, cobra especial importancia revisar qué va a hacer, qué autorizamos y qué necesitamos supervisar.</p>
+        <h5>Cómo se hace</h5>
+        <ol>
+          <li>Abran una carpeta con una copia de una consigna o material propio que quieran rediseñar. Trabajen siempre sobre una copia, nunca sobre el archivo original.</li>
+          <li>Pidan una acción concreta: por ejemplo, generar dos variantes ajustadas a condiciones distintas y guardarlas en archivos separados.</li>
+          <li>Antes de aprobar, lean el plan de pasos que propone. Si algo no se entiende, pregunten qué va a hacer exactamente.</li>
+          <li>Después de ejecutarlo, comparen las versiones: ¿el ajuste responde a una condición real del grupo o es un cambio cosmético?</li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="acc">
+      <summary><span class="num">⑤</span> Codex para producir una versión final lista para compartir — ChatGPT <span class="chev">▾</span></summary>
+      <div class="acc-body">
+        <h5>Qué es</h5>
+        <p>Codex es un agente de OpenAI orientado a trabajar con código, archivos y tareas de varios pasos. Actualmente está incluido en todos los planes de ChatGPT, incluidos Free y Go; los límites de uso varían según el plan.</p>
+        <p>En este eje puede utilizarse para el último tramo del diseño: tomar un material ya trabajado y producir una versión que un estudiante pueda recibir directamente, por ejemplo una página web simple, organizada en un archivo HTML, que integre en un mismo entorno la consigna, los criterios de evaluación, los recursos y las orientaciones necesarias para realizar la actividad.</p>
+        <p>Acá conviene una aclaración, porque cambia el panorama respecto de Claude. En ChatGPT, las cuentas personales —Free, Go, Plus y Pro— no pueden crear nuevos GPT personalizados, y las Skills están disponibles en determinados espacios de trabajo institucionales. Esto marca una diferencia respecto de otras plataformas que permiten configurar recursos reutilizables desde cuentas individuales.</p>
+        <p>En este recorrido, Codex introduce otra posibilidad dentro de ChatGPT: no se trata de configurar un asistente que sostenga un rol o una habilidad, sino de trabajar con un agente capaz de actuar sobre archivos y llevar adelante tareas de varios pasos. Esta diferencia es importante para lo que estamos analizando: <strong>pasamos de configurar una IA para que sostenga un criterio a delegarle la ejecución de determinadas acciones</strong>. Y cuanto mayor es aquello que delegamos, más relevante se vuelve revisar qué acciones realizará, cuáles autorizamos y qué decisiones conservamos bajo nuestra responsabilidad.</p>
+        <h5>Cómo se hace</h5>
+        <ol>
+          <li>Entren a Codex con su cuenta de ChatGPT (disponible en los distintos planes, aunque los límites de uso varían según el plan).</li>
+          <li>Suban o trabajen sobre una copia de la consigna o del material ya diseñado.</li>
+          <li>Pídanle que produzca una versión concreta, por ejemplo una página web simple pensada para estudiantes.</li>
+          <li>Revisen el plan de pasos antes de aprobarlo. Si incluye una acción no solicitada —como sobrescribir el archivo original—, corríjanla antes de autorizar.</li>
+          <li>Abran y revisen el resultado antes de compartirlo. Producir una versión técnicamente terminada no garantiza que sea pedagógicamente clara.</li>
+        </ol>
+      </div>
+    </details>
+  </section>
+
+  <section class="block" id="t42-desafios">
+    <h2>Desafíos para experimentar</h2>
+    <p class="lead">Los desafíos son optativos y están pensados para practicar. La condición común es trabajar siempre sobre copias de los materiales: cuando una herramienta puede ejecutar acciones, la prevención técnica también forma parte de la responsabilidad docente.</p>
+
+    <div class="note-box"><strong>Antes de empezar:</strong> trabajen siempre sobre una copia de su material —nunca sobre el documento o archivo original—. Si Code o Codex ejecuta algo inesperado, lo que se puede perder es la copia, no la base con la que dan clase.</div>
+
+    <details class="acc" open>
+      <summary><span class="num">B</span> Nivel inicial — diseñar y sostener un criterio <span class="chev">▾</span></summary>
+      <div class="acc-body">
+        <ol>
+          <li>Elijan una consigna o actividad propia y hagan una copia del archivo. Todo lo que sigue se hace sobre esa copia, nunca sobre el original.</li>
+          <li>Entren a gemini.google.com y retomen el Gem que armaron en el apartado ① —o armen uno nuevo siguiendo esos mismos pasos, si todavía no lo tienen—.</li>
+          <li>Pídanle que diseñe dos variantes de esa consigna, para dos grupos distintos que ustedes conozcan realmente —por nivel de lectura, por acceso a conectividad, por lo que sea relevante en su contexto—.</li>
+          <li>Guarden esas dos variantes en archivos separados, con nombres que las distingan.</li>
+          <li>Ahora armen una habilidad breve, siguiendo los pasos del apartado ②: que describa un criterio que quieren sostener siempre al diseñar variantes —por ejemplo, que ninguna dependa de que el estudiante tenga conexión estable—.</li>
+          <li>Con la habilidad ya activada, abran un chat nuevo en Claude y pídanle que diseñe otra variante más de la misma consigna, sin recordarle el criterio. Fíjense si la habilidad se activó sola, y si el resultado la respeta.</li>
+        </ol>
+        <p style="margin-bottom:0;font-size:0.9rem;color:var(--gris-suave);">Si en algún momento el Gem o Claude responden algo que no esperaban, o no encuentran dónde queda una opción del menú: pregúntenle a la aplicación misma qué está pasando o cómo se hace, antes de abandonar el intento.</p>
+      </div>
+    </details>
+
+    <details class="acc">
+      <summary><span class="num">I</span> Nivel intermedio — con plan pago de Claude o ChatGPT <span class="chev">▾</span></summary>
+      <div class="acc-body">
+        <p>Dos caminos posibles, según qué plan tengan. Si tienen los dos, pueden probar ambos; si tienen uno solo, alcanza con ese.</p>
+
+        <div class="branch-diagram">
+          <p class="branch-title">Nivel intermedio: dos caminos posibles, no obligatorios</p>
+          <div class="branch-box">Consigna o material propio<br>(sobre una copia)</div>
+          <span class="branch-connector">↓</span>
+          <div class="branch-pair">
+            <div class="branch-box a"><span class="branch-cap">Camino A</span>Design + Code · Claude Pro/Max</div>
+            <div class="branch-box b"><span class="branch-cap">Camino B</span>Codex · ChatGPT Plus</div>
+          </div>
+          <span class="branch-connector">↓</span>
+          <div class="branch-box">Revisar y comparar<br>lo que produjo cada camino</div>
+        </div>
+
+        <h5>Camino A · Con Claude Pro o Max: Design + Code</h5>
+        <ol>
+          <li>Retomen la misma consigna (la copia, no el original) y entren a claude.ai/design.</li>
+          <li>Pídanle que arme un diseño visual con las variantes que ya armaron en el nivel inicial —por ejemplo, una infografía comparativa, o una ficha por variante—.</li>
+          <li>Cuando el diseño esté encaminado, dejen el proyecto abierto y pasen a Code.</li>
+          <li>En la terminal, usen el comando <code>/design-sync</code> para traer ese proyecto de Design al entorno de Code.</li>
+          <li>Pídanle a Code que aplique, sobre ese diseño, la misma habilidad armada en el nivel inicial, y que genere una versión final lista para revisar —no para publicar todavía—.</li>
+          <li>Antes de aprobar cualquier paso que proponga Code, léanlo. Si algo no se entiende, pregunten qué va a hacer exactamente antes de decir que sí.</li>
+        </ol>
+
+        <h5>Camino B · Con ChatGPT Plus: Codex</h5>
+        <ol>
+          <li>Retomen la misma consigna (la copia) y entren a chatgpt.com/codex.</li>
+          <li>Suban el material y pídanle a Codex que arme una página HTML simple, pensada para que la vean directamente los estudiantes, aplicando el mismo criterio de diseño trabajado en el nivel inicial.</li>
+          <li>Revisen el plan de pasos antes de aprobarlo. Si incluye algo que no pidieron —por ejemplo, que sobrescriba el archivo original—, corríjanlo antes de aprobar.</li>
+          <li>Descarguen el archivo y ábranlo en el navegador para revisarlo, antes de compartirlo con nadie.</li>
+        </ol>
+
+        <p style="margin-bottom:0;">Terminado uno de los dos caminos (o los dos), una comparación final: ¿cambió algo más que la velocidad respecto del nivel inicial? ¿hubo algún paso que, si lo hubieran mirado uno por uno en lugar de aprobarlo de corrido, los habría hecho frenar?</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="block" id="t42-cierre">
+    <span class="eyebrow">Para cerrar</span>
+    <h2>Diseñar, enseñar, comunicar</h2>
+    <p class="lead">En los distintos apartados, lo que se diseñó fue diferente —una variante, un criterio sostenido, una composición visual, una transformación de archivos, una página—, pero la pregunta de fondo fue la misma: esto, tal como quedó armado, ¿comunica lo que necesito que le llegue a quien lo va a recibir?</p>
+    <p>La mirada tecnológica permite, además, reconocer que no todas las formas de asistencia implican la misma delegación. Pedir alternativas, sostener un criterio, componer visualmente y ejecutar una secuencia de acciones son operaciones diferentes. Cuanto mayor es la capacidad de ejecución, más necesario resulta hacer visibles los momentos de intervención y revisión humana.</p>
+    <p>Conviene no perder de vista que un criterio que se aplica solo, sin que nadie lo revise, puede quedar desactualizado sin que nadie lo note.</p>
+    <div class="pull">La pregunta que cierra este módulo no es distinta de la que abrió el eje: ¿quién decide, qué estamos delegando y con qué criterios revisamos esa decisión?</div>
+
+    <h3>Advertencias</h3>
+    <ul class="warn-list">
+      <li>Una habilidad o un Gem bien configurado pueden sostener un criterio de diseño, pero no deciden si ese criterio sigue siendo el correcto.</li>
+      <li>Antes de compartir con estudiantes cualquier material generado, revisen si de verdad se ajusta al grupo real y no solo a un grupo genérico imaginado.</li>
+      <li>En ChatGPT, las Skills y la creación de nuevos GPT personalizados no están disponibles en cuentas individuales, sino en determinados espacios de trabajo institucionales. Por eso, no conviene asumir que todo el grupo podrá experimentar del mismo modo ni con las mismas posibilidades en todas las plataformas.</li>
+      <li>Una página web, una infografía o un material visualmente atractivo no se vuelve automáticamente más claro: la mediación también necesita ser revisada desde quien lo va a usar.</li>
+      <li>Cuando una herramienta puede ejecutar acciones, trabajen sobre copias y revisen los pasos antes de autorizarlos.</li>
+      <li>Transparentar el uso de IA no significa registrar cada clic, sino poder explicar qué se delegó, qué se revisó y qué decisiones quedaron bajo responsabilidad humana.</li>
+    </ul>
+
+    <div class="behind-scenes">
+      <h3>Una didáctica en vivo para tecnologías que cambian</h3>
+      <p>El propio recorrido del curso muestra por qué esta articulación entre mirada pedagógica y tecnológica es necesaria. Las herramientas, sus posibilidades y las formas de interactuar con ellas cambian mientras enseñamos. Pasar del prompteo y la conversación con chatbots a sistemas que articulan herramientas y automatizan procesos modifica no solo lo que la tecnología puede hacer, sino también aquello que necesitamos aprender a decidir.</p>
+      <p>Formarnos en IA, entonces, no puede consistir únicamente en dominar la herramienta disponible hoy. Necesitamos reconocer las lógicas que emergen, interrogarlas y construir criterios para decidir qué delegar, qué verificar, qué transformar y qué conservar bajo decisión humana.</p>
+      <p style="margin-bottom:0;">En este sentido, la mirada tecnológica no funciona como un agregado instrumental al documento pedagógico. Es su complemento: permite comprender qué hace la tecnología para poder sostener, con mayor fundamento, las decisiones pedagógicas sobre enseñanza, evaluación, autoría y aprendizaje.</p>
+    </div>
+
+    <div class="note-box"><strong>Nota de actualización sobre ChatGPT.</strong> La disponibilidad de funciones y planes cambia con frecuencia. Para esta versión se actualizó la información de Codex y de las opciones de creación en ChatGPT con documentación oficial de OpenAI consultada en septiembre de 2026: Codex está incluido en todos los planes de ChatGPT, con límites diferentes; la creación de nuevos GPT personalizados no está disponible en cuentas personales; y las Skills de ChatGPT se ofrecen en espacios de trabajo institucionales elegibles.</div>
+  </section>
+
+</section>
+
+<footer>
+  <p class="credit">Eje 4 · Trayecto formador en IA para la práctica docente</p>
+</footer>
+
+<script>
+(function(){
+  // Tab switching (4.1 / 4.2)
+  var tabButtons = document.querySelectorAll('.tab-btn');
+  var tabPanels = document.querySelectorAll('.tab-panel');
+  tabButtons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var target = btn.getAttribute('data-tab');
+      tabButtons.forEach(function(b){ b.classList.toggle('active', b === btn); });
+      tabPanels.forEach(function(p){ p.classList.toggle('active', p.id === 'tab-' + target); });
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  // Docente/Estudiante toggle
+  document.querySelectorAll('.cmp-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var group = btn.closest('.segmented');
+      var wrap = group.parentElement;
+      var key = btn.getAttribute('data-cmp');
+      group.querySelectorAll('.cmp-btn').forEach(function(b){ b.classList.toggle('active', b === btn); });
+      wrap.querySelectorAll('.compare-panel').forEach(function(p){
+        p.classList.toggle('active', p.getAttribute('data-cmp-panel') === key);
+      });
+    });
+  });
+
+  // Scroll-spy for each tab's sticky TOC
+  function setupScrollSpy(links, sectionIds){
+    var sections = sectionIds.map(function(id){ return document.getElementById(id); }).filter(Boolean);
+    function setActive(id){
+      links.forEach(function(l){ l.classList.toggle('active', l.getAttribute('data-target') === id); });
+      var activeLink = null;
+      links.forEach(function(l){ if(l.classList.contains('active')) activeLink = l; });
+      if(activeLink){ activeLink.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'}); }
+    }
+    if('IntersectionObserver' in window){
+      var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){ if(entry.isIntersecting){ setActive(entry.target.id); } });
+      }, {rootMargin:'-40% 0px -50% 0px', threshold:0});
+      sections.forEach(function(s){ observer.observe(s); });
+    }
+    links.forEach(function(l){ l.addEventListener('click', function(){ setActive(l.getAttribute('data-target')); }); });
+  }
+
+  setupScrollSpy(
+    Array.prototype.slice.call(document.querySelectorAll('#tocScroll41 .toc-link')),
+    ['s41','s42','s43','s44','s45','cierre41']
+  );
+  setupScrollSpy(
+    Array.prototype.slice.call(document.querySelectorAll('#tocScroll42 .toc-link')),
+    ['t42-intro','t42-bisagra','t42-herramientas','t42-desafios','t42-cierre']
+  );
+})();
+</script>
+
+</body>
+</html>
