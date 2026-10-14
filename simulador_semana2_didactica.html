@@ -1,0 +1,979 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulador · Semana 2 · Seminario de Didáctica</title>
+<style>
+:root{
+  --tinta:#33484A; --tinta-suave:#5b7173; --arena:#F5FBFA; --papel:#ffffff;
+  --agua:#7CC2B9; --agua-p:#4C948B; --salvia:#93C9B5; --salvia-p:#5FA089;
+  --rosa:#E6A0AC; --rosa-p:#C97686; --coral:#EFA98D; --coral-p:#D3805F;
+  --borde:#cfe3df; --r:18px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--arena);color:var(--tinta);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.25;margin:0 0 .4em}
+h1{font-size:1.7rem} h2{font-size:1.3rem} h3{font-size:1.1rem}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px 48px}
+header{padding:24px 0 8px}
+.eyebrow{font:600 .72rem/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--agua-p)}
+.lead{color:var(--tinta-suave);max-width:70ch;margin:.3em 0 0}
+nav[role=tablist]{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+nav button{font:inherit;border:1.5px solid var(--borde);background:var(--papel);color:var(--tinta);padding:10px 16px;border-radius:999px;cursor:pointer}
+nav button[disabled]{opacity:.5;cursor:not-allowed}
+nav button[aria-selected=true]{background:var(--tinta);color:#fff;border-color:var(--tinta)}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--coral-p);outline-offset:2px}
+.card{background:var(--papel);border:1.5px solid var(--borde);border-radius:var(--r);padding:18px}
+.small{font-size:.88rem;color:var(--tinta-suave)}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.col h3{display:flex;gap:8px;align-items:baseline}
+.col .num{font:700 .8rem ui-monospace,Menlo,monospace;background:var(--tinta);color:#fff;border-radius:8px;padding:2px 8px}
+.col[data-sec="1"] .nodo{border-left:6px solid var(--agua-p)}
+.col[data-sec="2"] .nodo{border-left:6px solid var(--salvia-p)}
+.col[data-sec="3"] .nodo{border-left:6px solid var(--rosa-p)}
+.nodo{display:block;width:100%;text-align:left;font:inherit;background:var(--papel);color:var(--tinta);border:1.5px solid var(--borde);border-radius:14px;padding:10px 12px;margin:8px 0;cursor:pointer}
+.nodo b{display:block;font-family:Georgia,serif}
+.nodo span{display:block;font-size:.85rem;color:var(--tinta-suave)}
+.nodo[aria-pressed=true]{background:var(--tinta);color:#fff;border-color:var(--tinta)}
+.nodo[aria-pressed=true] span{color:#d9ecea}
+.nodo.visto::after{content:"● explorado";display:block;font-size:.72rem;color:var(--agua-p);margin-top:2px}
+.nodo[aria-pressed=true].visto::after{color:#bfe6df}
+#detalle{margin-top:16px;min-height:140px}
+blockquote{margin:12px 0;padding:10px 14px;border-left:4px solid var(--coral);background:#fff6f1;border-radius:0 12px 12px 0}
+blockquote cite{display:block;font-style:normal;font-size:.85rem;color:var(--tinta-suave);margin-top:4px}
+.para-pensar{background:var(--arena);border:1.5px dashed var(--agua-p);border-radius:14px;padding:10px 14px;margin:12px 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{font:inherit;font-size:.85rem;border:1.5px solid var(--borde);background:var(--papel);color:var(--tinta);border-radius:999px;padding:4px 12px;cursor:pointer}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.btn{font:inherit;border:1.5px solid var(--tinta);background:var(--tinta);color:#fff;border-radius:12px;padding:9px 16px;cursor:pointer}
+.btn.sec{background:var(--papel);color:var(--tinta)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.escena-texto{background:#fff6f1;border:1.5px solid #f3d3c4;border-radius:14px;padding:14px;margin:10px 0}
+.obs{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1.5px solid var(--borde);border-radius:12px;margin:6px 0;background:var(--papel);cursor:pointer}
+.obs input{margin-top:5px;width:18px;height:18px;accent-color:var(--agua-p)}
+.obs:has(input:checked){border-color:var(--agua-p);background:#eef8f6}
+.tiempo{border-top:1.5px solid var(--borde);margin-top:14px;padding-top:12px}
+.tiempo h3{font-size:1rem}
+.lente{margin:8px 0;padding:8px 12px;border-radius:12px;background:var(--arena);border:1px solid var(--borde)}
+.lente b{font-family:Georgia,serif}
+.opt{display:block;width:100%;text-align:left;font:inherit;background:var(--papel);color:var(--tinta);border:1.5px solid var(--borde);border-radius:12px;padding:10px 14px;margin:8px 0;cursor:pointer}
+.opt[aria-pressed=true]{border-color:var(--tinta);background:#eef8f6}
+.opt[disabled]{cursor:default}
+.prog{height:8px;background:var(--borde);border-radius:99px;overflow:hidden;margin:8px 0}
+.prog i{display:block;height:100%;background:var(--agua-p);width:0}
+textarea{width:100%;min-height:110px;font:inherit;color:var(--tinta);border:1.5px solid var(--borde);border-radius:12px;padding:10px 12px;background:#fff;resize:vertical}
+label.campo{display:block;font-weight:600;margin:14px 0 4px}
+.caso p{margin:.6em 0}
+.consigna{background:#eef8f6;border:1.5px solid var(--agua);border-radius:14px;padding:12px 14px;margin:12px 0}
+footer{margin-top:28px}
+[hidden]{display:none!important}
+@media (max-width:820px){.cols{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:no-preference){.prog i{transition:width .3s}}
+.pasos{margin:8px 0 0;padding-left:1.2em}
+.pasos li{margin:6px 0}
+.roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:8px}
+.rol{background:var(--arena);border:1.5px solid var(--borde);border-radius:12px;padding:8px 12px;font-size:.92rem}
+.rol b{font-family:Georgia,serif;display:block}
+.form-map{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:12px;align-items:end}
+.form-map label{display:block;font-weight:600;font-size:.9rem;margin-bottom:3px}
+select,input[type=text]{width:100%;font:inherit;color:var(--tinta);border:1.5px solid var(--borde);border-radius:10px;padding:8px 10px;background:#fff}
+select:focus-visible,input[type=text]:focus-visible,textarea:focus-visible{outline:3px solid var(--coral-p);outline-offset:2px}
+.mapa-wrap{background:#fff;border:1.5px solid var(--borde);border-radius:var(--r);overflow:auto;margin-top:14px}
+.mapa-wrap svg{display:block;width:100%;height:auto;min-width:640px}
+.lista-nodos{list-style:none;margin:0;padding:0}
+.lista-nodos>li{border:1.5px solid var(--borde);border-radius:12px;padding:10px 12px;margin:8px 0;background:var(--papel)}
+.lista-nodos .cab{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.lista-nodos .cab b{font-family:Georgia,serif}
+.lista-nodos textarea{min-height:60px;margin-top:6px}
+.btn.mini{padding:4px 10px;font-size:.85rem;border-radius:10px}
+.plen{border:1.5px solid var(--agua);background:#eef8f6;border-radius:14px;padding:10px 14px;margin:8px 0}
+.plen input[type=text]{margin-top:6px}
+.extra-item{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0}
+.cap-tip{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-top:8px}
+.form-map>div{min-width:0}
+select{max-width:100%;text-overflow:ellipsis}
+.form-map select,.form-map input{width:100%;min-width:0}
+.pieza{border:1.5px solid var(--borde);border-radius:14px;padding:10px 14px;margin:10px 0;background:var(--papel)}
+.pieza .eyebrow{color:var(--rosa-p)}
+.pieza p{margin:.35em 0}
+.fila{display:grid;grid-template-columns:130px 1fr;gap:4px 12px;margin:4px 0;padding:4px 0;border-top:1px dashed var(--borde)}
+.fila b{font-family:Georgia,serif;font-size:.95rem}
+.muestra{background:#fff6f1;border:1.5px solid #f3d3c4;border-radius:12px;padding:8px 12px;margin:8px 0}
+.mira{font-size:.85rem;color:var(--agua-p);margin-top:6px}
+.est{display:inline-block;font:600 .72rem/1 ui-monospace,Menlo,monospace;letter-spacing:.04em;padding:3px 8px;border-radius:999px;margin-right:6px;background:var(--arena);border:1px solid var(--borde)}
+@media (max-width:560px){.fila{grid-template-columns:1fr}}
+.desplegable{margin-top:12px;border:1.5px solid var(--borde);border-radius:14px;background:var(--arena);padding:0}
+.desplegable>summary{cursor:pointer;list-style:none;padding:10px 14px;font-weight:600;border-radius:14px}
+.desplegable>summary::-webkit-details-marker{display:none}
+.desplegable>summary::before{content:"▸ ";color:var(--agua-p)}
+.desplegable[open]>summary::before{content:"▾ "}
+.desplegable>summary:focus-visible{outline:3px solid var(--coral-p);outline-offset:2px}
+.desplegable>p{padding:0 14px 10px}
+.gen-wrap{padding:0 10px 6px}
+.gen-wrap iframe{display:block;width:100%;aspect-ratio:16/9;min-height:340px;border:1.5px solid var(--borde);border-radius:12px;background:#fff}
+fieldset.chk{border:1.5px solid var(--borde);border-radius:12px;margin:8px 0;padding:6px 12px 8px}
+fieldset.chk legend{font-weight:600;padding:0 6px}
+.chk-l{display:inline-block;margin:3px 14px 3px 0;font-weight:400}
+.chk-l input{width:auto;margin-right:4px}
+.mapa-wrap svg{touch-action:none}
+.mapa-wrap svg g[tabindex]:focus-visible rect{stroke:#D3805F;stroke-width:5}
+.mapa-wrap svg g[tabindex]:focus{outline:none}
+.chip{margin:3px 6px 3px 0}
+.chip:disabled{opacity:.55;cursor:default}
+#m-propio{min-height:64px}
+.extra-item select,.lista-nodos .cab select,#u-rel2{width:auto;max-width:220px}
+.lista-nodos .cab input[type=text]{width:auto;min-width:160px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">Seminario de Didáctica · Semana 2 · Sincrónico 2</div>
+  <h1>Cartografías en diálogo: exploración de territorios posibles</h1>
+  <p class="lead">Dos momentos. Primero, en cada grupo, un mapa mental con lo trabajado en la Semana 1, para elegir de qué conversar. Después, el análisis de un caso con los lentes de la Semana 2. No hay puntaje ni respuestas únicas: las devoluciones dejan preguntas y remiten a las fuentes.</p>
+</header>
+
+<nav role="tablist" aria-label="Recorrido del simulador">
+  <button role="tab" id="t-mapa" aria-selected="true" aria-controls="p-mapa">1 · Mapa mental del grupo</button>
+  <button role="tab" id="t-caso" aria-selected="false" aria-controls="p-caso">2 · Caso para analizar con los lentes</button>
+</nav>
+
+<main>
+<!-- MAPA -->
+<section id="p-mapa" role="tabpanel" aria-labelledby="t-mapa">
+  <div class="card">
+    <div class="eyebrow">Una manera de armarlo</div>
+    <h2>Un tejido de palabras con lo abordado en la Semana 1</h2>
+    <ol class="pasos">
+      <li><b>Soltar palabras.</b> Pueden escribir las que vayan apareciendo (varias a la vez, separadas por coma) y sumar conceptos del banco de la Semana 1. Cada palabra aparece como un nodo suelto, sin lugar asignado.</li>
+      <li><b>Mover y agrupar.</b> En el modo «Mover», cada nodo se arrastra a donde el grupo lo siente. Con el teclado, las flechas lo desplazan.</li>
+      <li><b>Tejer hilos.</b> En el modo «Unir», se toca un nodo y después otro. Cualquier nodo puede tener tantos hilos como el grupo necesite, con una relación nombrada o sin nombre.</li>
+      <li><b>Escribir en los nodos y leer el tejido.</b> Debajo del mapa, cada nodo tiene un espacio para anotar lo que dice el grupo. ¿Qué nodos quedaron solos? ¿Dónde se cruzan los hilos? ¿Qué quedó afuera? Con ★ se marcan los nodos de los que el grupo quiere hablar en el plenario.</li>
+      <li><b>Guardar.</b> Una captura de pantalla alcanza; también hay botones para descargar la imagen.</li>
+    </ol>
+    <p class="small">Una posibilidad para una sala de cinco: una persona comparte pantalla y mueve los nodos, otra lee en voz alta, otra anota lo que se dice en cada nodo, otra trae la pregunta «¿qué quedó afuera?» y otra cuida el tiempo. Los roles pueden rotar. Lo que escriban se guarda en este navegador y no se envía a ningún lado.</p>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2>Palabras</h2>
+    <div class="form-map">
+      <div style="grid-column:1/-1"><label for="m-propio">Palabras sueltas del grupo</label><textarea id="m-propio" rows="2" maxlength="600" placeholder="Una escena, una palabra, una pregunta. Varias separadas por coma o en renglones distintos (Enter agrega; Mayús + Enter baja de renglón)"></textarea></div>
+      <div><button class="btn" type="button" id="m-add">Agregar al mapa</button></div>
+    </div>
+    <details class="desplegable" id="m-banco-det" style="margin-top:12px">
+      <summary>Banco de conceptos de la Semana 1 <span class="small">(tocar un concepto lo suma al mapa y muestra su idea)</span></summary>
+      <div style="padding:0 14px 10px"><div id="m-banco"></div></div>
+    </details>
+    <div class="card" id="m-detalle" style="margin-top:12px;background:var(--arena)" aria-live="polite"><p class="small">Al sumar un concepto del banco, acá aparecen su idea, una cita y una pregunta para conversar.</p></div>
+    <p class="small" id="m-msg" aria-live="polite"></p>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2>El mapa</h2>
+    <div class="row" role="group" aria-label="Modo de trabajo en el mapa">
+      <button class="btn" type="button" id="modo-mover" aria-pressed="true">Mover</button>
+      <button class="btn sec" type="button" id="modo-unir" aria-pressed="false">Unir</button>
+      <button class="btn sec" type="button" id="modo-separar" aria-pressed="false">Separar</button>
+      <button class="btn sec" type="button" id="modo-quitar" aria-pressed="false">Quitar</button>
+      <button class="btn sec" type="button" id="modo-jerarquia" aria-pressed="false">Jerarquía</button>
+      <button class="btn sec" type="button" id="m-deshacer" disabled>Deshacer</button>
+      <button class="btn sec" type="button" id="m-rehacer" disabled>Rehacer</button>
+      <label for="u-rel2" class="small" style="margin-left:6px">Relación para los próximos hilos</label>
+      <select id="u-rel2" style="max-width:240px"></select>
+    </div>
+    <fieldset class="chk" id="niveles"><legend>Niveles para el modo «Jerarquía»</legend>
+      <label class="chk-l"><input type="radio" name="nivel" value="1" checked> 1 · lo más central</label>
+      <label class="chk-l"><input type="radio" name="nivel" value="2"> 2 · intermedio</label>
+      <label class="chk-l"><input type="radio" name="nivel" value="3"> 3 · lo más accesorio</label>
+      <label class="chk-l"><input type="radio" name="nivel" value="0"> sin nivel</label>
+      <span class="small">Letra del nivel 1: 16 pt en negrita y borde más grueso. Nivel 2: 14 pt. Nivel 3: 12 pt y borde punteado. Sin nivel: 13 pt.</span>
+    </fieldset>
+    <p class="small" id="m-estado" aria-live="polite">Modo «Mover»: arrastren los nodos para ordenarlos.</p>
+    <div class="mapa-wrap" id="mapa-wrap"><svg id="mapa-svg" role="group" aria-labelledby="mapa-desc" viewBox="0 0 1200 760" preserveAspectRatio="xMidYMid meet"></svg></div>
+    <p class="small" id="mapa-desc">Mapa mental del grupo. La misma información está en la lista de nodos y de hilos de más abajo.</p>
+    <div class="row">
+      <button class="btn sec" type="button" id="m-png">Descargar imagen (PNG)</button>
+      <button class="btn sec" type="button" id="m-svg">Descargar imagen (SVG)</button>
+      <button class="btn sec" type="button" id="m-copiar">Copiar mapa como texto</button>
+      <button class="btn sec" type="button" id="m-borrar">Borrar el mapa</button>
+    </div>
+    <p class="small" id="m-msg2" aria-live="polite"></p>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2>Hilos</h2>
+    <p class="small">Los hilos también pueden tejerse con listas, sin arrastrar ni tocar el mapa.</p>
+    <div class="form-map">
+      <div><label for="u-a">Desde</label><select id="u-a"></select></div>
+      <div><label for="u-rel">Relación</label><select id="u-rel"></select></div>
+      <div><label for="u-b">Hacia</label><select id="u-b"></select></div>
+      <div><button class="btn" type="button" id="u-add">Tejer hilo</button></div>
+    </div>
+    <p class="small" id="u-cuenta" aria-live="polite"></p>
+    <div id="u-lista"></div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2>Nodos del mapa</h2>
+    <p class="small">En cada nodo pueden anotar lo que dice el grupo. La estrella marca los nodos para el plenario.</p>
+    <ul class="lista-nodos" id="lista-nodos"></ul>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2>Para el plenario</h2>
+    <p class="small" id="plen-estado" aria-live="polite"></p>
+    <div id="plen-lista"></div>
+    <div class="para-pensar"><b>Preguntas posibles para hablar de un nodo: </b>¿qué escribimos acá y por qué lo ubicamos ahí? ¿Con qué otros nodos conversa? ¿Qué ejemplo de nuestras prácticas lo hizo visible? ¿Qué pregunta nos dejó abierta?</div>
+  </div>
+  <div class="row"><button class="btn" type="button" data-ir="t-caso">Continuar con el caso</button></div>
+</section>
+
+<!-- CASO -->
+<section id="p-caso" role="tabpanel" aria-labelledby="t-caso" hidden>
+  <div class="card">
+    <div class="eyebrow">Lentes de la Semana 2</div>
+    <h2>Cuatro lentes y tres capas para leer una propuesta</h2>
+    <div class="lente"><b>Evidencias de aprendizaje.</b> La evidencia no se reduce a «lo que recuerdan», sino a lo que pueden decir, hacer, escribir o producir cuando el contenido se vuelve operable en una situación.</div>
+    <div class="lente"><b>Desafíos cognitivos.</b> Steiman sostiene que el desafío cognitivo funciona como «catalizador del contenido» y disparador de la actividad didáctica.</div>
+    <div class="lente"><b>Coherencia interna del diseño.</b> Existe cuando propósitos, contenidos, consignas y evaluación «tiran para el mismo lado»; si no, aparecen desajustes entre lo que decimos buscar y lo que las tareas y criterios vuelven probable que ocurra.</div>
+    <div class="lente"><b>Estrategia / método / técnica.</b> No hay nada «mágico» en el formato; lo decisivo es la coherencia entre el tipo de trabajo intelectual esperado, las mediaciones elegidas y el tipo de evidencia que se recoge.</div>
+    <div class="lente"><b>Tres capas.</b> Macro (sistema y políticas), meso (institución) y micro (aula y práctica docente): ayudan a situar de dónde viene cada decisión y qué margen de acción queda.</div>
+    <p class="small">Texto de los cuatro lentes: Genially «Lentes para fundamentar decisiones de enseñanza», Semana 2. Las capas, según el desarrollo de la Semana 2, apartado 1.1.</p>
+    <details class="desplegable" id="gen-det">
+      <summary>Ver el Genially de los lentes <span class="small">(se despliega y se oculta cuando haga falta)</span></summary>
+      <div class="gen-wrap"><iframe id="gen-frame" title="Genially: Lentes para fundamentar decisiones de enseñanza, Semana 2" data-src="https://view.genially.com/699654ddcaa8c4e5964c85ac" allowfullscreen></iframe></div>
+      <p class="small">Si el recurso no se muestra en este espacio, puede abrirse en <a href="https://view.genially.com/699654ddcaa8c4e5964c85ac" target="_blank" rel="noopener">una pestaña nueva</a>.</p>
+    </details>
+  </div>
+
+  <div class="card caso" style="margin-top:14px">
+    <div class="eyebrow">Caso para analizar</div>
+    <div class="row" id="caso-sel" role="group" aria-label="Elegir caso"></div>
+    <h2 id="caso-titulo" style="margin-top:12px"></h2>
+    <div id="caso-texto"></div>
+    <div id="caso-piezas"></div>
+    <p class="small" id="caso-nota"></p>
+    <div class="consigna">
+      <b>Consigna.</b> Lean el caso completo. Los seis campos de más abajo señalan en qué momento del relato mirar. Pueden apoyar lo que escriban con una cita breve del caso. Lo escrito se conserva en este navegador.
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h2>Ensayen una lectura</h2>
+    <p class="small">Una primera lectura provisoria alcanza. Lo que escriban se queda en este navegador y no se envía a ningún lado. La devolución busca en el texto palabras del desarrollo y referencias al caso: orienta con preguntas y no califica.</p>
+    <div id="campos"></div>
+    <p class="small" id="c-cuenta" aria-live="polite"></p>
+    <div class="row">
+      <button class="btn" id="c-ver">Ver devolución</button>
+      <button class="btn sec" id="c-copiar">Copiar respuesta y devolución</button>
+      <button class="btn sec" id="c-reset">Borrar este caso y empezar de nuevo</button>
+    </div>
+    <p class="small" id="c-msg" aria-live="polite"></p>
+    <div id="c-dev" aria-live="polite"></div>
+  </div>
+  <div class="row"><button class="btn sec" type="button" data-ir="t-mapa">Volver al mapa</button></div>
+</section>
+</main>
+
+<footer class="card small">
+  <b>Sobre las fuentes.</b> El banco de conceptos del mapa sigue el desarrollo de la Semana 1; las citas y páginas se toman como figuran allí, contrastadas con las lecturas de la carpeta en los casos indicados en el simulador de la Semana 1. Las devoluciones del caso se apoyan en el desarrollo de la Semana 2 (De Alba, Edelstein, Edwards, Litwin, Steiman, Krichesky, Anijovich y Cappelletti, Álvarez Méndez, Ravela, Picaroni y Loureiro, Celman, Díaz-Barriga); las páginas se citan como figuran en ese desarrollo. Es un apoyo para estudiar y conversar; no califica.
+</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- utilidades ---------- */
+function el(tag, props, kids){
+  var n=document.createElement(tag);
+  if(props){ for(var k in props){
+    if(k==="text") n.textContent=props[k];
+    else if(k==="class") n.className=props[k];
+    else n.setAttribute(k,props[k]);
+  }}
+  (kids||[]).forEach(function(c){ if(c) n.appendChild(typeof c==="string"?document.createTextNode(c):c); });
+  return n;
+}
+var SVGNS="http://www.w3.org/2000/svg";
+function sv(tag,attrs,text){
+  var n=document.createElementNS(SVGNS,tag);
+  for(var k in attrs) n.setAttribute(k,attrs[k]);
+  if(text!=null) n.textContent=text;
+  return n;
+}
+function clear(n){ while(n.firstChild) n.removeChild(n.firstChild); }
+function $(id){ return document.getElementById(id); }
+function copiar(txt,msgEl,okTxt){
+  function ok(){ msgEl.textContent=okTxt; }
+  function plan(){
+    var ta=el("textarea",{"aria-label":"Texto para copiar"}); ta.value=txt;
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); ok(); }catch(e){ msgEl.textContent="No se pudo copiar automáticamente."; }
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(ok,plan); } else { plan(); }
+}
+
+/* ---------- pestañas ---------- */
+var tabs=[["t-mapa","p-mapa"],["t-caso","p-caso"]];
+function showTab(id){
+  tabs.forEach(function(t){
+    var sel=t[0]===id;
+    $(t[0]).setAttribute("aria-selected",sel?"true":"false");
+    $(t[1]).hidden=!sel;
+  });
+  window.scrollTo(0,0);
+}
+tabs.forEach(function(t){ $(t[0]).addEventListener("click",function(){ showTab(t[0]); }); });
+[].forEach.call(document.querySelectorAll("[data-ir]"),function(b){ b.addEventListener("click",function(){ showTab(b.getAttribute("data-ir")); }); });
+
+/* ---------- 1 · BANCO DE CONCEPTOS (Semana 1) ---------- */
+var SECCIONES={
+  1:"Coordenadas y supuestos",
+  2:"La práctica como objeto de análisis",
+  3:"Problematización y modelos"
+};
+var NODOS=[
+ {id:"n1",sec:1,t:"Pedagogía",s:"un quehacer que pregunta",
+  idea:"En el desarrollo, la pedagogía se entiende como un modo de producir preguntas, leer la experiencia escolar y desnaturalizar lo que parece obvio.",
+  cita:"la Pedagogía asume este esfuerzo de pensamiento y análisis, como su tarea principal",ref:"Brailovsky (2018, p. 8)",
+  p:"¿Qué pregunta por el sentido de lo que hacen aparece cuando enseñan algo que ya les parece obvio?",con:["n2","n3"]},
+ {id:"n2",sec:1,t:"Didáctica",s:"el hacer en situación",
+  idea:"Mira las decisiones de enseñanza en situación: con qué lógicas se toman, qué supuestos las sostienen y qué efectos producen. Combina niveles teórico, técnico e instrumental, y considera el tiempo, el espacio y los agrupamientos.",
+  cita:"La didáctica implica una combinación de los niveles teórico, técnico, instrumental en el análisis y elaboración de los problemas de su ámbito; lo que supone una interrelación permanente entre la indagación teórica y la práctica educativa",ref:"Edelstein y Rodríguez (1974, p. 21), citadas en Steiman (2023)",
+  p:"Cuando diseñan una clase, ¿qué decisiones sobre tiempo, espacio y agrupamientos suelen quedar sin nombrar?",con:["n1","n3","n5"]},
+ {id:"n3",sec:1,t:"Fundamentos",s:"el suelo que no se nombra",
+  idea:"Los fundamentos antropológicos, epistemológicos y éticos funcionan como un suelo que organiza la mirada aunque pocas veces se explicite: qué idea de sujeto, qué concepción de conocimiento, qué noción de justicia educativa.",
+  cita:null,ref:"Desarrollo de la Semana 1, apartado 1.1",
+  p:"Frente a una secuencia que consideran «incoherente», ¿qué estarían señalando: sentidos formativos, estrategias o supuestos sobre el conocimiento?",con:["n2","n7","n8","n9"]},
+ {id:"n4",sec:1,t:"Campo ecléctico",s:"fronteras difusas",
+  idea:"Steiman describe un campo ecléctico. El desarrollo propone pensar esa falta de fronteras nítidas como signo de la complejidad de la enseñanza, que habilita interpelaciones profundas y situadas.",
+  cita:"lo que pertenece al campo de la Didáctica y lo que no pertenece no está tan claramente delimitado",ref:"Steiman (2023, p. 20)",
+  p:"¿Qué cambia en la lectura de una clase si las fronteras del campo se consideran un rasgo de su complejidad?",con:["n2","n5"]},
+ {id:"n5",sec:1,t:"Mandato prescriptivo",s:"¿con qué herramienta se regula?",
+  idea:"Escuela tradicional, activa y tecnicismo cambian el lema y comparten una lógica normativa sobre qué sería una buena clase.",
+  cita:"el «problema didáctico» por excelencia es: ¿con qué herramienta se regula la práctica?",ref:"Steiman (2023, p. 17)",
+  p:"¿Qué lema sobre «una buena clase» recuerdan de su propia formación y cuál aparece hoy en su práctica?",con:["n4","n6"]},
+ {id:"n6",sec:1,t:"Interpretativo-crítico",s:"situación sociopolítica concreta",
+  idea:"El desplazamiento coloca la incertidumbre como rasgo de la enseñanza: decisiones situadas, fundamentadas y revisables, en lugar de garantías del tipo «si hago X, obtengo Y».",
+  cita:"la Didáctica no opera a nivel de laboratorio: trascurre en un enmarque de una situación sociopolítica concreta, en función o disfunción de la cual actúa",ref:"Barco (1975, p. 38), citada en Steiman (2023)",
+  p:"¿Qué incomodidad aparece cuando se desalojan las certezas y qué permite pensar esa incomodidad?",con:["n5","n7"]},
+ {id:"n7",sec:1,t:"Supuestos antropológicos",s:"¿qué sujeto se imagina?",
+  idea:"Toda decisión didáctica porta una idea de sujeto que aprende. Se traduce en la distribución de la palabra, el tipo de tareas y la relación con el error.",
+  cita:"concibe al/la docente como agente curricular significativo; un/una docente que conoce, que tiene un saber y se define respecto del qué, cómo, porqué y para qué enseña",ref:"Edelstein (2022, p. 68), según el desarrollo",
+  p:"En su última clase, ¿quién habló, quién preguntó, quién «sabía»?",con:["n8","n9"]},
+ {id:"n8",sec:1,t:"Supuestos epistemológicos",s:"¿qué cuenta como saber?",
+  idea:"Qué contenidos, fuentes y modos de validar se priorizan, y qué saberes quedan afuera. Incluye las lógicas de búsqueda y procesamiento de información en entornos digitales.",
+  cita:"síntesis de elementos culturales (conocimientos, valores, costumbres, creencias, hábitos)",ref:"De Alba (1998, p. 59)",
+  p:"¿Qué saberes circulan en sus aulas en condiciones de igualdad y cuáles quedan como «menores»?",con:["n7","n9"]},
+ {id:"n9",sec:1,t:"Supuestos éticos",s:"hospitalidad y alteridad",
+  idea:"Qué hacemos con el otro cuando llega: qué lugar le damos, qué mundo le ofrecemos. La responsabilidad aparece como respuesta: hacerse cargo de las condiciones del encuentro.",
+  cita:"acogimiento hospitalario de los recién llegados",ref:"Bárcena y Mèlich (2000, p. 14)",
+  p:"¿Qué condiciones de acogida construyen para que alguien pueda entrar al trabajo con el saber sin ser expulsado?",con:["n7","n8"]},
+
+ {id:"n10",sec:2,t:"Documentar",s:"hacer visible lo invisible",
+  idea:"Documentar construye un registro que hace visibles decisiones, supuestos y efectos; captura tensiones y no solo logros, y abre preguntas.",
+  cita:"colocar como objeto de estudio las propias prácticas de enseñanza",ref:"Edelstein (2022, p. 59)",
+  p:"¿Qué quedaría visible de su última clase en un registro y qué se evaporaría?",con:["n11","n13"]},
+ {id:"n11",sec:2,t:"Tres movimientos",s:"distanciar, extrañar, conceptualizar",
+  idea:"Distanciamiento (mirar la práctica desde afuera), extrañamiento (volver problemático el «así se hace») y análisis conceptual (leerla con categorías del campo didáctico).",
+  cita:"que lo familiar se vuelva extraño",ref:"Edelstein (2022)",
+  p:"¿Qué práctica propia aparece como «natural» y podría volverse extraña?",con:["n10","n12"]},
+ {id:"n12",sec:2,t:"Enseñanza y aprendizaje",s:"sin garantía automática",
+  idea:"Becker Soares cuestiona el binomio «enseñanza-aprendizaje». El aprendizaje importa como referente y contraste para revisar la enseñanza, sin ser consecuencia asegurada.",
+  cita:"hace suponer que de la enseñanza necesariamente resulta aprendizaje, lo que no es verdad",ref:"Becker Soares (1985, p. 3)",
+  p:"Al releer una clase, ¿qué lugar le dan al aprendizaje: referente, promesa, otra cosa?",con:["n10","n13"]},
+ {id:"n13",sec:2,t:"Polifonía de voces",s:"palabras, silencios, materiales",
+  idea:"La práctica se reconstruye con palabras, gestos y silencios, materiales, tiempos y ritmos, y producciones de estudiantes. Para eso se mencionan dispositivos: un mapa de decisiones, protocolos de observación, bitácoras, evidencias de producciones.",
+  cita:"una polifonía de voces",ref:"Edelstein (2022, p. 59)",
+  p:"¿Qué voz falta en el relato de su práctica?",con:["n10","n14"]},
+ {id:"n14",sec:2,t:"Ética del análisis",s:"sin tribunal",
+  idea:"Edelstein señala condiciones: romper la soledad y el aislamiento, construir un clima de credibilidad y confianza. Anijovich y Cappelletti suman la suspensión del juicio y una lógica recursiva, espiralada.",
+  cita:"no juzga, no lleva ante un tribunal, el tribunal de la razón",ref:"Edelstein (2022, p. 66)",
+  p:"¿Qué condiciones necesitarían para contar una clase sin un relato autocomplaciente ni una autoexigencia que aplaste?",con:["n13","n15"]},
+ {id:"n15",sec:2,t:"Niveles de reflexión",s:"de describir a deliberar",
+  idea:"Anijovich distingue descripción no reflexiva, reflexión descriptiva, discurso deliberativo, reflexión dialógica y reflexión crítica. Es una entrada para mirar la profundidad de los registros.",
+  cita:"da cuenta de las razones en la toma de decisiones, considerando el contexto histórico, social y político",ref:"Anijovich (2006), en Anijovich y Cappelletti (2021, cap. 1)",
+  p:"¿En qué nivel suelen quedar sus registros y qué conversaciones podrían ampliarlo?",con:["n14","n16"]},
+ {id:"n16",sec:2,t:"Macro, meso y micro",s:"la práctica excede el aula",
+  idea:"A escala macro, el contexto histórico-social; a escala meso, el tipo de organización institucional; a escala micro, el aula, con expectativas, representaciones mutuas y procesos interactivos.",
+  cita:"las resoluciones más sencillas de supervivencia en la función se asocien con frecuencia a la falta de problematización",ref:"Edelstein (2022, p. 49)",
+  p:"¿Qué condicionantes de escala macro o meso aparecen en lo que viven como «problema del aula»?",con:["n12","n17"]},
+
+ {id:"n17",sec:3,t:"Problematizar",s:"dejar de dar por sentado",
+  idea:"Una práctica se vuelve pensable cuando se mira qué la organiza. Aparecen tensiones y contradicciones que desplazan el trabajo en torno al conocimiento.",
+  cita:"corrimiento/desplazamiento de aquello que es tarea central en la enseñanza: el trabajo en torno al conocimiento",ref:"Edelstein (2022, p. 48)",
+  p:"¿Qué se corre del centro en sus clases y qué ocupa ese lugar?",con:["n16","n18"]},
+ {id:"n18",sec:3,t:"Declarado y operado",s:"lo que digo y lo que hago",
+  idea:"Nivel declarativo: lo que digo que creo. Nivel operativo: lo que concreto en tareas, tiempos, palabra, evidencias y evaluación. Las grietas suelen mostrar algo estructural: conviven modelos, tradiciones y mandatos institucionales.",
+  cita:"Decimos que el error es parte del proceso, pero lo tratamos como falta y lo penalizamos con puntaje",ref:"Desarrollo de la Semana 1, apartado 3.1",
+  p:"¿Qué distancia reconocen entre lo que dicen valorar y lo que pide su evaluación?",con:["n17","n19"]},
+ {id:"n19",sec:3,t:"Modelos en disputa",s:"herencias y mandatos",
+  idea:"El desarrollo describe cuatro lógicas: expositiva, participación dentro del guion, cumplimiento curricular y crítico-interpretativa. Ninguna aparece pura: se mezclan y se contradicen.",
+  cita:"la Didáctica prescribe, sólo que cambia el formato",ref:"Steiman (2023, p. 16)",
+  p:"¿Qué lógica manda en una decisión reciente, qué deja ver, qué deja afuera, qué corre del centro?",con:["n18","n20"]},
+ {id:"n20",sec:3,t:"Teorías implícitas",s:"esquemas prácticos",
+  idea:"Son ideas sobre enseñar y aprender que estructuran decisiones aunque no se hayan formulado. Orientan qué se ve como problema, qué soluciones parecen posibles, cómo se interpretan las respuestas y qué aprendizajes se legitiman.",
+  cita:"entran en juego como terceros que facilitan el pensar y no como verdad teórica a aplicar",ref:"Souto (2016, p. 77), en Anijovich y Cappelletti (2021)",
+  p:"Si cambian una clase magistral por un video, ¿qué lógica cambió y cuál sigue mandando?",con:["n19","n21"]},
+ {id:"n21",sec:3,t:"Hacia la Semana 2",s:"construir coherencias posibles",
+  idea:"Las tensiones documentadas en la Semana 1 quedan como insumo para rediseñar desde marcos explícitos. Steiman propone un paradigma que parte de la interpretación, sin abandonar la criticidad, y construye orientaciones para la acción.",
+  cita:"Creo que es necesario que la Didáctica proponga, no que norme y regule, pero sí que proponga",ref:"Steiman (2023, p. 25)",
+  p:"¿Qué tensión de su práctica les gustaría llevar como material a la próxima semana?",con:["n20"]}
+];
+var porId={}; NODOS.forEach(function(n){ porId[n.id]=n; });
+/* ---------- 1 · TEJIDO DE PALABRAS ---------- */
+var RELS=["se conecta con","se apoya en","tensiona con","condiciona a","ejemplifica","abre la pregunta por","queda afuera de"];
+var COL={1:["#d3ece8","#4C948B","#33484A"],2:["#dcefe6","#5FA089","#33484A"],3:["#f8dce1","#C97686","#33484A"],9:["#fbe1d4","#D3805F","#33484A"]};
+var KEY="sem2_tejido_didactica_v2";
+var CW=1200, CH=760, MAXN=60;
+var M={nodes:[],links:[],seq:1};
+var modo="mover", origen=null, arrastre=null;
+
+var pilaU=[], pilaR=[];
+function btnsHist(){ $("m-deshacer").disabled=!pilaU.length; $("m-rehacer").disabled=!pilaR.length; }
+function empujar(str){ pilaU.push(str); if(pilaU.length>60) pilaU.shift(); pilaR=[]; btnsHist(); }
+function snap(){ try{ empujar(JSON.stringify(M)); }catch(e){} }
+function restaurar(str,msg){
+  try{ M=JSON.parse(str); }catch(e){ return; }
+  origen=null; $("m-msg2").textContent=msg; guardar(); renderTodo(); btnsHist();
+}
+function deshacer(){ if(!pilaU.length) return; pilaR.push(JSON.stringify(M)); restaurar(pilaU.pop(),"Se deshizo el último cambio."); }
+function rehacer(){ if(!pilaR.length) return; pilaU.push(JSON.stringify(M)); restaurar(pilaR.pop(),"Se rehizo el cambio."); }
+function guardar(){ try{ localStorage.setItem(KEY,JSON.stringify(M)); }catch(e){} }
+function num(v,d,lo,hi){ v=Number(v); if(!isFinite(v)) v=d; return Math.max(lo,Math.min(hi,v)); }
+function cargar(){
+  try{
+    var s=localStorage.getItem(KEY); if(!s) return;
+    var d=JSON.parse(s);
+    if(!d||!Array.isArray(d.nodes)||!Array.isArray(d.links)) return;
+    var ids={};
+    var nodes=d.nodes.slice(0,MAXN).map(function(n){
+      var id=String(n.id||""); ids[id]=true;
+      return {id:id,label:String(n.label||"").slice(0,60),cid:(n.cid&&porId[n.cid])?n.cid:null,
+        x:num(n.x,600,40,CW-40),y:num(n.y,380,30,CH-30),nivel:[0,1,2,3].indexOf(Number(n.nivel))>=0?Number(n.nivel):0,note:String(n.note||"").slice(0,2000),star:!!n.star,voz:String(n.voz||"").slice(0,80)};
+    }).filter(function(n){ return n.id&&n.label; });
+    ids={}; nodes.forEach(function(n){ ids[n.id]=true; });
+    var links=d.links.filter(function(l){ return ids[l.a]&&ids[l.b]&&l.a!==l.b; }).map(function(l){ return {a:l.a,b:l.b,rel:String(l.rel||"").slice(0,40)}; });
+    M={nodes:nodes,links:links,seq:Number(d.seq)||nodes.length+1};
+  }catch(e){}
+}
+function nodo(id){ for(var i=0;i<M.nodes.length;i++) if(M.nodes[i].id===id) return M.nodes[i]; return null; }
+function seccion(n){ return (n.cid&&porId[n.cid])?porId[n.cid].sec:9; }
+function opt(v,t){ return el("option",{value:v,text:t}); }
+
+/* medidas y ubicación */
+function envolver(t,max){
+  var pal=t.split(" "), out=[], cur="";
+  pal.forEach(function(w){
+    if(!cur) cur=w; else if((cur+" "+w).length<=max) cur+=" "+w; else { out.push(cur); cur=w; }
+  });
+  if(cur) out.push(cur); return out;
+}
+var TIPO={1:{fs:16,fw:"700"},2:{fs:14,fw:"500"},3:{fs:12,fw:"400"},0:{fs:13,fw:"500"}};
+function dims(n){
+  var lin=envolver(n.label,18), m=0; lin.forEach(function(l){ m=Math.max(m,l.length); });
+  var t=TIPO[n.nivel||0]||TIPO[0], fs=t.fs;
+  return {lin:lin,fs:fs,fw:t.fw,lh:fs*1.25,w:Math.max(90,m*fs*0.58+36),h:lin.length*fs*1.25+20};
+}
+function ubicar(label){
+  var tmp={label:label}, d=dims(tmp);
+  for(var k=0;k<400;k++){
+    var ang=k*0.75, r=k===0?0:70+k*4.5;
+    var x=Math.max(d.w/2+10,Math.min(CW-d.w/2-10,600+Math.cos(ang)*r*1.5));
+    var y=Math.max(d.h/2+10,Math.min(CH-d.h/2-10,380+Math.sin(ang)*r));
+    var libre=M.nodes.every(function(n){ var e=dims(n);
+      return Math.abs(n.x-x)>(e.w+d.w)/2+40||Math.abs(n.y-y)>(e.h+d.h)/2+30; });
+    if(libre) return {x:x,y:y};
+  }
+  return {x:100+Math.random()*(CW-200),y:60+Math.random()*(CH-120)};
+}
+function sumarNodo(label,cid){
+  var p=ubicar(label), id="m"+(M.seq++);
+  M.nodes.push({id:id,label:label.slice(0,60),cid:cid||null,x:p.x,y:p.y,nivel:0,note:"",star:false,voz:""});
+  return id;
+}
+
+/* selects */
+function llenarRel(id,conVacio){ var s=$(id); clear(s); if(conVacio) s.appendChild(opt("","sin nombre de relación")); RELS.forEach(function(r){ s.appendChild(opt(r,r)); }); }
+llenarRel("u-rel2",true); llenarRel("u-rel",true); $("u-rel2").value="se conecta con"; $("u-rel").value="se conecta con";
+function llenarSelects(){
+  ["u-a","u-b"].forEach(function(id){
+    var s=$(id), p=s.value; clear(s);
+    M.nodes.forEach(function(n){ s.appendChild(opt(n.id,n.label)); });
+    if(nodo(p)) s.value=p;
+  });
+  if($("u-b").value===$("u-a").value&&$("u-b").options.length>1) $("u-b").selectedIndex=($("u-a").selectedIndex+1)%$("u-b").options.length;
+  $("u-cuenta").textContent="Hilos tejidos hasta ahora: "+M.links.length+".";
+}
+
+/* banco */
+function mostrarDetalle(cid){
+  var d=$("m-detalle"); clear(d); var n=porId[cid];
+  d.appendChild(el("div",{"class":"eyebrow",text:"Sección "+n.sec+" · "+SECCIONES[n.sec]}));
+  d.appendChild(el("h3",{text:n.t}));
+  d.appendChild(el("p",{text:n.idea}));
+  if(n.cita) d.appendChild(el("blockquote",null,["«"+n.cita+"»",el("cite",{text:n.ref})]));
+  else d.appendChild(el("p",{"class":"small",text:"Fuente: "+n.ref}));
+  d.appendChild(el("div",{"class":"para-pensar"},[el("b",{text:"Para conversar: "}),n.p]));
+}
+function llenarBanco(){
+  var bx=$("m-banco"), usados={}; clear(bx);
+  M.nodes.forEach(function(n){ if(n.cid) usados[n.cid]=true; });
+  [1,2,3].forEach(function(sx){
+    var fs=el("fieldset",{"class":"chk"},[el("legend",{text:sx+" · "+SECCIONES[sx]})]);
+    NODOS.filter(function(n){ return n.sec===sx; }).forEach(function(n){
+      var b=el("button",{"class":"btn sec mini chip",type:"button",text:(usados[n.id]?"✓ ":"")+n.t,title:n.s});
+      if(usados[n.id]) b.disabled=true;
+      b.addEventListener("click",function(){
+        if(M.nodes.length>=MAXN){ $("m-msg").textContent="El mapa llegó a "+MAXN+" nodos."; return; }
+        snap(); sumarNodo(n.t,n.id); mostrarDetalle(n.id);
+        $("m-msg").textContent="Se sumó «"+n.t+"». Pueden moverlo y unirlo con otros nodos.";
+        guardar(); renderTodo();
+      });
+      fs.appendChild(b);
+    });
+    bx.appendChild(fs);
+  });
+}
+function agregarPalabras(){
+  var v=$("m-propio").value, msg=$("m-msg");
+  var ps=v.split(/[,;·|\/\n]+/).map(function(x){ return x.replace(/\s+/g," ").trim(); }).filter(function(x){ return x.length>=2; });
+  if(!ps.length){ msg.textContent="Escriban al menos una palabra."; return; }
+  if(M.nodes.length+ps.length>MAXN){ msg.textContent="El mapa pasaría de "+MAXN+" nodos; quizás convenga ordenar antes de seguir."; return; }
+  snap(); ps.forEach(function(p){ sumarNodo(p,null); });
+  $("m-propio").value="";
+  msg.textContent=ps.length===1?"Se sumó «"+ps[0]+"».":"Se sumaron "+ps.length+" palabras.";
+  guardar(); renderTodo();
+}
+$("m-add").addEventListener("click",agregarPalabras);
+$("m-propio").addEventListener("keydown",function(e){ if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); agregarPalabras(); } });
+
+/* modos */
+function setModo(m){
+  modo=m; origen=null;
+  $("modo-mover").setAttribute("aria-pressed",m==="mover"?"true":"false");
+  $("modo-unir").setAttribute("aria-pressed",m==="unir"?"true":"false");
+  ["mover","unir","separar","quitar","jerarquia"].forEach(function(k){ $("modo-"+k).className="btn"+(m===k?"":" sec"); $("modo-"+k).setAttribute("aria-pressed",m===k?"true":"false"); });
+  $("m-estado").textContent={mover:"Modo «Mover»: arrastren los nodos para ordenarlos.",unir:"Modo «Unir»: toquen un nodo y después otro para tejer un hilo entre ellos.",separar:"Modo «Separar»: toquen un nodo que reúna varias palabras para que cada una pase a ser un nodo propio.",jerarquia:"Modo «Jerarquía»: elijan un nivel y toquen los nodos a los que quieran asignárselo. El nivel 1 reúne lo más central para el grupo, el 3 lo más accesorio.",quitar:"Modo «Quitar»: toquen un nodo o un hilo para eliminarlo. Si fue sin querer, «Deshacer» lo recupera."}[m];
+  dibujar();
+}
+$("modo-mover").addEventListener("click",function(){ setModo("mover"); });
+$("modo-unir").addEventListener("click",function(){ setModo("unir"); });
+$("modo-separar").addEventListener("click",function(){ setModo("separar"); });
+$("modo-quitar").addEventListener("click",function(){ setModo("quitar"); });
+$("modo-jerarquia").addEventListener("click",function(){ setModo("jerarquia"); });
+function nivelElegido(){ var r=document.querySelector('input[name="nivel"]:checked'); return r?Number(r.value):1; }
+function asignarNivel(id){
+  var n=nodo(id); if(!n) return; var v=nivelElegido(); if(n.nivel===v) return; snap(); n.nivel=v;
+  $("m-estado").textContent="«"+n.label+"»: "+(v?"nivel "+v:"sin nivel")+"."; guardar(); renderTodo(id);
+}
+$("niveles").addEventListener("change",function(){ if(modo!=="jerarquia") setModo("jerarquia"); });
+$("m-deshacer").addEventListener("click",deshacer);
+$("m-rehacer").addEventListener("click",rehacer);
+
+function quitarNodo(id){
+  var n=nodo(id); if(!n) return; snap();
+  M.nodes=M.nodes.filter(function(x){ return x.id!==id; });
+  M.links=M.links.filter(function(l){ return l.a!==id&&l.b!==id; });
+  if(origen===id) origen=null;
+  $("m-estado").textContent="Se quitó «"+n.label+"» con sus hilos."; guardar(); renderTodo();
+}
+function quitarHilo(i){
+  var l=M.links[i]; if(!l) return; var a=nodo(l.a), b=nodo(l.b); snap();
+  M.links.splice(i,1);
+  $("m-estado").textContent="Se quitó el hilo entre «"+(a?a.label:"")+"» y «"+(b?b.label:"")+"»."; guardar(); renderTodo();
+}
+function separarNodo(id){
+  var n=nodo(id); if(!n) return;
+  var ps=n.label.split(/[,;·|\/\n]+/).map(function(x){ return x.replace(/\s+/g," ").trim(); }).filter(Boolean);
+  if(ps.length<2) ps=n.label.split(/\s+/).filter(Boolean);
+  if(ps.length<2){ $("m-estado").textContent="«"+n.label+"» es una sola palabra; no hay nada para separar."; return; }
+  if(M.nodes.length-1+ps.length>MAXN){ $("m-estado").textContent="Al separar, el mapa pasaría de "+MAXN+" nodos."; return; }
+  snap();
+  n.label=ps[0].slice(0,60); if(n.cid) n.cid=null;
+  var base={x:n.x,y:n.y};
+  ps.slice(1).forEach(function(p,i){
+    var ang=(i+1)*2*Math.PI/ps.length+0.5, d=dims({label:p});
+    var id2="m"+(M.seq++);
+    M.nodes.push({id:id2,label:p.slice(0,60),cid:null,x:num(base.x+Math.cos(ang)*170,base.x,d.w/2+10,CW-d.w/2-10),y:num(base.y+Math.sin(ang)*110,base.y,d.h/2+10,CH-d.h/2-10),nivel:0,note:"",star:false,voz:""});
+  });
+  $("m-estado").textContent="Se separó en "+ps.length+" nodos. Los hilos y las notas quedaron en «"+n.label+"».";
+  guardar(); renderTodo(id);
+}
+
+function existeHilo(a,b){ return M.links.some(function(l){ return (l.a===a&&l.b===b)||(l.a===b&&l.b===a); }); }
+function clickUnir(id){
+  var n=nodo(id), st=$("m-estado");
+  if(!origen){ origen=id; st.textContent="Eligieron «"+n.label+"». Ahora toquen el nodo con el que se conecta, o toquen el mismo para cancelar."; dibujar(id); return; }
+  if(origen===id){ origen=null; st.textContent="Se canceló. Pueden elegir otro nodo de partida."; dibujar(id); return; }
+  var o=nodo(origen);
+  if(existeHilo(origen,id)){ st.textContent="«"+o.label+"» y «"+n.label+"» ya están unidos."; }
+  else { snap(); M.links.push({a:origen,b:id,rel:$("u-rel2").value}); st.textContent="Hilo tejido entre «"+o.label+"» y «"+n.label+"». Pueden seguir desde otro nodo."; guardar(); }
+  origen=null; renderTodo(id);
+}
+
+/* dibujo */
+function lab(s,x,y,t){
+  s.appendChild(sv("text",{x:x,y:y,"text-anchor":"middle","font-size":11,"font-style":"italic",fill:"#5b7173","font-family":"system-ui,Segoe UI,sans-serif",stroke:"#ffffff","stroke-width":4,"paint-order":"stroke"},t));
+}
+function dibujar(foco){
+  var s=$("mapa-svg"); clear(s);
+  s.appendChild(sv("rect",{x:0,y:0,width:CW,height:CH,fill:"#ffffff"}));
+  if(!M.nodes.length){
+    s.appendChild(sv("text",{x:CW/2,y:CH/2,"text-anchor":"middle","font-size":18,fill:"#8aa09d","font-family":"system-ui,Segoe UI,sans-serif"},"Todavía no hay palabras. Escriban algunas o sumen conceptos del banco."));
+    return;
+  }
+  M.links.forEach(function(l,i){
+    var a=nodo(l.a), b=nodo(l.b); if(!a||!b) return;
+    s.appendChild(sv("line",{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:modo==="quitar"?"#D3805F":"#7fa6a2","stroke-width":2.4,"pointer-events":"none"}));
+    if(modo==="quitar"){
+      var h=sv("line",{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:"transparent","stroke-width":18,style:"cursor:pointer",role:"button",tabindex:"0","aria-label":"Quitar el hilo entre "+a.label+" y "+b.label});
+      h.addEventListener("click",function(){ quitarHilo(i); });
+      h.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); quitarHilo(i); } });
+      s.appendChild(h);
+    }
+  });
+  M.links.forEach(function(l){
+    var a=nodo(l.a), b=nodo(l.b); if(!a||!b||!l.rel) return;
+    lab(s,(a.x+b.x)/2,(a.y+b.y)/2-3,l.rel);
+  });
+  M.nodes.forEach(function(n){
+    var c=COL[seccion(n)], d=dims(n), sel=(origen===n.id);
+    var g=sv("g",{"data-id":n.id,tabindex:"0",role:"button","aria-label":n.label+(n.star?", marcado para el plenario":"")+(modo==="mover"?". Flechas para mover, Supr para quitar.":". Enter para "+modo+"."),style:"cursor:"+(modo==="mover"?"grab":"pointer")+";touch-action:none"});
+    g.appendChild(sv("ellipse",{cx:n.x,cy:n.y,rx:d.w/2*1.08,ry:d.h/2*1.2,fill:c[0],stroke:sel?"#D3805F":c[1],"stroke-width":sel?5:(n.star?4:(n.nivel===1?3.5:2)),"stroke-dasharray":n.nivel===3?"5 4":"none"}));
+    d.lin.forEach(function(l,i){
+      g.appendChild(sv("text",{x:n.x,y:n.y-(d.lin.length-1)*d.lh/2+d.fs*0.35+i*d.lh,"text-anchor":"middle","font-size":d.fs,"font-weight":d.fw,fill:c[2],"font-family":"system-ui,Segoe UI,sans-serif","pointer-events":"none"},l));
+    });
+    if(n.star){
+      g.appendChild(sv("circle",{cx:n.x+d.w/2*0.8,cy:n.y-d.h/2*0.9,r:10,fill:"#D3805F"}));
+      g.appendChild(sv("text",{x:n.x+d.w/2*0.8,y:n.y-d.h/2*0.9+5,"text-anchor":"middle","font-size":13,fill:"#ffffff","pointer-events":"none"},"★"));
+    }
+    g.addEventListener("pointerdown",function(e){
+      if(modo!=="mover") return;
+      var p=punto(e); arrastre={id:n.id,dx:n.x-p.x,dy:n.y-p.y,mov:false,pre:JSON.stringify(M)};
+      try{ $("mapa-svg").setPointerCapture(e.pointerId); }catch(x){}
+      e.preventDefault();
+    });
+    g.addEventListener("click",function(){ if(modo==="unir") clickUnir(n.id); else if(modo==="separar") separarNodo(n.id); else if(modo==="jerarquia") asignarNivel(n.id); else if(modo==="quitar") quitarNodo(n.id); });
+    g.addEventListener("keydown",function(e){
+      if(e.key==="Delete"||e.key==="Backspace"){ e.preventDefault(); quitarNodo(n.id); return; }
+      if(modo!=="mover"&&(e.key==="Enter"||e.key===" ")){ e.preventDefault(); if(modo==="unir") clickUnir(n.id); else if(modo==="separar") separarNodo(n.id); else if(modo==="jerarquia") asignarNivel(n.id); else quitarNodo(n.id); return; }
+      var st=e.shiftKey?40:15, dx=0, dy=0;
+      if(e.key==="ArrowLeft") dx=-st; else if(e.key==="ArrowRight") dx=st; else if(e.key==="ArrowUp") dy=-st; else if(e.key==="ArrowDown") dy=st; else return;
+      e.preventDefault(); snap(); n.x=num(n.x+dx,n.x,40,CW-40); n.y=num(n.y+dy,n.y,30,CH-30); guardar(); dibujar(n.id);
+    });
+    s.appendChild(g);
+  });
+  if(foco){ var f=s.querySelector('[data-id="'+foco+'"]'); if(f) f.focus(); }
+}
+function punto(e){
+  var s=$("mapa-svg"), pt=s.createSVGPoint(); pt.x=e.clientX; pt.y=e.clientY;
+  var m=s.getScreenCTM(); if(!m) return {x:0,y:0};
+  var r=pt.matrixTransform(m.inverse()); return {x:r.x,y:r.y};
+}
+$("mapa-svg").addEventListener("pointermove",function(e){
+  if(!arrastre) return;
+  var n=nodo(arrastre.id); if(!n) return; var p=punto(e);
+  n.x=num(p.x+arrastre.dx,n.x,40,CW-40); n.y=num(p.y+arrastre.dy,n.y,30,CH-30); if(!arrastre.mov) empujar(arrastre.pre); arrastre.mov=true;
+  dibujar();
+});
+function finArrastre(){ if(arrastre){ var m=arrastre.mov; arrastre=null; if(m){ guardar(); } } }
+$("mapa-svg").addEventListener("pointerup",finArrastre);
+$("mapa-svg").addEventListener("pointercancel",finArrastre);
+
+/* hilos (lista) */
+function renderHilos(){
+  var b=$("u-lista"); clear(b);
+  M.links.forEach(function(l,i){
+    var a=nodo(l.a), c=nodo(l.b); if(!a||!c) return;
+    var sel=el("select",{"aria-label":"Relación entre "+a.label+" y "+c.label});
+    sel.appendChild(opt("","sin nombre de relación")); RELS.forEach(function(r){ sel.appendChild(opt(r,r)); });
+    sel.value=l.rel; if(sel.value!==l.rel){ sel.appendChild(opt(l.rel,l.rel)); sel.value=l.rel; }
+    sel.addEventListener("change",function(){ snap(); l.rel=sel.value; guardar(); dibujar(); });
+    var q=el("button",{"class":"btn sec mini",type:"button",text:"Quitar"});
+    q.addEventListener("click",function(){ quitarHilo(i); });
+    b.appendChild(el("div",{"class":"extra-item"},[el("span",{text:"«"+a.label+"»"}),sel,el("span",{text:"«"+c.label+"»"}),q]));
+  });
+}
+$("u-add").addEventListener("click",function(){
+  var a=$("u-a").value, b=$("u-b").value, r=$("u-rel").value, m=$("m-msg2");
+  if(!a||!b||a===b){ m.textContent="Elijan dos nodos distintos para unir."; return; }
+  if(existeHilo(a,b)){ m.textContent="Esos dos nodos ya están unidos."; return; }
+  snap(); M.links.push({a:a,b:b,rel:r}); m.textContent="Se tejió el hilo.";
+  guardar(); renderTodo();
+});
+
+/* lista de nodos */
+function renderLista(){
+  var ul=$("lista-nodos"); clear(ul);
+  if(!M.nodes.length){ ul.appendChild(el("li",null,[el("span",{"class":"small",text:"Todavía no hay nodos."})])); return; }
+  M.nodes.forEach(function(n){
+    var li=el("li",null,[]), cab=el("div",{"class":"cab"});
+    var inp=el("input",{type:"text",maxlength:"60","aria-label":"Nombre del nodo",style:"max-width:260px;font-weight:600"}); inp.value=n.label;
+    inp.addEventListener("input",function(){ var v=inp.value.replace(/\s+/g," ").trim(); if(v.length>=1){ n.label=v.slice(0,60); guardar(); dibujar(); llenarSelects(); renderHilos(); renderPlenario(); } });
+    cab.appendChild(inp);
+    var conex=M.links.filter(function(l){ return l.a===n.id||l.b===n.id; }).length;
+    cab.appendChild(el("span",{"class":"small",text:conex?(conex+(conex===1?" hilo":" hilos")):"sin hilos"}));
+    var sn=el("select",{"aria-label":"Nivel de «"+n.label+"»",style:"max-width:210px"});
+    [["0","sin nivel"],["1","nivel 1 · central"],["2","nivel 2"],["3","nivel 3 · accesorio"]].forEach(function(o){ sn.appendChild(opt(o[0],o[1])); });
+    sn.value=String(n.nivel||0);
+    sn.addEventListener("change",function(){ snap(); n.nivel=Number(sn.value); guardar(); renderTodo(); });
+    cab.appendChild(sn);
+    var st=el("button",{"class":"btn sec mini",type:"button","aria-pressed":n.star?"true":"false",text:n.star?"★ en el plenario":"☆ llevar al plenario"});
+    st.addEventListener("click",function(){ snap(); n.star=!n.star; guardar(); dibujar(); renderLista(); renderPlenario(); });
+    cab.appendChild(st);
+    var q=el("button",{"class":"btn sec mini",type:"button",text:"Quitar",title:"También se quitan sus hilos"});
+    q.addEventListener("click",function(){ quitarNodo(n.id); });
+    var sp=el("button",{"class":"btn sec mini",type:"button",text:"Separar en palabras"});
+    sp.addEventListener("click",function(){ separarNodo(n.id); });
+    cab.appendChild(sp); cab.appendChild(q);
+    li.appendChild(cab);
+    var ta=el("textarea",{"aria-label":"Lo que dice el grupo en el nodo "+n.label,placeholder:"Lo que dice el grupo acá, con ejemplos de sus prácticas"});
+    ta.value=n.note;
+    ta.addEventListener("input",function(){ n.note=ta.value.slice(0,2000); guardar(); renderPlenario(); });
+    li.appendChild(ta); ul.appendChild(li);
+  });
+}
+function renderPlenario(){
+  var box=$("plen-lista"); clear(box);
+  var st=M.nodes.filter(function(n){ return n.star; });
+  $("plen-estado").textContent=st.length?("Nodos marcados para el plenario: "+st.length+(st.length>3?". Una posibilidad es llegar con tres, para dar lugar a la conversación.":"")):"Todavía no hay nodos marcados. Pueden marcar con la estrella los nodos de los que quieran hablar.";
+  st.forEach(function(n){
+    var d=el("div",{"class":"plen"});
+    d.appendChild(el("b",{text:n.label}));
+    var cx=[]; M.links.forEach(function(l){ var o=l.a===n.id?nodo(l.b):(l.b===n.id?nodo(l.a):null); if(o) cx.push("«"+o.label+"»"+(l.rel?" ("+l.rel+")":"")); });
+    d.appendChild(el("div",{"class":"small",text:cx.length?"Conversa con: "+cx.join(", "):"Todavía sin hilos."}));
+    d.appendChild(el("p",{text:n.note?n.note:"Todavía no escribieron nada en este nodo."}));
+    var inp=el("input",{type:"text","aria-label":"Quién habla de "+n.label,placeholder:"¿Quién habla de este nodo?",maxlength:"80"});
+    inp.value=n.voz;
+    inp.addEventListener("input",function(){ n.voz=inp.value.slice(0,80); guardar(); });
+    d.appendChild(inp); box.appendChild(d);
+  });
+}
+function renderTodo(foco){ llenarSelects(); llenarBanco(); dibujar(foco); renderLista(); renderHilos(); renderPlenario(); }
+
+/* texto, copiar, borrar, exportar */
+function esquema(){
+  var out=["Mapa mental del grupo","","Nodos:"];
+  M.nodes.forEach(function(n){ out.push("- "+n.label+(n.nivel?" [nivel "+n.nivel+"]":"")+(n.star?" ★":"")+(n.note?": "+n.note.replace(/\s+/g," "):"")); });
+  out.push("","Hilos:");
+  if(!M.links.length) out.push("- (sin hilos todavía)");
+  M.links.forEach(function(l){ var a=nodo(l.a), b=nodo(l.b); if(a&&b) out.push("- "+a.label+(l.rel?" "+l.rel+" ":" — ")+b.label); });
+  return out.join("\n");
+}
+$("m-copiar").addEventListener("click",function(){ copiar(esquema(),$("m-msg2"),"Copiado. Pueden pegarlo en un documento o en el chat."); });
+var confBorrar=null;
+$("m-borrar").addEventListener("click",function(){
+  var b=$("m-borrar");
+  if(!confBorrar){ b.textContent="¿Seguro? Tocar de nuevo para borrar"; confBorrar=setTimeout(function(){ confBorrar=null; b.textContent="Borrar el mapa"; },4000); return; }
+  clearTimeout(confBorrar); confBorrar=null; b.textContent="Borrar el mapa";
+  snap(); M={nodes:[],links:[],seq:1}; origen=null; $("m-msg2").textContent="El mapa quedó vacío."; guardar(); renderTodo();
+});
+function svgTexto(){
+  var s=$("mapa-svg").cloneNode(true);
+  s.setAttribute("xmlns",SVGNS); s.setAttribute("width",String(CW)); s.setAttribute("height",String(CH));
+  [].forEach.call(s.querySelectorAll("[tabindex]"),function(g){ g.removeAttribute("tabindex"); g.removeAttribute("role"); g.removeAttribute("style"); g.removeAttribute("aria-label"); });
+  return new XMLSerializer().serializeToString(s);
+}
+function bajar(blob,name){
+  var a=el("a",{href:URL.createObjectURL(blob),download:name});
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(a.href); },1500);
+}
+$("m-svg").addEventListener("click",function(){
+  bajar(new Blob([svgTexto()],{type:"image/svg+xml"}),"mapa_mental_grupo.svg");
+  $("m-msg2").textContent="Se generó la imagen SVG.";
+});
+$("m-png").addEventListener("click",function(){
+  var img=new Image();
+  img.onload=function(){
+    var c=document.createElement("canvas"); c.width=CW*2; c.height=CH*2;
+    var x=c.getContext("2d"); x.fillStyle="#fff"; x.fillRect(0,0,c.width,c.height); x.drawImage(img,0,0,c.width,c.height);
+    c.toBlob(function(b){ if(b){ bajar(b,"mapa_mental_grupo.png"); $("m-msg2").textContent="Se generó la imagen PNG."; } else $("m-msg2").textContent="No se pudo generar la imagen; una captura de pantalla también sirve."; },"image/png");
+  };
+  img.onerror=function(){ $("m-msg2").textContent="No se pudo generar la imagen; una captura de pantalla también sirve."; };
+  img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svgTexto());
+});
+
+cargar(); renderTodo(); setModo("mover"); btnsHist();
+
+/* ---------- 2 · CASO ---------- */
+
+/* ---------- 2 · CASOS ---------- */
+var CAMPOS=["Capas y márgenes de decisión","Evidencias de aprendizaje","Desafíos cognitivos","Coherencia interna","Estrategia, método y técnica","Una pregunta que abra supuestos y un puente a la investigación"];
+var LENTE=[
+ "macro|meso|micro|nivel|escala|programa|institucion|diseno oficial|curricul|margen|heredad|elig|decid|prescri",
+ "evidencia|muestra|producci|respuesta|desempen|puede hacer|mostrar|muestran",
+ "desafio|cognitiv|trabajo mental|trabajo intelectual|verbo|reconoc|aplic|analiz|argument|juicio|enumer|clasific|comprend|reproduc|verific",
+ "coheren|desajuste|contradic|tiran|distancia|declara|busca|proposito|objetivo|criterio|consigna",
+ "estrategia|metodo|tecnica|exposicion|discusion|casos|mediaci|planificad|ocurrid|sostuvo|sostuvieron"
+];
+var CASOS=[
+ {id:"unidad7",nombre:"Caso",titulo:"La pregunta que no tuvo lugar en la planilla",
+  texto:[
+   "Lucía dicta Formación Ciudadana en el primer año de una carrera. El diseño curricular oficial propone «promover el pensamiento crítico sobre los problemas de la vida pública» y nombra la desigualdad social entre sus temas. La institución, por su parte, pide una calificación numérica por tema y, al final del cuatrimestre, un examen escrito de definiciones y clasificaciones.",
+   "Lucía quiere que, en el tema de desigualdad, el estudiantado problematice cómo se construye la desigualdad como problema público. Pero piensa en el examen y escribe como objetivos «definir pobreza, empleo y escolaridad» y «clasificar situaciones según indicadores». Se dice: «primero lo básico, después profundizamos». Prepara una exposición y una guía en la que hay que clasificar situaciones según los indicadores vistos.",
+   "En la clase, la exposición ocupa casi todo el tiempo y la guía se completa rápido, con respuestas parecidas. Una estudiante pregunta: «¿Por qué hay quienes miden la pobreza por ingresos y otros por otras cosas?». Lucía responde que eso se verá si alcanza el tiempo y sigue con el programa.",
+   "Para calificar, toma un cuestionario de definiciones y clasificación de casos, con corrección conceptual. La estudiante de la pregunta responde todo bien y agrega al final: «Ninguna de estas categorías incluye el trabajo de cuidado que hacemos sin paga las mujeres de mi colonia: cuidar a niños y niñas, a personas mayores o enfermas, sostener la casa. ¿Cómo se mediría eso?». Lucía no encuentra dónde ubicar esa pregunta en la planilla y registra un 10 por los ítems.",
+   "La semana próxima empieza otro tema. Lucía tiene la planilla completa y dos preguntas que irrumpieron en lo que había planificado y no encontraron dónde ser escuchadas: la de por qué se mide la pobreza de maneras distintas, que quedó para «si alcanza el tiempo», y la del trabajo de cuidado, que no tuvo lugar en la planilla. Todavía no sabe si volver sobre ellas ni qué cambiaría en la clase, en la consigna o en el cuestionario si decidiera hacerlo."],
+  nota:"Caso elaborado para este simulador, en diálogo con los apartados 1.1 y 2 del desarrollo de la Semana 2. La situación, los nombres y los textos son ficticios.",
+  campos:[
+   {ayuda:"¿Qué decisiones o condiciones del relato corresponden al diseño oficial (macro), al programa de la institución (meso) y al aula de Lucía (micro)? ¿Qué parece elección suya, qué algo heredado y qué requeriría negociación?",
+    pista:"¿Qué responde a cada nivel (diseño oficial, programa institucional, aula)? ¿Qué margen tuvo Lucía frente a la calificación por tema y el examen final?",ref:"Desarrollo de la Semana 2, apartado 1.1 (niveles macro, meso y micro)"},
+   {ayuda:"¿Qué evidencia de aprendizaje recoge el cuestionario? ¿Qué muestra la respuesta de la estudiante que lo supera y qué queda sin leer en la planilla?",
+    pista:"¿Qué podría hacer con el contenido quien responde el cuestionario? ¿Qué muestra la pregunta de la estudiante que el criterio de corrección conceptual no lee?",ref:"Anijovich y Cappelletti (2017), según el desarrollo de la Semana 2: la evidencia no habla sola, debe ser interpretada"},
+   {ayuda:"¿Qué trabajo mental piden los objetivos, la consigna y los ítems? ¿Qué verbo los ordena? ¿Qué desafío cognitivo pediría el propósito que Lucía escribió?",
+    pista:"¿Qué tienen que hacer con el contenido quienes aprenden? Steiman distingue, por ejemplo, definir un concepto de identificar qué circunstancias lo vulneran: ¿reconocimiento, aplicación, análisis?",ref:"Steiman (2020, p. 138), según el desarrollo de la Semana 2"},
+   {ayuda:"Propósito, objetivos, consigna y criterio: ¿tiran para el mismo lado? ¿Y con el propósito del diseño oficial? ¿Qué vuelve probable el conjunto?",
+    pista:"El propósito expresa la intención docente y los objetivos lo que el o la estudiante podrá hacer. ¿Qué distancia hay entre lo que se declara buscar y lo que las consignas y los criterios vuelven probable?",ref:"Krichesky (2024), según el desarrollo de la Semana 2, apartado 2.1"},
+   {ayuda:"¿Qué estrategia, método o técnica reconocen? ¿Qué relación con el saber vuelve probable? ¿Qué lugar tuvieron las dos preguntas de la estudiante en esa forma de organizar la clase?",
+    pista:"¿Qué estrategia y qué técnicas hay en la clase? Una misma técnica puede inscribirse en lógicas distintas: ¿qué «mensaje» entrega esta forma sobre quién produce el saber?",ref:"Litwin (1996) y Edwards (1993, p. 2), según el desarrollo de la Semana 2"},
+   {ayuda:"Una pregunta problematizadora que tarde en tener respuesta. Después, una línea: «Me interesaría investigar ___ porque supongo que ___».",ref:"Cierre del desarrollo de la Semana 2"}
+  ],
+  anclas:["pensamiento critico","indicador","calificacion|planilla|cuestionario","exposicion|guia","clasific","cuidado|mujeres|colonia|barrio|comunidad|como se mediria","examen final","programa","lucia","definicion|definir","semana proxima|otro tema","si alcanza el tiempo","propositos?|objetivos?","dos preguntas|irrump|volver"],
+  claves:[
+   ["Capas y márgenes","El diseño oficial propone pensamiento crítico; el programa pide calificación por tema y examen final; Lucía decide qué hacer en el encuentro. ¿Qué responde a qué nivel y qué margen queda en el aula?","Desarrollo de la Semana 2, apartado 1.1"],
+   ["Coherencia entre lo que se busca y lo que se vuelve probable","El propósito de Lucía y el del diseño oficial apuntan a problematizar; los objetivos, la consigna y el criterio apuntan a definir y clasificar. ¿Qué vuelve probable el conjunto?","Krichesky (2024), según el desarrollo de la Semana 2, apartado 2.1"],
+   ["Qué desafío cognitivo se pide","Definir y clasificar piden reconocimiento y aplicación. ¿Qué desafío pediría problematizar cómo se construye la desigualdad como problema público?","Steiman (2020, p. 138), según el desarrollo de la Semana 2"],
+   ["Qué evidencia se lee y cuál queda afuera","La respuesta de la estudiante muestra un saber que el criterio de corrección conceptual no lee: una pregunta sobre qué se mide y quién lo mide. ¿Qué cambiaría si esa pregunta contara como evidencia? ¿Evaluar o examinar?","Anijovich y Cappelletti (2017); Álvarez Méndez (2001), según el desarrollo de la Semana 2"],
+   ["Forma, tiempo y voces en los márgenes","Una pregunta de la estudiante queda para «si alcanza el tiempo» y la otra no encuentra lugar en la planilla. ¿Qué mensaje entrega esa forma de organizar la clase y qué voces o criterios de validación quedan en los márgenes cuando se «cumple» un programa?","Edwards (1993, p. 2); De Alba (1998, p. 59), según el desarrollo de la Semana 2"]
+  ]}
+];
+
+var KEYC="sem2_casos_didactica_v1", casoActual=0, guardado={};
+function guardarCasos(){
+  var c=CASOS[casoActual];
+  guardado[c.id]=[].map.call(document.querySelectorAll("#campos textarea"),function(t){ return t.value; });
+  try{ localStorage.setItem(KEYC,JSON.stringify({g:guardado,c:casoActual})); }catch(e){}
+}
+function norm(t){ return t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g," ").trim(); }
+function renderPieza(p){
+  var d=el("div",{"class":"pieza"});
+  d.appendChild(el("div",{"class":"eyebrow",text:"Pieza "+p.id+" · "+p.t}));
+  (p.p||[]).forEach(function(t){ d.appendChild(el("p",{text:t})); });
+  (p.filas||[]).forEach(function(f){ d.appendChild(el("div",{"class":"fila"},[el("b",{text:f[0]}),el("span",{text:f[1]})])); });
+  (p.muestras||[]).forEach(function(f){ d.appendChild(el("div",{"class":"muestra"},[el("b",{text:f[0]+": "}),f[1]])); });
+  d.appendChild(el("div",{"class":"mira",text:p.mira}));
+  return d;
+}
+function cargarCaso(i){
+  if(document.querySelector("#campos textarea")) guardarCasos();
+  casoActual=i;
+  var c=CASOS[i], box=$("caso-texto"), pz=$("caso-piezas"); clear(box); clear(pz);
+  $("caso-titulo").textContent=c.titulo;
+  c.texto.forEach(function(t){ box.appendChild(el("p",{text:t})); });
+  (c.piezas||[]).forEach(function(p){ pz.appendChild(renderPieza(p)); });
+  $("caso-nota").textContent=c.nota;
+  var cont=$("campos"); clear(cont);
+  var v=guardado[c.id]||[];
+  c.campos.forEach(function(cp,k){
+    var id="c-"+(k+1);
+    cont.appendChild(el("label",{"class":"campo","for":id,text:(k+1)+" · "+CAMPOS[k]}));
+    cont.appendChild(el("p",{"class":"small",id:"h-"+(k+1),text:cp.ayuda}));
+    var ta=el("textarea",{id:id,"aria-describedby":"h-"+(k+1)});
+    ta.style.minHeight="80px"; ta.value=v[k]||"";
+    ta.addEventListener("input",function(){ contarCaso(); guardarCasos(); });
+    cont.appendChild(ta);
+  });
+  clear($("c-dev")); $("c-msg").textContent="";
+  renderCasoSel(); contarCaso();
+}
+function renderCasoSel(){
+  var s=$("caso-sel"); clear(s);
+  if(CASOS.length<2){ s.hidden=true; return; }
+  CASOS.forEach(function(c,i){
+    var b=el("button",{"class":"chip",type:"button","aria-pressed":i===casoActual?"true":"false",text:c.nombre});
+    if(i===casoActual){ b.style.background="var(--tinta)"; b.style.color="#fff"; b.style.borderColor="var(--tinta)"; }
+    b.addEventListener("click",function(){ if(i!==casoActual) cargarCaso(i); });
+    s.appendChild(b);
+  });
+}
+function textos(){ return [].map.call(document.querySelectorAll("#campos textarea"),function(t){ return t.value; }); }
+function contarCaso(){
+  var n=norm(textos().join(" "));
+  var p=n?n.split(" ").length:0;
+  $("c-cuenta").textContent="Palabras escritas: "+p+(p<40?" (la devolución se arma a partir de unas 40 palabras)":"");
+}
+function cuenta(res,txt){ var k=[]; res.forEach(function(r){ var m=new RegExp(r,"i").exec(txt); if(m) k.push(m[0]); }); return k; }
+function estadoCampo(i,c,texto){
+  var n=norm(texto), pal=n?n.split(" ").length:0;
+  if(pal<8) return {e:"vacio",ancl:[]};
+  var ancl=cuenta(c.anclas,n), lente=new RegExp(LENTE[i],"i").test(n);
+  if(ancl.length&&lente) return {e:"apoyado",ancl:ancl};
+  if(lente) return {e:"sinapoyo",ancl:[]};
+  if(ancl.length) return {e:"solocaso",ancl:ancl};
+  return {e:"vacio",ancl:[]};
+}
+var RESOL=["deberia","tendria que","habria que","hay que","lo mejor es","recomendaria","tendria que haber","deberia haber","prohibir","la solucion"];
+function devolucionCaso(){
+  var c=CASOS[casoActual], t=textos(), box=$("c-dev"); clear(box); $("c-msg").textContent="";
+  var all=norm(t.join(" ")), pal=all?all.split(" ").length:0;
+  if(pal<40){ $("c-msg").textContent="Para armar la devolución hacen falta unas 40 palabras en total. Pueden seguir escribiendo."; return; }
+  if(t.join(" ").length>9000){ $("c-msg").textContent="El texto es muy extenso para la devolución automática. Pueden sintetizarlo."; return; }
+  var ETQ={apoyado:"se apoya en el caso",sinapoyo:"nombra el lente, sin apoyo visible en el caso",solocaso:"habla del caso, sin el lente",vacio:"todavía sin desarrollar"};
+  var t1=el("div",{"class":"tiempo"},[el("h3",{text:"1 · Lo que aparece en cada campo"})]);
+  var pend=[];
+  for(var i=0;i<5;i++){
+    var r=estadoCampo(i,c,t[i]);
+    var linea=el("div",{"class":"lente"},[el("b",{text:CAMPOS[i]+". "}),el("span",{"class":"est",text:ETQ[r.e]}),document.createTextNode(" ")]);
+    if(r.e==="apoyado") linea.appendChild(document.createTextNode("Aparecen referencias al caso («"+r.ancl.slice(0,3).join("», «")+"»)."));
+    if(r.e!=="apoyado") pend.push(i);
+    t1.appendChild(linea);
+  }
+  var pr=0, np=norm(t[5]);
+  var preg=/\?/.test(t[5]);
+  var supu=/que cuenta como|que entendemos por|que se define como|que significa|quien decide|desde donde|que supuestos|que queda afuera|supone|supuesto/.test(np);
+  var puente=/investig/.test(np);
+  var l6=el("div",{"class":"lente"},[el("b",{text:CAMPOS[5]+". "}),
+    el("span",{"class":"est",text:preg?"hay una pregunta":"sin pregunta"}),document.createTextNode(" "),
+    el("span",{"class":"est",text:supu?"toca supuestos":"sin supuestos visibles"}),document.createTextNode(" "),
+    el("span",{"class":"est",text:puente?"esboza un puente":"sin puente a la investigación"})]);
+  t1.appendChild(l6);
+  box.appendChild(t1);
+
+  var t2=el("div",{"class":"tiempo"},[el("h3",{text:"2 · Preguntas que podrían ayudar a profundizar"})]);
+  pend.forEach(function(i){
+    var cp=c.campos[i];
+    t2.appendChild(el("div",{"class":"lente"},[el("b",{text:CAMPOS[i]+": "}),cp.pista,el("div",{"class":"small",text:"Para volver a: "+cp.ref})]));
+  });
+  if(!preg) t2.appendChild(el("div",{"class":"lente"},[el("b",{text:CAMPOS[5]+": "}),"¿Cuál sería una pregunta que abra supuestos y tarde en tener respuesta rápida?"]));
+  else if(!supu) t2.appendChild(el("div",{"class":"lente"},[el("b",{text:CAMPOS[5]+": "}),"¿Qué palabra de la pregunta carga un supuesto (participar, evidencia, fuente, validar, saber)? ¿Cómo se la reformularía para preguntar por ese supuesto?"]));
+  if(!puente) t2.appendChild(el("div",{"class":"lente"},[el("b",{text:"Puente a la investigación: "}),"¿Qué de esa pregunta podría volverse pregunta de investigación educativa? ¿Qué se necesitaría para indagarla?",el("div",{"class":"small",text:"Para volver a: Cierre del desarrollo de la Semana 2"})]));
+  var res=RESOL.filter(function(w){ return all.indexOf(w)>=0; });
+  if(res.length) t2.appendChild(el("div",{"class":"lente"},[el("b",{text:"Una formulación para mirar: "}),"Aparecen expresiones que orientan a resolver o corregir («"+res.slice(0,3).join("», «")+"»). ¿Qué pasaría si esas ideas se reformularan como preguntas sobre los supuestos que sostienen las piezas?"]));
+  if(t2.childNodes.length===1) t2.appendChild(el("p",{text:"Todos los campos se apoyan en el caso. ¿Cuál de los lentes ordenó a los demás en su análisis?"}));
+  box.appendChild(t2);
+
+  var t3=el("div",{"class":"tiempo"},[el("h3",{text:"3 · Entradas que este caso permite abrir"}),
+    el("p",{"class":"small",text:"No son respuestas esperadas: muestran caminos posibles para contrastar con lo que escribieron."})]);
+  c.claves.forEach(function(k){
+    t3.appendChild(el("div",{"class":"lente"},[el("b",{text:k[0]+". "}),k[1],el("div",{"class":"small",text:"Para volver a: "+k[2]})]));
+  });
+  box.appendChild(t3);
+  box.appendChild(el("p",{"class":"small",text:"Esta devolución busca en el texto palabras del desarrollo y referencias al caso. No lee el sentido de lo que escribieron ni evalúa su calidad: una idea puede estar presente con otras palabras, y una referencia puede aparecer sin que haya análisis."}));
+}
+function textoCopiable(){
+  var c=CASOS[casoActual], t=textos();
+  var p=["Caso: "+c.titulo,""];
+  for(var i=0;i<6;i++){ p.push((i+1)+" · "+CAMPOS[i],t[i],""); }
+  var d=$("c-dev"); if(d.textContent) p.push("Devolución del simulador",d.innerText||d.textContent);
+  return p.join("\n");
+}
+$("c-ver").addEventListener("click",devolucionCaso);
+$("c-copiar").addEventListener("click",function(){ copiar(textoCopiable(),$("c-msg"),"Copiado. Pueden pegarlo en un documento propio o en el chat."); });
+$("c-reset").addEventListener("click",function(){
+  [].forEach.call(document.querySelectorAll("#campos textarea"),function(t){ t.value=""; });
+  guardarCasos(); clear($("c-dev")); $("c-msg").textContent=""; contarCaso();
+});
+$("gen-det").addEventListener("toggle",function(){
+  var f=$("gen-frame");
+  if($("gen-det").open&&!f.getAttribute("src")) f.setAttribute("src",f.getAttribute("data-src"));
+});
+try{ var sv0=localStorage.getItem(KEYC); if(sv0){ var o=JSON.parse(sv0); if(o&&o.g&&typeof o.g==="object") guardado=o.g; } }catch(e){}
+cargarCaso(0);
+})();
+</script>
+</body>
+</html>
